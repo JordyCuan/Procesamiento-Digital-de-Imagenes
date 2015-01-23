@@ -1,3 +1,9 @@
+// Sistema de desarrollo para la implementacion de
+// Procesamiento Digital de iMgenes
+// V 0.4
+// 21 - 01 - 2015
+// FCC BUAP
+
 unit Unit1;
 
 interface
@@ -9,7 +15,7 @@ uses
   Vcl.Menus, Vcl.ExtDlgs,
   Vcl.ComCtrls, math, Vcl.StdCtrls,
   Jpeg, PNGImage, GIFImg, Vcl.ImgList, Vcl.ToolWin,
-  UBase, UHisto;
+  UBase, UHisto, UPuntuales;
 
 type
   TAppPDI = class(TForm)
@@ -45,6 +51,7 @@ type
     EstiloPunk1: TMenuItem;
     Varios1: TMenuItem;
     Histograma1: TMenuItem;
+    Logaritmo1: TMenuItem;
 
     // Metodos
     procedure Abrir1Click(Sender: TObject);
@@ -57,14 +64,19 @@ type
     procedure EstiloFCC1Click(Sender: TObject);
     procedure EstiloPunk1Click(Sender: TObject);
     procedure Histograma1Click(Sender: TObject);
+    procedure Logaritmo1Click(Sender: TObject);
   private
     { Private declarations }
+
+    procedure Prepara();
+    procedure Presenta();
   public
     { Public declarations }
     nomIma   : string;
     BM1      : TBitMap;
     valor    : single;
     Im1,Im2  : MatImg;
+    nc,nr    : integer;
   end;
 
 var
@@ -132,6 +144,7 @@ begin
       Image1.Picture.Assign(BM1);
 
       BMP2Mat(BM1,Im1);
+      Im2.nc := 0; Im2.nr := 0;
 
       _x1 := 0      ; _y1 := 0;
       _x2 := Im1.nc ; _y2 := Im1.nr;
@@ -175,72 +188,60 @@ begin
   StatusBar1.Panels[2].Text := IntToStr(r);
   StatusBar1.Panels[3].Text := IntToStr(g);
   StatusBar1.Panels[4].Text := IntToStr(b);
-
 end;
 
 
-// Negativo usando el BitMap: BM1
-procedure TAppPDI.Negativo1Click(Sender: TObject);
-var
-  x,y, pix,
-  nc,nr    : integer;
-  r,g,b    : byte;
+// Prepara para procesar una imagen en forma de matriz
+procedure TAppPDI.Prepara();
 begin
+  // Si Im2 no esta vacia = si ha habido un proceso previo
+  // Copiamos Im2 en Im1
+  if (Im2.nc+Im2.nr) <> 0 then
+    Mat2Mat(Im2,Im1);
+
   // descomponer pixel  pixel e invertir
   // en cada canal 255 - z
 
-  nc := BM1.Width;
-  nr := BM1.Height;
+  nc := Im1.nc;
+  nr := Im1.nr;
 
-  for y := 0 to nr-1 do
-    for x := 0 to nc-1 do begin
+  // inicializar Im2 al mismo tamaño de Im1
+  Im2.nc := nc;
+  Im2.nr := nr;
+  Setlength(Im2.dat,nc,nr,3);
+end;
 
-      pix := BM1.Canvas.Pixels[X,Y];
-      r := 255 - GetRValue(pix);
-      g := 255 - GetGValue(pix);
-      b := 255 - GetBValue(pix);
+// Presentan el resultado del proceso en pantalla
+procedure TAppPDI.Presenta();
+begin
+  Mat2BMP(Im2,BM1);
+  Image1.Picture.Assign(BM1);
+end;
 
-      BM1.Canvas.Pixels[X,Y] := RGB(r,g,b);
-    end;
-
-    Image1.Picture.Assign(BM1);
+// Negativo usando el BitMap: BM1
+procedure TAppPDI.Negativo1Click(Sender: TObject);
+begin
+  Prepara();
+  fp_negativo(Im1,Im2);
+  Presenta();
 end;
 
 // Correccion Gamma
 procedure TAppPDI.Gamma1Click(Sender: TObject);
-var
-  x,y, pix,
-  nc,nr    : integer;
-  r,g,b    : byte;
-
-  function gamma(z,gg: single): byte;
-  begin
-    result := ceil((255*power(z/255,gg)));
-  end;
-
 begin
-  // descomponer pixel  pixel e invertir
-  // en cada canal 255 - z
-
-  nc := BM1.Width;
-  nr := BM1.Height;
-
   valor := StrToFloat(Edit1.Text);
 
-  for y := 0 to nr-1 do
-    for x := 0 to nc-1 do begin
+  Prepara();
+  fp_gamma(Im1,Im2,valor);
+  Presenta();
+end;
 
-      pix := BM1.Canvas.Pixels[X,Y];
-
-      r := gamma(GetRValue(pix),valor);
-      g := gamma(GetGValue(pix),valor);
-      b := gamma(GetBValue(pix),valor);
-
-
-      BM1.Canvas.Pixels[X,Y] := RGB(r,g,b);
-    end;
-
-    Image1.Picture.Assign(BM1);
+// amplificacion logaritmica
+procedure TAppPDI.Logaritmo1Click(Sender: TObject);
+begin
+  Prepara();
+  fp_logaritmo(Im1,Im2);
+  Presenta();
 end;
 
 end.

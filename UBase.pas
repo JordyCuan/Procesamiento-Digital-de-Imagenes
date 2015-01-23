@@ -19,7 +19,10 @@ type
   // metodos
   function ajusta255(z : single) : byte;
   function ajusta511(z : single) : integer;
+
   procedure BMP2Mat(BM : TBitMap; var Mat : MatImg);
+  procedure Mat2BMP(Mat : MatImg; var BM  : TBitMap);
+  procedure Mat2Mat(MA : MatImg ; var MB  : MatImg);
 
 implementation
 
@@ -66,5 +69,44 @@ begin
     end;
 end;
 
+// Pasar de la representacion matricial a un BitMap
+procedure Mat2BMP(Mat : MatImg; var BM : TBitMap);
+var
+  x,y,c,pix : integer;
+  nnc,nnr   : integer;
+  r,g,b     : integer;
+begin
+  nnr := Mat.nr;
+  nnc := Mat.nc;
+
+  BM.Width  := nnc;
+  BM.Height := nnr;
+
+  for y := 0 to nnr-1 do
+    for x := 0 to nnc-1 do begin
+
+      r := ajusta255(Mat.dat[x][y][0]);
+      g := ajusta255(Mat.dat[x][y][1]) SHL 8;
+      b := ajusta255(Mat.dat[x][y][2]) SHL 16;
+
+      BM.Canvas.Pixels[x,y] := r OR g OR b;
+    end;
+end;
+
+// Copia Matriz en Matriz (MA -> MB)
+procedure Mat2Mat(MA : MatImg ; var MB  : MatImg);
+var
+  x,y,c,nc,nr  : integer;
+begin
+  MB.nc := MA.nc;
+  MB.nr := MA.nr;
+  SetLength(MB.dat,MB.nc,MB.nr,3);
+
+  for y := 0 to MB.nr-1 do
+    for x := 0 to MB.nc-1 do
+      for c := 0 to 2 do
+        MB.dat[x][y][c] := MA.dat[x][y][c];
+
+end;
 
 end.

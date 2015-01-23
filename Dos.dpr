@@ -4,7 +4,8 @@ uses
   Vcl.Forms,
   Unit1 in 'Unit1.pas' {AppPDI},
   UHisto in 'UHisto.pas' {FormHisto},
-  UBase in 'UBase.pas';
+  UBase in 'UBase.pas',
+  UPuntuales in 'UPuntuales.pas';
 
 {$R *.res}
 
