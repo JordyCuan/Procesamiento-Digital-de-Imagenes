@@ -5,9 +5,11 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils,
   System.Variants,System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Menus, Vcl.ExtDlgs,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls,
+  Vcl.Menus, Vcl.ExtDlgs,
   Vcl.ComCtrls, math, Vcl.StdCtrls,
-  Jpeg, PNGImage, GIFImg, Vcl.ImgList, Vcl.ToolWin;
+  Jpeg, PNGImage, GIFImg, Vcl.ImgList, Vcl.ToolWin,
+  UBase, UHisto;
 
 type
   TAppPDI = class(TForm)
@@ -41,6 +43,8 @@ type
     Interface1: TMenuItem;
     EstiloFCC1: TMenuItem;
     EstiloPunk1: TMenuItem;
+    Varios1: TMenuItem;
+    Histograma1: TMenuItem;
 
     // Metodos
     procedure Abrir1Click(Sender: TObject);
@@ -52,13 +56,15 @@ type
     procedure Gamma1Click(Sender: TObject);
     procedure EstiloFCC1Click(Sender: TObject);
     procedure EstiloPunk1Click(Sender: TObject);
+    procedure Histograma1Click(Sender: TObject);
   private
     { Private declarations }
   public
     { Public declarations }
-    nomIma : string;
-    BM1    : TBitMap;
-    valor  : single;
+    nomIma   : string;
+    BM1      : TBitMap;
+    valor    : single;
+    Im1,Im2  : MatImg;
   end;
 
 var
@@ -84,6 +90,8 @@ begin
 
   BM1 := TBitMap.Create;
 
+  _banCir := false;
+
 end;
 
 // Cambia Tema
@@ -95,6 +103,13 @@ end;
 procedure TAppPDI.EstiloPunk1Click(Sender: TObject);
 begin
   ToolBar1.Images := ImageList2;
+end;
+
+// Histograma
+procedure TAppPDI.Histograma1Click(Sender: TObject);
+begin
+  // Llamar a la interface del Histograma
+  FormHisto.show;
 end;
 
 
@@ -115,6 +130,11 @@ begin
       BM1.Height := pic.Height;
       BM1.Canvas.Draw(0,0,pic.Graphic);
       Image1.Picture.Assign(BM1);
+
+      BMP2Mat(BM1,Im1);
+
+      _x1 := 0      ; _y1 := 0;
+      _x2 := Im1.nc ; _y2 := Im1.nr;
 
       StatusBar3.Panels[1].Text := nomIma
     finally

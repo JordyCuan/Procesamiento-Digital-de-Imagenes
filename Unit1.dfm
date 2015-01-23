@@ -123,6 +123,7 @@ object AppPDI: TAppPDI
     Left = 0
     Top = 0
     Width = 542
+    Height = 29
     ButtonHeight = 30
     ButtonWidth = 30
     Caption = 'ToolBar1'
@@ -172,6 +173,7 @@ object AppPDI: TAppPDI
       Top = 0
       Caption = 'ToolButton6'
       ImageIndex = 3
+      OnClick = Histograma1Click
     end
   end
   object MainMenu1: TMainMenu
@@ -183,6 +185,13 @@ object AppPDI: TAppPDI
         Caption = 'Abrir'
         ShortCut = 16449
         OnClick = Abrir1Click
+      end
+    end
+    object Varios1: TMenuItem
+      Caption = 'Varios'
+      object Histograma1: TMenuItem
+        Caption = 'Histograma'
+        OnClick = Histograma1Click
       end
     end
     object Editar1: TMenuItem
