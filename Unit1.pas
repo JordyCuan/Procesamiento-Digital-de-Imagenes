@@ -52,6 +52,9 @@ type
     Varios1: TMenuItem;
     Histograma1: TMenuItem;
     Logaritmo1: TMenuItem;
+    HacerDeshacer1: TMenuItem;
+    Constante50501: TMenuItem;
+    Porcentual50501: TMenuItem;
 
     // Metodos
     procedure Abrir1Click(Sender: TObject);
@@ -65,6 +68,9 @@ type
     procedure EstiloPunk1Click(Sender: TObject);
     procedure Histograma1Click(Sender: TObject);
     procedure Logaritmo1Click(Sender: TObject);
+    procedure HacerDeshacer1Click(Sender: TObject);
+    procedure Constante50501Click(Sender: TObject);
+    procedure Porcentual50501Click(Sender: TObject);
   private
     { Private declarations }
 
@@ -190,6 +196,22 @@ begin
   StatusBar1.Panels[4].Text := IntToStr(b);
 end;
 
+// Hacer deshacer
+// Siempre que haya un proceso previo una imagen
+procedure TAppPDI.HacerDeshacer1Click(Sender: TObject);
+var
+ Mtemp : MatImg;
+begin
+  // validamos si hubo proceso
+  if (Im2.nc+Im2.nr) <> 0 then begin
+    Mat2Mat (Im1  , Mtemp);
+    Mat2Mat (Im2  , Im1);
+    Mat2Mat (Mtemp, Im2);
+    SetLength(Mtemp.dat,1,1,1);
+
+    Presenta();
+  end;
+end;
 
 // Prepara para procesar una imagen en forma de matriz
 procedure TAppPDI.Prepara();
@@ -243,5 +265,36 @@ begin
   fp_logaritmo(Im1,Im2);
   Presenta();
 end;
+
+// aditivo
+procedure TAppPDI.Constante50501Click(Sender: TObject);
+begin
+  valor := StrToFloat(Edit1.Text);
+
+  if abs(valor)>=50 then begin
+    ShowMessage('Fuera de rango, lea !!!');
+    exit;
+  end;
+
+  Prepara();
+  fp_constante(Im1,Im2, valor);
+  Presenta();
+end;
+
+// porcentual
+procedure TAppPDI.Porcentual50501Click(Sender: TObject);
+begin
+  valor := StrToFloat(Edit1.Text);
+
+  if abs(valor)>=50 then begin
+    ShowMessage('Fuera de rango, lea !!!');
+    exit;
+  end;
+
+  Prepara();
+  fp_porcentual (Im1,Im2, valor);
+  Presenta();
+end;
+
 
 end.

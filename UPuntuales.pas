@@ -5,9 +5,11 @@ interface
 uses
   math, UBase;
 
-  procedure fp_negativo (MA: MatImg; var MB: MatImg);
-  procedure fp_gamma    (MA: MatImg; var MB: MatImg; valor : single);
-  procedure fp_logaritmo(MA: MatImg; var MB: MatImg);
+  procedure fp_negativo   (MA: MatImg; var MB: MatImg);
+  procedure fp_gamma      (MA: MatImg; var MB: MatImg; vv : single);
+  procedure fp_logaritmo  (MA: MatImg; var MB: MatImg);
+  procedure fp_constante  (MA: MatImg; var MB: MatImg; vv : single);
+  procedure fp_porcentual (MA: MatImg; var MB: MatImg; vv : single);
 
 implementation
 
@@ -23,42 +25,70 @@ begin
 end;
 
 // Proceso de filtrado gamma (rango dinamico)
-procedure fp_gamma(MA: MatImg; var MB: MatImg; valor : single);
+procedure fp_gamma   (MA: MatImg; var MB: MatImg; vv : single);
 var
   x,y,c   : integer;
 
-  function gamma(z,gammaValue: single): byte;
+  function gamma(z,gg: single): single;
   begin
-    result := ceil(255*power(z/255,gammaValue));
+    result := 255*power(z/255,gg);
   end;
 
 begin
   for y := 0 to MA.nr-1 do
     for x := 0 to MA.nc-1 do
       for c := 0 to 2 do
-        MB.dat[x][y][c] := gamma(MA.dat[x][y][c],valor);
+        MB.dat[x][y][c] := gamma(MA.dat[x][y][c],vv);
 
 end;
 
-
-procedure fp_logaritmo(MA: MatImg; var MB: MatImg);
+// Filtro logaritmico - tipo vision nocturna
+procedure fp_logaritmo (MA: MatImg; var MB: MatImg);
 var
   x,y,c   : integer;
+  ff      : single;
 
-  function logaritmo(z: single): byte;
+  function loga(z: single): single;
   begin
-    result := ceil(
-        (Log10(z + 1) / Log10(255 + 1)) * 255);
+    result := ff*log10(z+1);
   end;
 
+begin
+  ff := 255/log10(256);
+
+  for y := 0 to MA.nr-1 do
+    for x := 0 to MA.nc-1 do
+      for c := 0 to 2 do
+        MB.dat[x][y][c] := loga(MA.dat[x][y][c]);
+
+end;
+
+// Aplica aditivamente una constante
+// proceso de negativo
+procedure fp_constante(MA: MatImg; var MB: MatImg; vv : single);
+var
+  x,y,c   : integer;
 begin
   for y := 0 to MA.nr-1 do
     for x := 0 to MA.nc-1 do
       for c := 0 to 2 do
-        MB.dat[x][y][c] := logaritmo(MA.dat[x][y][c]);
+        MB.dat[x][y][c] := MA.dat[x][y][c] + vv;
+end;
+
+// Aplica multiplicativa una constante
+// proceso de negativo
+procedure fp_porcentual (MA: MatImg; var MB: MatImg; vv : single);
+var
+  x,y,c   : integer;
+  ff      : single;
+begin
+  ff := 1 + vv/100;
+
+  for y := 0 to MA.nr-1 do
+    for x := 0 to MA.nc-1 do
+      for c := 0 to 2 do
+        MB.dat[x][y][c] := ff*MA.dat[x][y][c];
 end;
 
 
-
-// End main
 end.
