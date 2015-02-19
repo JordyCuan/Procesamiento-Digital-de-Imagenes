@@ -5,7 +5,8 @@ uses
   Unit1 in 'Unit1.pas' {AppPDI},
   UHisto in 'UHisto.pas' {FormHisto},
   UBase in 'UBase.pas',
-  UPuntuales in 'UPuntuales.pas';
+  UPuntuales in 'UPuntuales.pas',
+  URegionales in 'URegionales.pas';
 
 {$R *.res}
 

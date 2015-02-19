@@ -20,7 +20,7 @@ object AppPDI: TAppPDI
     Left = 1
     Top = 40
     Width = 534
-    Height = 377
+    Height = 338
     TabOrder = 0
     object Image1: TImage
       Left = 0
@@ -97,9 +97,9 @@ object AppPDI: TAppPDI
   end
   object Panel1: TPanel
     Left = 2
-    Top = 423
+    Top = 384
     Width = 532
-    Height = 37
+    Height = 76
     Color = clMoneyGreen
     ParentBackground = False
     TabOrder = 4
@@ -117,6 +117,39 @@ object AppPDI: TAppPDI
       Height = 21
       TabOrder = 0
       Text = '1.0'
+    end
+    object CheckBox1_ROJO: TCheckBox
+      Left = 118
+      Top = 10
+      Width = 97
+      Height = 17
+      Caption = '  Rojo'
+      Checked = True
+      State = cbChecked
+      TabOrder = 1
+      OnClick = CheckBox1_ROJOClick
+    end
+    object CheckBox2_VERDE: TCheckBox
+      Left = 118
+      Top = 30
+      Width = 97
+      Height = 17
+      Caption = '  Verde'
+      Checked = True
+      State = cbChecked
+      TabOrder = 2
+      OnClick = CheckBox2_VERDEClick
+    end
+    object CheckBox3_AZUL: TCheckBox
+      Left = 118
+      Top = 50
+      Width = 97
+      Height = 17
+      Caption = '  Azul'
+      Checked = True
+      State = cbChecked
+      TabOrder = 3
+      OnClick = CheckBox3_AZULClick
     end
   end
   object ToolBar1: TToolBar
@@ -145,6 +178,7 @@ object AppPDI: TAppPDI
       Top = 0
       Caption = 'ToolButton2'
       ImageIndex = 1
+      OnClick = Guardar1Click
     end
     object ToolButton3: TToolButton
       Left = 60
@@ -178,14 +212,24 @@ object AppPDI: TAppPDI
     end
   end
   object MainMenu1: TMainMenu
-    Left = 64
-    Top = 128
+    Left = 128
+    Top = 224
     object Archivos1: TMenuItem
       Caption = '&Archivos'
       object Abrir1: TMenuItem
         Caption = 'Abrir'
         ShortCut = 16449
         OnClick = Abrir1Click
+      end
+      object Guardar1: TMenuItem
+        Caption = 'Guardar'
+        ShortCut = 16467
+        OnClick = Guardar1Click
+      end
+      object Guardarcomo1: TMenuItem
+        Caption = 'Guardar como...'
+        ShortCut = 49235
+        OnClick = Guardarcomo1Click
       end
     end
     object Varios1: TMenuItem
@@ -251,12 +295,12 @@ object AppPDI: TAppPDI
     InitialDir = '.'
     Options = [ofHideReadOnly, ofPathMustExist, ofFileMustExist, ofEnableSizing]
     Title = 'Abrir Archivo de Imagen'
-    Left = 160
-    Top = 128
+    Left = 424
+    Top = 112
   end
   object ImageList1: TImageList
-    Left = 64
-    Top = 200
+    Left = 128
+    Top = 280
     Bitmap = {
       494C010104000A00080010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
@@ -530,11 +574,11 @@ object AppPDI: TAppPDI
       000000000000}
   end
   object ImageList2: TImageList
-    Left = 264
-    Top = 192
+    Left = 272
+    Top = 280
     Bitmap = {
       494C010104000A00080010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
-      0000000000003600000028000000400000002000000001002000000000000020
+            0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -803,5 +847,14 @@ object AppPDI: TAppPDI
       000300008060800380030000E001810180030000F0018301FC0F0000F803E701
       FC1F0000FC07FF01FE3F8001FFFFFF8700000000000000000000000000000000
       000000000000}
+
+  end
+  object SavePictureDialog1: TSavePictureDialog
+    DefaultExt = 'jpg'
+    InitialDir = '.'
+    Options = [ofOverwritePrompt, ofHideReadOnly, ofPathMustExist, ofEnableSizing]
+    Title = 'Salvar Imagen - PDI'
+    Left = 424
+    Top = 176
   end
 end

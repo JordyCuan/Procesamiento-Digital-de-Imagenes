@@ -20,10 +20,16 @@ procedure fp_negativo(MA: MatImg; var MB: MatImg);
 var
   x,y,c   : integer;
 begin
-  for y := 0 to MA.nr-1 do
-    for x := 0 to MA.nc-1 do
-      for c := 0 to 2 do
-        MB.dat[x][y][c] := 255 - MA.dat[x][y][c];
+
+  for c := 0 to 2 do
+    if _kan[c] then
+      for y := 0 to MA.nr-1 do
+        for x := 0 to MA.nc-1 do
+          MB.dat[x][y][c] := 255 - MA.dat[x][y][c]
+		else
+			for y := 0 to MA.nr-1 do
+				for x := 0 to MA.nc-1 do
+					MB.dat[x][y][c] := MB.dat[x][y][c];
 end;
 
 // Proceso de filtrado gamma (rango dinamico)

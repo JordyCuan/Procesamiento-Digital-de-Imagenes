@@ -1,14 +1,9 @@
-unit UBase;
+﻿unit UBase;
 
 interface
 
 uses
   VCL.Graphics, math;
-
-var
-  _x1, _x2, _y1, _y2  : integer;
-  _xc, _yc, _Rx, _Ry  : integer;
-  _banCir             : boolean;
 
 type
   MatImg = record
@@ -16,9 +11,30 @@ type
     dat    : array of array of array of single;
   end;
 
+  //Matris de convolucion
+  MatConv = record
+    nc, nr : integer;
+    dat    : array of array of single;
+  end;
+
+var
+  //Regiones establecidas en la selección de la imagen
+  _x1, _x2, _y1, _y2  : integer;
+  _xc, _yc, _Rx, _Ry  : integer;
+  _xs, _ys            : integer;
+
+  _banCir, _banRect   : boolean;
+  _kan                : array [0..2] of boolean;
+  _MC1                : MatConv;
+  idf : TextFile;
+  x,y : integer;
+
+
   // metodos
   function ajusta255(z : single) : byte;
   function ajusta511(z : single) : integer;
+
+  //function CanalPrendido() : boolean;
 
   procedure BMP2Mat(BM : TBitMap; var Mat : MatImg);
   procedure Mat2BMP(Mat : MatImg; var BM  : TBitMap);
@@ -108,5 +124,41 @@ begin
         MB.dat[x][y][c] := MA.dat[x][y][c];
 
 end;
+
+
+
+// Create???
+    (*
+begin
+  // abrir Archivo para lectura
+  Assign(idfile, ArchiString)
+  Reset(idfile) // Abrir para lectura
+
+
+  readln(idfile) //Leer la linea de descripcion
+
+
+          //Array of MatConv
+  readln(idfile, NumMCG) // Lee numero de matrices / filtros de bordes
+  SetLenght(_MCG, NumMCG);
+  SelLenght(_ACMC, NumMCG);
+
+
+
+  for k:=0 to _NumMCG-1 do begin
+    readln(idfile, _ACMC[k]); //Leer nombre del filtro
+    readln(idfile, _MCG[k].nc, _MCG[k].nr); // Leer dimenciones de la matriz
+
+    //Dar tamaño a la matriz
+    SetLenght(_MCG[k].dat, _MCG[k].nc, _MCG[k].nr)
+
+    // Leer la matriz
+    for y := 0 to _MCG[k].nc-1 do begin
+      for x:=0 to _MCG[k].nr-1 do
+        read(idfile, _MCG[k].dat[x][y])
+      readln(idfile)
+    end;
+  end;
+*)
 
 end.

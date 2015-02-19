@@ -55,10 +55,18 @@ type
     HacerDeshacer1: TMenuItem;
     Constante50501: TMenuItem;
     Porcentual50501: TMenuItem;
+
     FuncionSeno1: TMenuItem;
     FuncionExponencial1: TMenuItem;
 
-    // Metodos
+    SavePictureDialog1: TSavePictureDialog;
+    Guardar1: TMenuItem;
+    Guardarcomo1: TMenuItem;
+    CheckBox1_ROJO: TCheckBox;
+    CheckBox2_VERDE: TCheckBox;
+    CheckBox3_AZUL: TCheckBox;
+
+    // Metodos
     procedure Abrir1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Image1MouseLeave(Sender: TObject);
@@ -75,6 +83,21 @@ type
     procedure Porcentual50501Click(Sender: TObject);
     procedure FuncionSeno1Click(Sender: TObject);
     procedure FuncionExponencial1Click(Sender: TObject);
+    procedure Guardar1Click(Sender: TObject);
+    procedure Guardarcomo1Click(Sender: TObject);
+    procedure CheckBox1_ROJOClick(Sender: TObject);
+    procedure CheckBox2_VERDEClick(Sender: TObject);
+    procedure CheckBox3_AZULClick(Sender: TObject);
+
+
+    // Añadidos por Jordy
+    //procedure BSX1Click(Sender: TObject);
+    //procedure BSY1Click(Sender: TObject);
+    //procedure MatrizYB1Click(Sender: TObject);
+    //procedure MetMediasGen(Sender: TObject);
+
+
+
   private
     { Private declarations }
 
@@ -83,10 +106,11 @@ type
   public
     { Public declarations }
     nomIma   : string;
-    BM1      : TBitMap;
+    BM1, BMS : TBitMap;
     valor    : single;
+    nc, nr   : integer;
+    MC1      : MatConv;
     Im1,Im2  : MatImg;
-    nc,nr    : integer;
   end;
 
 var
@@ -98,6 +122,8 @@ implementation
 
 // Inicializacion de la Ventana
 procedure TAppPDI.FormCreate(Sender: TObject);
+var
+  i : integer;
 begin
   StatusBar3.Panels[0].Text := 'Archivo';
 
@@ -114,6 +140,32 @@ begin
 
   _banCir := false;
 
+  // Llenado del canal
+  for i := 0 to 2 do
+    _kan[i] := true;
+end;
+
+
+// ************Ajustar canales según el cambio
+procedure TAppPDI.CheckBox1_ROJOClick(Sender: TObject);
+var ROJO : integer;
+begin
+  ROJO := 0;
+  _kan[ROJO] := CheckBox1_ROJO.Checked;
+end;
+
+procedure TAppPDI.CheckBox2_VERDEClick(Sender: TObject);
+var VERDE : integer;
+begin
+  VERDE := 1;
+  _kan[VERDE] := CheckBox2_VERDE.Checked;
+end;
+
+procedure TAppPDI.CheckBox3_AZULClick(Sender: TObject);
+var AZUL : integer;
+begin
+  AZUL := 2;
+  _kan[AZUL] := CheckBox3_AZUL.Checked;
 end;
 
 
@@ -169,6 +221,68 @@ begin
   end;
 end;
 
+procedure salvar_Imagen(BB : TBitmap; nombre : string);
+var
+  ext  : string;
+  fjpg : TJPEGImage;
+  fgif : TGIFImage;
+  fpng : TPngImage;
+begin
+
+  // ********* Extension no dada *********
+  if not (pos('.', nombre) > 1) then begin
+    nombre := nombre + '.jpg';
+  end;
+
+
+  // ********* JPEG *********
+  if (pos('.jpg', nombre) > 1) or (pos('.jpeg', nombre) > 1) then begin
+    // create the jpeg-graphic
+    fjpg := TJPEGImage.Create;
+    // assign the bitmap to the jpeg, this converts the bitmap
+    fjpg.Assign(BB);
+    // and save it to file
+    fjpg.SaveToFile(nombre);
+  end;
+
+
+  // ********* GIF *********
+  if (pos('.gif', nombre) > 1) then begin
+    // create the jpeg-graphic
+    fgif := TGIFImage.Create;
+    // assign the bitmap to the jpeg, this converts the bitmap
+    fgif.Assign(BB);
+    // and save it to file
+    fgif.SaveToFile(nombre);
+  end;
+
+  // ********* PNG *********
+  if (pos('.png', nombre) > 1) then begin
+    // create the jpeg-graphic
+    fpng := TPNGImage.Create;
+    // assign the bitmap to the jpeg, this converts the bitmap
+    fpng.Assign(BB);
+    // and save it to file
+    fpng.SaveToFile(nombre);
+  end;
+
+end;
+
+// Guardar la imagen
+procedure TAppPDI.Guardar1Click(Sender: TObject);
+begin
+  salvar_Imagen(bm1, nomIma);
+end;
+
+// Salvar Como
+procedure TAppPDI.Guardarcomo1Click(Sender: TObject);
+begin
+  SavePictureDialog1.FileName := nomIma;
+  if SavePictureDialog1.Execute then begin
+    nomIma := SavePictureDialog1.FileName;
+    salvar_Imagen(BM1, nomIma);
+  end;
+end;
 
 // Aviso fuera de imagen
 procedure TAppPDI.Image1MouseLeave(Sender: TObject);
@@ -319,4 +433,52 @@ begin
 end;
 
 
+// Borde simple en Y
+(*procedure TAppPDI.BSY1Click(Sender: TObject);
+begin
+  if CanalPrendido then begin
+    Prepara();
+    fr_BSY(im1, im2);
+    Presenta();
+  end;
+end;
+*)
+
+
+// Borde Simple Y con convoluciones
+(*procedure TAppPDI.MatrizYB1Click(Sender : TObject);
+begin
+  if CanalPrendido then begin
+    Prepara();
+    fr_BSCY(im1, _MC1, im2);
+    Presenta();
+  end;
+end;
+*)
+
+
+(*procedure TAppPDI.MetMediasGen(Sender: TObject);
+var
+  opc: integer;
+begin
+  opc := MediasConvolucion1.IndexOf(Sender as TMenuItem);
+
+
+  if CanalPrendido then begin
+    Prepara();
+    fr_MediasC(Im1, _MCGM[opc], Im2);
+    Presenta();
+  end;
+
+end;
+*)
 end.
+
+
+
+
+
+
+
+
+
