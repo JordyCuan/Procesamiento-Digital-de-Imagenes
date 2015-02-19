@@ -10,6 +10,8 @@ uses
   procedure fp_logaritmo  (MA: MatImg; var MB: MatImg);
   procedure fp_constante  (MA: MatImg; var MB: MatImg; vv : single);
   procedure fp_porcentual (MA: MatImg; var MB: MatImg; vv : single);
+  procedure fp_seno       (MA: MatImg; var MB: MatImg);
+  procedure fp_exponencial(MA: MatImg; var MB: MatImg);
 
 implementation
 
@@ -63,6 +65,46 @@ begin
 
 end;
 
+//Aplicacion de Fitro de Seno para Aclarado
+
+procedure fp_seno(MA:MatImg; var MB:MatImg);
+var
+  x,y,c   :integer;
+  ff,kk    :single;
+
+  function sen(z:single): single;
+  begin
+    result:=ff*sin((3.1416*z)/(2*ff));
+  end;
+
+  begin
+  ff:=3.1416/2*255;
+  for y :=0 to Ma.nr-1 do
+    for x := 0 to MA.nc-1 do
+      for c := 0 to 2  do
+        MB.dat[x][y][c] := sen(MA.dat[x][y][c]);
+  end;
+
+//Aplicacion de Filtro Exponencial para Aclarado
+
+procedure fp_exponencial(MA:MatImg; var MB:MatImg);
+var
+  x,y,c   :integer;
+
+  function expo(z:single): single;
+  begin
+    result:=z/(1-exp(-1));
+  end;
+
+  begin
+
+  for y := 0 to Ma.nr-1 do
+    for x := 0 to MA.nc-1 do
+      for c := 0 to 2 do
+        MB.dat[x][y][c]:= expo(MA.dat[x][y][c]);
+  end;
+
+
 // Aplica aditivamente una constante
 // proceso de negativo
 procedure fp_constante(MA: MatImg; var MB: MatImg; vv : single);
@@ -89,6 +131,8 @@ begin
       for c := 0 to 2 do
         MB.dat[x][y][c] := ff*MA.dat[x][y][c];
 end;
+
+
 
 
 end.

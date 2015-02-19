@@ -55,6 +55,8 @@ type
     HacerDeshacer1: TMenuItem;
     Constante50501: TMenuItem;
     Porcentual50501: TMenuItem;
+    FuncionSeno1: TMenuItem;
+    FuncionExponencial1: TMenuItem;
 
     // Metodos
     procedure Abrir1Click(Sender: TObject);
@@ -71,6 +73,8 @@ type
     procedure HacerDeshacer1Click(Sender: TObject);
     procedure Constante50501Click(Sender: TObject);
     procedure Porcentual50501Click(Sender: TObject);
+    procedure FuncionSeno1Click(Sender: TObject);
+    procedure FuncionExponencial1Click(Sender: TObject);
   private
     { Private declarations }
 
@@ -111,6 +115,8 @@ begin
   _banCir := false;
 
 end;
+
+
 
 // Cambia Tema
 procedure TAppPDI.EstiloFCC1Click(Sender: TObject);
@@ -264,6 +270,22 @@ begin
   Prepara();
   fp_logaritmo(Im1,Im2);
   Presenta();
+end;
+
+//Funcion Seno
+procedure TAppPDI.FuncionSeno1Click(Sender: TObject);
+begin
+Prepara();
+fp_seno(Im1,Im2);
+Presenta();
+end;
+
+//Funcion Exponencial
+procedure TAppPDI.FuncionExponencial1Click(Sender: TObject);
+begin
+Prepara();
+fp_exponencial(Im1,Im2);
+Presenta();
 end;
 
 // aditivo
