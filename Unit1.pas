@@ -65,6 +65,8 @@ type
     CheckBox1_ROJO: TCheckBox;
     CheckBox2_VERDE: TCheckBox;
     CheckBox3_AZUL: TCheckBox;
+    FuncionCoseno1: TMenuItem;
+    ClaroOscuro1: TMenuItem;
 
     // Metodos
     procedure Abrir1Click(Sender: TObject);
@@ -88,6 +90,8 @@ type
     procedure CheckBox1_ROJOClick(Sender: TObject);
     procedure CheckBox2_VERDEClick(Sender: TObject);
     procedure CheckBox3_AZULClick(Sender: TObject);
+    procedure FuncionCoseno1Click(Sender: TObject);
+    procedure ClaroOscuro1Click(Sender: TObject);
 
 
     // Añadidos por Jordy
@@ -167,7 +171,6 @@ begin
   AZUL := 2;
   _kan[AZUL] := CheckBox3_AZUL.Checked;
 end;
-
 
 
 // Cambia Tema
@@ -394,12 +397,30 @@ fp_seno(Im1,Im2);
 Presenta();
 end;
 
+//Funcion Coseno
+procedure TAppPDI.FuncionCoseno1Click(Sender: TObject);
+begin
+Prepara();
+fp_coseno(Im1,Im2);
+Presenta();
+end;
+
 //Funcion Exponencial
+
 procedure TAppPDI.FuncionExponencial1Click(Sender: TObject);
 begin
 Prepara();
 fp_exponencial(Im1,Im2);
 Presenta();
+end;
+
+//Funcion TangenteHiperbolica Claro-Oscuro
+procedure TAppPDI.ClaroOscuro1Click(Sender: TObject);
+begin
+  Prepara();
+  fp_claroOscuro(Im1,Im2);
+  Presenta();
+
 end;
 
 // aditivo

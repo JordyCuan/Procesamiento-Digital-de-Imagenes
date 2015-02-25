@@ -12,6 +12,8 @@ uses
   procedure fp_porcentual (MA: MatImg; var MB: MatImg; vv : single);
   procedure fp_seno       (MA: MatImg; var MB: MatImg);
   procedure fp_exponencial(MA: MatImg; var MB: MatImg);
+  procedure fp_coseno     (MA: MatImg; var MB: MatImg);
+  procedure fp_claroOscuro(MA: MatImg; var MB: MatImg);
 
 implementation
 
@@ -89,7 +91,27 @@ var
     for x := 0 to MA.nc-1 do
       for c := 0 to 2  do
         MB.dat[x][y][c] := sen(MA.dat[x][y][c]);
-  end;
+end;
+
+//Aplicacion de Filtro de Coseno para Obscuresimiento
+procedure fp_coseno(MA: MatImg; var MB: MatImg);
+var
+x,y,c   :integer;
+ff,kk   :single;
+
+function coseno(z:single):  single;
+begin
+  result:= 255*(1-cos((3.1416*z)/(2*255)));
+end;
+
+begin
+
+for y :=0 to Ma.nr-1 do
+  for x := 0 to Ma.nc-1 do
+    for c := 0 to 2 do
+      MB.dat[x][y][c]:= coseno(MA.dat[x][y][c]);
+end;
+
 
 //Aplicacion de Filtro Exponencial para Aclarado
 
@@ -109,7 +131,24 @@ var
       for c := 0 to 2 do
         MB.dat[x][y][c]:= expo(MA.dat[x][y][c]);
   end;
+//Aplicacion de Fitro arcotangente para claro-obscuro
 
+procedure fp_claroOscuro(MA:MatImg; var MB:MatImg);
+var
+  x,y,c    :integer;
+  function claOsc(z:single): single;
+  begin
+    result:=(255/2)*(1+tanh(2*(z-(255/2))));
+  end;
+
+  begin
+
+  for y := 0 to Ma.nr-1 do
+    for x := 0 to Ma.nc-1 do
+      for c := 0 to 2 do
+        MB.dat[x][y][c]:= claOsc(MA.dat[x][y][c])
+
+end;
 
 // Aplica aditivamente una constante
 // proceso de negativo
