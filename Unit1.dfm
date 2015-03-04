@@ -2,8 +2,8 @@ object AppPDI: TAppPDI
   Left = 73
   Top = 154
   Caption = 'Ejemplo de PDI (2) Prim 2015 FCC BUAP'
-  ClientHeight = 516
-  ClientWidth = 542
+  ClientHeight = 640
+  ClientWidth = 662
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,25 +17,34 @@ object AppPDI: TAppPDI
   PixelsPerInch = 96
   TextHeight = 13
   object ScrollBox1: TScrollBox
-    Left = 1
-    Top = 40
-    Width = 534
-    Height = 338
+    Left = 8
+    Top = 33
+    Width = 646
+    Height = 460
     TabOrder = 0
     object Image1: TImage
       Left = 0
       Top = 0
-      Width = 345
-      Height = 313
+      Width = 25
+      Height = 25
       AutoSize = True
-      OnMouseLeave = Image1MouseLeave
-      OnMouseMove = Image1MouseMove
+    end
+    object Image2Selec: TImage
+      Left = 0
+      Top = 0
+      Width = 17
+      Height = 17
+      Transparent = True
+      OnMouseDown = Image2SelecMouseDown
+      OnMouseLeave = Image2SelecMouseLeave
+      OnMouseMove = Image2SelecMouseMove
+      OnMouseUp = Image2SelecMouseUp
     end
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 497
-    Width = 542
+    Top = 621
+    Width = 662
     Height = 19
     Panels = <
       item
@@ -52,6 +61,12 @@ object AppPDI: TAppPDI
       end
       item
         Width = 50
+      end
+      item
+        Width = 25
+      end
+      item
+        Width = 75
       end
       item
         Width = 50
@@ -59,8 +74,8 @@ object AppPDI: TAppPDI
   end
   object StatusBar2: TStatusBar
     Left = 0
-    Top = 478
-    Width = 542
+    Top = 602
+    Width = 662
     Height = 19
     Panels = <
       item
@@ -79,13 +94,20 @@ object AppPDI: TAppPDI
         Width = 50
       end
       item
+        Width = 25
+      end
+      item
+        Text = 'Seleccion: '
+        Width = 75
+      end
+      item
         Width = 50
       end>
   end
   object StatusBar3: TStatusBar
     Left = 0
-    Top = 459
-    Width = 542
+    Top = 583
+    Width = 662
     Height = 19
     Panels = <
       item
@@ -96,9 +118,9 @@ object AppPDI: TAppPDI
       end>
   end
   object Panel1: TPanel
-    Left = 2
-    Top = 384
-    Width = 532
+    Left = 8
+    Top = 499
+    Width = 646
     Height = 76
     Color = clMoneyGreen
     ParentBackground = False
@@ -155,7 +177,7 @@ object AppPDI: TAppPDI
   object ToolBar1: TToolBar
     Left = 0
     Top = 0
-    Width = 542
+    Width = 662
     Height = 29
     ButtonHeight = 30
     ButtonWidth = 30
@@ -232,19 +254,31 @@ object AppPDI: TAppPDI
         OnClick = Guardarcomo1Click
       end
     end
-    object Varios1: TMenuItem
-      Caption = 'Varios'
-      object Histograma1: TMenuItem
-        Caption = 'Histograma'
-        OnClick = Histograma1Click
-      end
-    end
     object Editar1: TMenuItem
       Caption = '&Editar'
       object HacerDeshacer1: TMenuItem
         Caption = 'Hacer-Deshacer'
         ShortCut = 16474
         OnClick = HacerDeshacer1Click
+      end
+      object Activarseleccion1: TMenuItem
+        Caption = 'Activar seleccion Rec'
+        OnClick = Activarseleccion1Click
+      end
+      object ActivarSeleccionCir1: TMenuItem
+        Caption = 'Activar Seleccion Cir'
+        OnClick = ActivarSeleccionCir1Click
+      end
+      object Desactivarseleccion1: TMenuItem
+        Caption = 'Desactivar seleccion'
+        OnClick = Desactivarseleccion1Click
+      end
+    end
+    object Varios1: TMenuItem
+      Caption = 'Varios'
+      object Histograma1: TMenuItem
+        Caption = 'Histograma'
+        OnClick = Histograma1Click
       end
     end
     object FiltrosPuntuales1: TMenuItem
@@ -269,6 +303,10 @@ object AppPDI: TAppPDI
         Caption = 'Porcentual (-50%, 50%)'
         OnClick = Porcentual50501Click
       end
+      object BlancoyNegro1: TMenuItem
+        Caption = 'Blanco y Negro'
+        OnClick = BlancoyNegro1Click
+      end
       object FuncionSeno1: TMenuItem
         Caption = 'Funcion Seno'
         OnClick = FuncionSeno1Click
@@ -285,6 +323,41 @@ object AppPDI: TAppPDI
         Caption = 'Claro-Oscuro'
         OnClick = ClaroOscuro1Click
       end
+    end
+    object FiltrosRegionales1: TMenuItem
+      Caption = 'Filtros &Regionales'
+      object BordesX1: TMenuItem
+        Caption = 'Borde Simple X'
+        OnClick = BordesX1Click
+      end
+      object BordesY1: TMenuItem
+        Caption = 'Borde Simple Y'
+        OnClick = BordesY1Click
+      end
+      object BordesXY1: TMenuItem
+        Caption = 'Bordes XY'
+      end
+      object BordesConvolucion1: TMenuItem
+        Caption = 'Bordes Convolucion'
+      end
+      object N1: TMenuItem
+        Caption = '-'
+      end
+      object MediasConvulucion1: TMenuItem
+        Caption = 'Medias Convulucion'
+      end
+      object N2: TMenuItem
+        Caption = '-'
+      end
+      object MedianaSimple1: TMenuItem
+        Caption = 'Mediana Simple'
+      end
+      object MedianasConvolucion1: TMenuItem
+        Caption = 'Medianas Convolucion'
+      end
+    end
+    object FiltrosGeometricos1: TMenuItem
+      Caption = 'Filtros &Geometricos'
     end
     object Interface1: TMenuItem
       Caption = 'Interface'
@@ -310,7 +383,7 @@ object AppPDI: TAppPDI
     Left = 128
     Top = 280
     Bitmap = {
-      494C010104000A00100010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010104000A00200010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -585,7 +658,7 @@ object AppPDI: TAppPDI
     Left = 272
     Top = 280
     Bitmap = {
-      494C010104000A00100010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010104000A00200010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

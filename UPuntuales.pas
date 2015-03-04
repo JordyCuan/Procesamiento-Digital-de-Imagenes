@@ -8,6 +8,7 @@ uses
   procedure fp_negativo   (MA: MatImg; var MB: MatImg);
   procedure fp_gamma      (MA: MatImg; var MB: MatImg; vv : single);
   procedure fp_logaritmo  (MA: MatImg; var MB: MatImg);
+  procedure fp_blancoNegro(MA: MatImg; var MB: MatImg);
   procedure fp_constante  (MA: MatImg; var MB: MatImg; vv : single);
   procedure fp_porcentual (MA: MatImg; var MB: MatImg; vv : single);
   procedure fp_seno       (MA: MatImg; var MB: MatImg);
@@ -25,13 +26,13 @@ begin
 
   for c := 0 to 2 do
     if _kan[c] then
-      for y := 0 to MA.nr-1 do
-        for x := 0 to MA.nc-1 do
+      for y := _y1 to _y2-1 do
+        for x := _x1 to _x2-1 do
           MB.dat[x][y][c] := 255 - MA.dat[x][y][c]
 		else
 			for y := 0 to MA.nr-1 do
 				for x := 0 to MA.nc-1 do
-					MB.dat[x][y][c] := MB.dat[x][y][c];
+					MB.dat[x][y][c] := MA.dat[x][y][c];
 end;
 
 // Proceso de filtrado gamma (rango dinamico)
@@ -45,10 +46,15 @@ var
   end;
 
 begin
-  for y := 0 to MA.nr-1 do
-    for x := 0 to MA.nc-1 do
-      for c := 0 to 2 do
-        MB.dat[x][y][c] := gamma(MA.dat[x][y][c],vv);
+  for c := 0 to 2 do
+    if _kan[c] then
+      for y := _y1 to _y2-1 do
+        for x := _x1 to _x2-1 do
+          MB.dat[x][y][c] := gamma(MA.dat[x][y][c],vv)
+		else
+			for y := 0 to MA.nr-1 do
+				for x := 0 to MA.nc-1 do
+					MB.dat[x][y][c] := MA.dat[x][y][c];
 
 end;
 
@@ -66,10 +72,15 @@ var
 begin
   ff := 255/log10(256);
 
-  for y := 0 to MA.nr-1 do
-    for x := 0 to MA.nc-1 do
-      for c := 0 to 2 do
-        MB.dat[x][y][c] := loga(MA.dat[x][y][c]);
+  for c := 0 to 2 do
+    if _kan[c] then
+      for y := _y1 to _y2-1 do
+        for x := _x1 to _x2-1 do
+          MB.dat[x][y][c] := loga(MA.dat[x][y][c])
+    else
+			for y := 0 to MA.nr-1 do
+				for x := 0 to MA.nc-1 do
+					MB.dat[x][y][c] := MA.dat[x][y][c];
 
 end;
 
@@ -87,10 +98,16 @@ var
 
   begin
   ff:=3.1416/2*255;
-  for y :=0 to Ma.nr-1 do
-    for x := 0 to MA.nc-1 do
-      for c := 0 to 2  do
-        MB.dat[x][y][c] := sen(MA.dat[x][y][c]);
+
+  for c := 0 to 2 do
+    if _kan[c] then
+      for y := _y1 to _y2-1 do
+        for x := _x1 to _x2-1 do
+          MB.dat[x][y][c] := sen(MA.dat[x][y][c])
+    else
+			for y := 0 to MA.nr-1 do
+				for x := 0 to MA.nc-1 do
+					MB.dat[x][y][c] := MA.dat[x][y][c];
 end;
 
 //Aplicacion de Filtro de Coseno para Obscuresimiento
@@ -106,10 +123,15 @@ end;
 
 begin
 
-for y :=0 to Ma.nr-1 do
-  for x := 0 to Ma.nc-1 do
-    for c := 0 to 2 do
-      MB.dat[x][y][c]:= coseno(MA.dat[x][y][c]);
+  for c := 0 to 2 do
+    if _kan[c] then
+      for y := _y1 to _y2-1 do
+        for x := _x1 to _x2-1 do
+          MB.dat[x][y][c]:= coseno(MA.dat[x][y][c])
+    else
+			for y := 0 to MA.nr-1 do
+				for x := 0 to MA.nc-1 do
+					MB.dat[x][y][c] := MA.dat[x][y][c];
 end;
 
 
@@ -124,13 +146,18 @@ var
     result:=z/(1-exp(-abs(ee)));
   end;
 
-  begin
+begin
 
-  for y := 0 to Ma.nr-1 do
-    for x := 0 to MA.nc-1 do
-      for c := 0 to 2 do
-        MB.dat[x][y][c]:= expo(MA.dat[x][y][c],vv);
-  end;
+  for c := 0 to 2 do
+    if _kan[c] then
+      for y := _y1 to _y2-1 do
+        for x := _x1 to _x2-1 do
+          MB.dat[x][y][c]:= expo(MA.dat[x][y][c],vv);
+    else
+			for y := 0 to MA.nr-1 do
+				for x := 0 to MA.nc-1 do
+					MB.dat[x][y][c] := MA.dat[x][y][c];
+end;
 //Aplicacion de Fitro arcotangente para claro-obscuro
 
 procedure fp_claroOscuro(MA:MatImg; var MB:MatImg; vv:single);
@@ -141,14 +168,38 @@ var
     result:=(255/2)*(1+tanh(abs(aa)*(z-(255/2))));
   end;
 
-  begin
-
-  for y := 0 to Ma.nr-1 do
-    for x := 0 to Ma.nc-1 do
-      for c := 0 to 2 do
-        MB.dat[x][y][c]:= claOsc(MA.dat[x][y][c],vv);
-
+begin
+  for c := 0 to 2 do
+    if _kan[c] then
+      for y := _y1 to _y2-1 do
+        for x := _x1 to _x2-1 do
+          MB.dat[x][y][c]:= claOsc(MA.dat[x][y][c],vv);
+    else
+			for y := 0 to MA.nr-1 do
+				for x := 0 to MA.nc-1 do
+					MB.dat[x][y][c] := MA.dat[x][y][c];
 end;
+
+
+// proceso Blanco y Negro
+procedure fp_blancoNegro(MA: MatImg; var MB: MatImg);
+var
+  x,y,c   : integer;
+  temp    : single;
+begin
+
+  for y := _y1 to _y2-1 do
+    for x := _x1 to _x2-1 do begin
+      temp := 0;
+      for c := 0 to 2 do begin
+        temp := temp + MA.dat[x][y][c];
+      end;
+      MB.dat[x][y][0] := temp / 3;
+      MB.dat[x][y][1] := temp / 3;
+      MB.dat[x][y][2] := temp / 3;
+    end;
+end;
+
 
 // Aplica aditivamente una constante
 // proceso de negativo
@@ -156,10 +207,16 @@ procedure fp_constante(MA: MatImg; var MB: MatImg; vv : single);
 var
   x,y,c   : integer;
 begin
-  for y := 0 to MA.nr-1 do
-    for x := 0 to MA.nc-1 do
-      for c := 0 to 2 do
-        MB.dat[x][y][c] := MA.dat[x][y][c] + vv;
+
+  for c := 0 to 2 do
+    if _kan[c] then
+      for y := _y1 to _y2-1 do
+        for x := _x1 to _x2-1 do
+          MB.dat[x][y][c] := MA.dat[x][y][c] + vv
+    else
+			for y := 0 to MA.nr-1 do
+				for x := 0 to MA.nc-1 do
+					MB.dat[x][y][c] := MA.dat[x][y][c];
 end;
 
 // Aplica multiplicativa una constante
@@ -171,13 +228,15 @@ var
 begin
   ff := 1 + vv/100;
 
-  for y := 0 to MA.nr-1 do
-    for x := 0 to MA.nc-1 do
-      for c := 0 to 2 do
-        MB.dat[x][y][c] := ff*MA.dat[x][y][c];
+  for c := 0 to 2 do
+    if _kan[c] then
+      for y := _y1 to _y2-1 do
+        for x := _x1 to _x2-1 do
+          MB.dat[x][y][c] := ff*MA.dat[x][y][c]
+    else
+			for y := 0 to MA.nr-1 do
+				for x := 0 to MA.nc-1 do
+					MB.dat[x][y][c] := MA.dat[x][y][c];
 end;
-
-
-
 
 end.
