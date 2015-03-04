@@ -409,16 +409,18 @@ end;
 
 procedure TAppPDI.FuncionExponencial1Click(Sender: TObject);
 begin
+valor := StrToFloat(Edit1.Text);
 Prepara();
-fp_exponencial(Im1,Im2);
+fp_exponencial(Im1,Im2,valor);
 Presenta();
 end;
 
 //Funcion TangenteHiperbolica Claro-Oscuro
 procedure TAppPDI.ClaroOscuro1Click(Sender: TObject);
 begin
+valor := StrToFloat(Edit1.Text);
   Prepara();
-  fp_claroOscuro(Im1,Im2);
+  fp_claroOscuro(Im1,Im2,valor);
   Presenta();
 
 end;

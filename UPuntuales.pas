@@ -11,9 +11,9 @@ uses
   procedure fp_constante  (MA: MatImg; var MB: MatImg; vv : single);
   procedure fp_porcentual (MA: MatImg; var MB: MatImg; vv : single);
   procedure fp_seno       (MA: MatImg; var MB: MatImg);
-  procedure fp_exponencial(MA: MatImg; var MB: MatImg);
+  procedure fp_exponencial(MA: MatImg; var MB: MatImg; vv : single);
   procedure fp_coseno     (MA: MatImg; var MB: MatImg);
-  procedure fp_claroOscuro(MA: MatImg; var MB: MatImg);
+  procedure fp_claroOscuro(MA: MatImg; var MB: MatImg; vv : single);
 
 implementation
 
@@ -115,13 +115,13 @@ end;
 
 //Aplicacion de Filtro Exponencial para Aclarado
 
-procedure fp_exponencial(MA:MatImg; var MB:MatImg);
+procedure fp_exponencial(MA:MatImg; var MB:MatImg; vv:single);
 var
   x,y,c   :integer;
 
-  function expo(z:single): single;
+  function expo(z,ee:single): single;
   begin
-    result:=z/(1-exp(-1));
+    result:=z/(1-exp(-abs(ee)));
   end;
 
   begin
@@ -129,16 +129,16 @@ var
   for y := 0 to Ma.nr-1 do
     for x := 0 to MA.nc-1 do
       for c := 0 to 2 do
-        MB.dat[x][y][c]:= expo(MA.dat[x][y][c]);
+        MB.dat[x][y][c]:= expo(MA.dat[x][y][c],vv);
   end;
 //Aplicacion de Fitro arcotangente para claro-obscuro
 
-procedure fp_claroOscuro(MA:MatImg; var MB:MatImg);
+procedure fp_claroOscuro(MA:MatImg; var MB:MatImg; vv:single);
 var
   x,y,c    :integer;
-  function claOsc(z:single): single;
+  function claOsc(z,aa:single): single;
   begin
-    result:=(255/2)*(1+tanh(2*(z-(255/2))));
+    result:=(255/2)*(1+tanh(abs(aa)*(z-(255/2))));
   end;
 
   begin
@@ -146,7 +146,7 @@ var
   for y := 0 to Ma.nr-1 do
     for x := 0 to Ma.nc-1 do
       for c := 0 to 2 do
-        MB.dat[x][y][c]:= claOsc(MA.dat[x][y][c])
+        MB.dat[x][y][c]:= claOsc(MA.dat[x][y][c],vv);
 
 end;
 
