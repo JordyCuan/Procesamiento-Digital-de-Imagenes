@@ -1,6 +1,6 @@
 // Sistema de desarrollo para la implementacion de
 // Procesamiento Digital de iMgenes
-// V 0.4
+// V 0.5.8
 // 21 - 01 - 2015
 // FCC BUAP
 
@@ -15,7 +15,8 @@ uses
   Vcl.Menus, Vcl.ExtDlgs,
   Vcl.ComCtrls, math, Vcl.StdCtrls,
   Jpeg, PNGImage, GIFImg, Vcl.ImgList, Vcl.ToolWin,
-  UBase, UHisto, UPuntuales;
+
+  UBase, UHisto, UPuntuales, URegionales;
 
 type
   TAppPDI = class(TForm)
@@ -67,15 +68,33 @@ type
     CheckBox3_AZUL: TCheckBox;
     FuncionCoseno1: TMenuItem;
     ClaroOscuro1: TMenuItem;
+<<<<<<< HEAD
     OscurecimientoFuerte1: TMenuItem;
     SenoidaInvertida1: TMenuItem;
 
     // Metodos
+=======
+    Image2Selec: TImage;
+    Activarseleccion1: TMenuItem;
+    ActivarSeleccionCir1: TMenuItem;
+    Desactivarseleccion1: TMenuItem;
+    FiltrosRegionales1: TMenuItem;
+    FiltrosGeometricos1: TMenuItem;
+    BlancoyNegro1: TMenuItem;
+    BordesX1: TMenuItem;
+    BordesY1: TMenuItem;
+    BordesXY1: TMenuItem;
+    BordesConvolucion1: TMenuItem;
+    N1: TMenuItem;
+    MediasConvulucion1: TMenuItem;
+    N2: TMenuItem;
+    MedianaSimple1: TMenuItem;
+    MedianasConvolucion1: TMenuItem;
+
+    // Metodos
+>>>>>>> origin/master
     procedure Abrir1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure Image1MouseLeave(Sender: TObject);
-    procedure Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
-      Y: Integer);
     procedure Negativo1Click(Sender: TObject);
     procedure Gamma1Click(Sender: TObject);
     procedure EstiloFCC1Click(Sender: TObject);
@@ -94,9 +113,25 @@ type
     procedure CheckBox3_AZULClick(Sender: TObject);
     procedure FuncionCoseno1Click(Sender: TObject);
     procedure ClaroOscuro1Click(Sender: TObject);
+<<<<<<< HEAD
     procedure OscurecimientoFuerte1Click(Sender: TObject);
     procedure SenoidaInvertida1Click(Sender: TObject);
 
+=======
+    procedure Image2SelecMouseLeave(Sender: TObject);
+    procedure Image2SelecMouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure Activarseleccion1Click(Sender: TObject);
+    procedure ActivarSeleccionCir1Click(Sender: TObject);
+    procedure Desactivarseleccion1Click(Sender: TObject);
+    procedure Image2SelecMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure Image2SelecMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure BlancoyNegro1Click(Sender: TObject);
+    procedure BordesX1Click(Sender: TObject);
+    procedure BordesY1Click(Sender: TObject);
+>>>>>>> origin/master
 
 
     // Añadidos por Jordy
@@ -145,14 +180,89 @@ begin
 
   Application.Icon.LoadFromFile('alien.ico');
 
+  // Variables: Saleccion
   BM1 := TBitMap.Create;
 
   _banCir := false;
+  _banRect := false;
+  BMSel    := TBitmap.Create;
+  _boolSeleccionando := false;
 
   // Llenado del canal
   for i := 0 to 2 do
     _kan[i] := true;
 end;
+
+
+// ************ Ajuste de las banderas de seleccion segun el cambio
+procedure TAppPDI.Activarseleccion1Click(Sender: TObject);
+begin
+  _banRect := true;
+  StatusBar1.Panels[6].Text := 'Activa';
+
+  // Si lo primero que hace el usuario despues de abierta la imagen es la seleccion
+  Mat2Mat(Im1,Im2);
+end;
+procedure TAppPDI.ActivarSeleccionCir1Click(Sender: TObject);
+begin
+  _banCir := true;
+  StatusBar1.Panels[6].Text := 'Activa';
+end;
+procedure TAppPDI.Desactivarseleccion1Click(Sender: TObject);
+begin
+  _banRect := false;
+  _banCir  := false;
+  StatusBar1.Panels[6].Text := 'No activa';
+
+  _x1 := 0      ; _y1 := 0;
+  _x2 := Im1.nc ; _y2 := Im1.nr;
+
+  BMSel.Canvas.Pen.Color := clWhite;
+  BMSel.Canvas.Rectangle(0,0,BMSel.Width, BMSel.Height);
+  Image2Selec.Picture.Assign(BMSel);
+end;
+
+// ******** SELECCIONES
+procedure TAppPDI.Image2SelecMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  if _banRect and (Button = mbLeft) then begin
+    _x1 := X;
+    _y1 := Y;
+
+    _boolSeleccionando := true;
+  end;
+end;
+
+procedure TAppPDI.Image2SelecMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  if (_banRect and (Button = mbLeft)) then begin
+    if X < _x1 then begin
+      _x2 := _x1;
+      _x1 := X
+    end
+    else begin
+      _x2 := X;
+    end;
+
+    if Y < _y1 then begin
+      _y2 := _y1;
+      _y1 := Y
+    end
+    else begin
+      _y2 := Y;
+    end;
+
+    BMSel.Canvas.Pen.Color := clGreen;
+
+    BMSel.Canvas.Rectangle(_x1,_y1,_x2,_y2);
+    Image2Selec.Picture.Assign(BMSel);
+
+    _boolSeleccionando := false;
+  end;
+end;
+
 
 
 // ************Ajustar canales según el cambio
@@ -207,6 +317,11 @@ begin
     nomIma := OpenPictureDialog1.FileName;
     pic := TPicture.Create;
 
+    _banRect := false;
+    _banCir  := false;
+
+    StatusBar1.Panels[6].Text := 'No activa';
+
     try
       pic.LoadFromFile(nomIma);
 
@@ -221,7 +336,29 @@ begin
       _x1 := 0      ; _y1 := 0;
       _x2 := Im1.nc ; _y2 := Im1.nr;
 
-      StatusBar3.Panels[1].Text := nomIma
+      StatusBar3.Panels[1].Text := nomIma;
+
+
+      // Actualizamos el tam del ImageSelec
+      Image2Selec.Width := _x2;
+      Image2Selec.Height := _y2;
+
+      // dimensionamos el BItMap de Seleccion
+      BMSel.Width  := Image1.Width;
+      BMSel.Height := Image1.Height;
+
+      BMSel.Transparent := true;
+      BMSel.TransparentColor := clWhite;
+      BMSel.Canvas.Pen.Color := clWhite;
+      BMSel.Canvas.Rectangle(0,0,BMSel.Width, BMSel.Height);
+      //BMSel.Canvas.Pen.Color := clBlack;
+      //PlumaSel := clBlack;
+
+      // Al ImageSel lo hacemos autoSize , en diseño
+      // y también Transparente
+
+      // Le asignamos el BMSel
+      Image2Selec.Picture.Assign(BMSel);
     finally
       pic.Free;
     end;
@@ -293,7 +430,7 @@ begin
 end;
 
 // Aviso fuera de imagen
-procedure TAppPDI.Image1MouseLeave(Sender: TObject);
+procedure TAppPDI.Image2SelecMouseLeave(Sender: TObject);
 begin
   StatusBar1.Panels[0].Text := '??';
   StatusBar1.Panels[1].Text := '??';
@@ -304,9 +441,8 @@ begin
 end;
 
 // Informa (X,Y) y RGB del pixel dentro de la Imagen
-procedure TAppPDI.Image1MouseMove(Sender: TObject;
-  Shift: TShiftState;
-  X, Y: Integer);
+procedure TAppPDI.Image2SelecMouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
 var
   r,g,b : byte;
   pix   : integer;
@@ -322,7 +458,21 @@ begin
   StatusBar1.Panels[2].Text := IntToStr(r);
   StatusBar1.Panels[3].Text := IntToStr(g);
   StatusBar1.Panels[4].Text := IntToStr(b);
+
+  if ((ssLeft in Shift) and _boolSeleccionando) then begin
+    // Borramos el anterior
+    BMSel.Canvas.Pen.Color := clWhite;
+    BMSel.Canvas.Rectangle(0,0,BMSel.Width, BMSel.Height);
+    Image2Selec.Picture.Assign(BMSel);
+
+    // Dibujamos el temporal
+    BMSel.Canvas.Pen.Color := clGreen;
+
+    BMSel.Canvas.Rectangle(_x1,_y1,X,Y);
+    Image2Selec.Picture.Assign(BMSel);
+  end;
 end;
+
 
 // Hacer deshacer
 // Siempre que haya un proceso previo una imagen
@@ -372,9 +522,11 @@ end;
 // Negativo usando el BitMap: BM1
 procedure TAppPDI.Negativo1Click(Sender: TObject);
 begin
-  Prepara();
-  fp_negativo(Im1,Im2);
-  Presenta();
+  if CanalPrendido then begin
+    Prepara();
+    fp_negativo(Im1,Im2);
+    Presenta();
+  end;
 end;
 
 
@@ -382,35 +534,43 @@ end;
 // Correccion Gamma
 procedure TAppPDI.Gamma1Click(Sender: TObject);
 begin
-  valor := StrToFloat(Edit1.Text);
+  if CanalPrendido then begin
+    valor := StrToFloat(Edit1.Text);
 
-  Prepara();
-  fp_gamma(Im1,Im2,valor);
-  Presenta();
+    Prepara();
+    fp_gamma(Im1,Im2,valor);
+    Presenta();
+  end;
 end;
 
 // amplificacion logaritmica
 procedure TAppPDI.Logaritmo1Click(Sender: TObject);
 begin
-  Prepara();
-  fp_logaritmo(Im1,Im2);
-  Presenta();
+  if CanalPrendido then begin
+    Prepara();
+    fp_logaritmo(Im1,Im2);
+    Presenta();
+  end;
 end;
 
 //Funcion Seno
 procedure TAppPDI.FuncionSeno1Click(Sender: TObject);
 begin
-Prepara();
-fp_seno(Im1,Im2);
-Presenta();
+  if CanalPrendido then begin
+    Prepara();
+    fp_seno(Im1,Im2);
+    Presenta();
+  end;
 end;
 
 //Funcion Coseno
 procedure TAppPDI.FuncionCoseno1Click(Sender: TObject);
 begin
-Prepara();
-fp_coseno(Im1,Im2);
-Presenta();
+  if CanalPrendido then begin
+    Prepara();
+    fp_coseno(Im1,Im2);
+    Presenta();
+  end;
 end;
 
 //Funcion Oscurecimiento Fuerte
@@ -424,13 +584,14 @@ Presenta();
 end;
 
 //Funcion Exponencial
-
 procedure TAppPDI.FuncionExponencial1Click(Sender: TObject);
 begin
-valor := StrToFloat(Edit1.Text);
-Prepara();
-fp_exponencial(Im1,Im2,valor);
-Presenta();
+  if CanalPrendido then begin
+    valor := StrToFloat(Edit1.Text);
+    Prepara();
+    fp_exponencial(Im1,Im2,valor);
+    Presenta();
+  end;
 end;
 //Funcion Senoidal Invertida para  Contraste
 procedure TAppPDI.SenoidaInvertida1Click(Sender: TObject);
@@ -444,54 +605,56 @@ end;
 //Funcion TangenteHiperbolica Claro-Oscuro
 procedure TAppPDI.ClaroOscuro1Click(Sender: TObject);
 begin
-valor := StrToFloat(Edit1.Text);
-  Prepara();
-  fp_claroOscuro(Im1,Im2,valor);
-  Presenta();
+  if CanalPrendido then begin
+    valor := StrToFloat(Edit1.Text);
+    Prepara();
+    fp_claroOscuro(Im1,Im2,valor);
+    Presenta();
+  end;
+end;
 
+procedure TAppPDI.BlancoyNegro1Click(Sender: TObject);
+begin
+  Prepara();
+  fp_blancoNegro(Im1,Im2);
+  Presenta();
 end;
 
 // aditivo
 procedure TAppPDI.Constante50501Click(Sender: TObject);
 begin
-  valor := StrToFloat(Edit1.Text);
+  if CanalPrendido then begin
+    valor := StrToFloat(Edit1.Text);
 
-  if abs(valor)>=50 then begin
-    ShowMessage('Fuera de rango, lea !!!');
-    exit;
+    if abs(valor)>=50 then begin
+      ShowMessage('Fuera de rango, lea !!!');
+      exit;
+    end;
+
+    Prepara();
+    fp_constante(Im1,Im2, valor);
+    Presenta();
   end;
-
-  Prepara();
-  fp_constante(Im1,Im2, valor);
-  Presenta();
 end;
 
 // porcentual
 procedure TAppPDI.Porcentual50501Click(Sender: TObject);
 begin
-  valor := StrToFloat(Edit1.Text);
-
-  if abs(valor)>=50 then begin
-    ShowMessage('Fuera de rango, lea !!!');
-    exit;
-  end;
-
-  Prepara();
-  fp_porcentual (Im1,Im2, valor);
-  Presenta();
-end;
-
-
-// Borde simple en Y
-(*procedure TAppPDI.BSY1Click(Sender: TObject);
-begin
   if CanalPrendido then begin
+    valor := StrToFloat(Edit1.Text);
+
+    if abs(valor)>=50 then begin
+      ShowMessage('Fuera de rango, lea !!!');
+      exit;
+    end;
+
     Prepara();
-    fr_BSY(im1, im2);
+    fp_porcentual (Im1,Im2, valor);
     Presenta();
   end;
 end;
-*)
+
+
 
 
 // Borde Simple Y con convoluciones
@@ -521,6 +684,30 @@ begin
 
 end;
 *)
+
+
+// ****************** REGIONALES ************************
+procedure TAppPDI.BordesX1Click(Sender: TObject);
+begin
+  if CanalPrendido then begin
+    Prepara();
+    fr_BSX(im1, im2);
+    Presenta();
+  end;
+end;
+
+
+
+// Borde simple en Y
+procedure TAppPDI.BordesY1Click(Sender: TObject);
+begin
+  if CanalPrendido then begin
+    Prepara();
+    fr_BSY(im1, im2);
+    Presenta();
+  end;
+end;
+
 end.
 
 

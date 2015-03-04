@@ -19,11 +19,17 @@ type
 
 var
   //Regiones establecidas en la selección de la imagen
+  BMSel               : TBitmap;
+  //plumaSel            : integer;
   _x1, _x2, _y1, _y2  : integer;
   _xc, _yc, _Rx, _Ry  : integer;
   _xs, _ys            : integer;
 
   _banCir, _banRect   : boolean;
+  _x1Selec, _y1Selec,
+  _x2Selec, _y2Selec  : integer;
+  _boolSeleccionando  : Boolean;
+
   _kan                : array [0..2] of boolean;
   _MC1                : MatConv;
   idf : TextFile;
@@ -39,6 +45,9 @@ var
   procedure BMP2Mat(BM : TBitMap; var Mat : MatImg);
   procedure Mat2BMP(Mat : MatImg; var BM  : TBitMap);
   procedure Mat2Mat(MA : MatImg ; var MB  : MatImg);
+
+
+  function CanalPrendido() : boolean;
 
 implementation
 
@@ -160,5 +169,10 @@ begin
     end;
   end;
 *)
+
+function CanalPrendido() : boolean;
+begin
+  result := _kan[0] or _kan[1] or _kan[2];
+end;
 
 end.
