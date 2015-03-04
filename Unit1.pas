@@ -16,7 +16,7 @@ uses
   Vcl.ComCtrls, math, Vcl.StdCtrls,
   Jpeg, PNGImage, GIFImg, Vcl.ImgList, Vcl.ToolWin,
 
-  UBase, UHisto, UPuntuales, URegionales;
+  UBase, UHisto, UPuntuales, URegionales, UGeometricos, UIntRotacion;
 
 type
   TAppPDI = class(TForm)
@@ -84,6 +84,16 @@ type
     N2: TMenuItem;
     MedianaSimple1: TMenuItem;
     MedianasConvolucion1: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    RotacionIBL1: TMenuItem;
+    FlipX1: TMenuItem;
+    FlipY1: TMenuItem;
+    Zoom2xF1: TMenuItem;
+    Zoom2xP1: TMenuItem;
+    ZoomVMC1: TMenuItem;
+    ZoomIBL1: TMenuItem;
+    RotacionVMC1: TMenuItem;
 
     // Metodos
     procedure Abrir1Click(Sender: TObject);
@@ -119,6 +129,7 @@ type
     procedure BlancoyNegro1Click(Sender: TObject);
     procedure BordesX1Click(Sender: TObject);
     procedure BordesY1Click(Sender: TObject);
+    procedure RotacionIBL1Click(Sender: TObject);
 
 
     // Añadidos por Jordy
@@ -673,6 +684,27 @@ begin
     Presenta();
   end;
 end;
+
+
+
+
+// ****************** GEOMETRICOS ************************
+procedure TAppPDI.RotacionIBL1Click(Sender: TObject);
+var
+  ang : single;
+begin
+  FormRot.ShowModal;
+
+  if FormRot.ModalResult = mrOK then begin
+    ang := FormRot.angRot;
+
+    //Prepara();
+    //fg_rotaIBL(im1, im2, ang);
+    //Presenta();
+  end;
+end;
+
+
 
 end.
 

@@ -1,9 +1,11 @@
 object AppPDI: TAppPDI
   Left = 73
   Top = 154
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
   Caption = 'Ejemplo de PDI (2) Prim 2015 FCC BUAP'
   ClientHeight = 640
-  ClientWidth = 662
+  ClientWidth = 663
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -44,7 +46,7 @@ object AppPDI: TAppPDI
   object StatusBar1: TStatusBar
     Left = 0
     Top = 621
-    Width = 662
+    Width = 663
     Height = 19
     Panels = <
       item
@@ -71,11 +73,12 @@ object AppPDI: TAppPDI
       item
         Width = 50
       end>
+    ExplicitWidth = 662
   end
   object StatusBar2: TStatusBar
     Left = 0
     Top = 602
-    Width = 662
+    Width = 663
     Height = 19
     Panels = <
       item
@@ -103,11 +106,12 @@ object AppPDI: TAppPDI
       item
         Width = 50
       end>
+    ExplicitWidth = 662
   end
   object StatusBar3: TStatusBar
     Left = 0
     Top = 583
-    Width = 662
+    Width = 663
     Height = 19
     Panels = <
       item
@@ -116,6 +120,7 @@ object AppPDI: TAppPDI
       item
         Width = 450
       end>
+    ExplicitWidth = 662
   end
   object Panel1: TPanel
     Left = 8
@@ -177,7 +182,7 @@ object AppPDI: TAppPDI
   object ToolBar1: TToolBar
     Left = 0
     Top = 0
-    Width = 662
+    Width = 663
     Height = 29
     ButtonHeight = 30
     ButtonWidth = 30
@@ -188,6 +193,7 @@ object AppPDI: TAppPDI
     Images = ImageList1
     GradientDirection = gdHorizontal
     TabOrder = 5
+    ExplicitWidth = 662
     object ToolButton1: TToolButton
       Left = 0
       Top = 0
@@ -358,6 +364,37 @@ object AppPDI: TAppPDI
     end
     object FiltrosGeometricos1: TMenuItem
       Caption = 'Filtros &Geometricos'
+      object FlipX1: TMenuItem
+        Caption = 'Flip X'
+      end
+      object FlipY1: TMenuItem
+        Caption = 'Flip Y'
+      end
+      object N3: TMenuItem
+        Caption = '-'
+      end
+      object Zoom2xF1: TMenuItem
+        Caption = 'Zoom 2xF'
+      end
+      object Zoom2xP1: TMenuItem
+        Caption = 'Zoom 2xP'
+      end
+      object ZoomVMC1: TMenuItem
+        Caption = 'Zoom VMC'
+      end
+      object ZoomIBL1: TMenuItem
+        Caption = 'Zoom IBL'
+      end
+      object N4: TMenuItem
+        Caption = '-'
+      end
+      object RotacionVMC1: TMenuItem
+        Caption = 'Rotacion VMC'
+      end
+      object RotacionIBL1: TMenuItem
+        Caption = 'Rotacion IBL'
+        OnClick = RotacionIBL1Click
+      end
     end
     object Interface1: TMenuItem
       Caption = 'Interface'
@@ -383,7 +420,7 @@ object AppPDI: TAppPDI
     Left = 128
     Top = 280
     Bitmap = {
-      494C010104000A00200010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010104000A00240010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -658,7 +695,7 @@ object AppPDI: TAppPDI
     Left = 272
     Top = 280
     Bitmap = {
-      494C010104000A00200010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010104000A00240010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
