@@ -152,7 +152,7 @@ begin
     if _kan[c] then
       for y := _y1 to _y2-1 do
         for x := _x1 to _x2-1 do
-          MB.dat[x][y][c]:= expo(MA.dat[x][y][c],vv);
+          MB.dat[x][y][c]:= expo(MA.dat[x][y][c],vv)
     else
 			for y := 0 to MA.nr-1 do
 				for x := 0 to MA.nc-1 do
@@ -173,7 +173,7 @@ begin
     if _kan[c] then
       for y := _y1 to _y2-1 do
         for x := _x1 to _x2-1 do
-          MB.dat[x][y][c]:= claOsc(MA.dat[x][y][c],vv);
+          MB.dat[x][y][c]:= claOsc(MA.dat[x][y][c],vv)
     else
 			for y := 0 to MA.nr-1 do
 				for x := 0 to MA.nc-1 do
