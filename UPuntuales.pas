@@ -14,6 +14,9 @@ uses
   procedure fp_exponencial(MA: MatImg; var MB: MatImg; vv : single);
   procedure fp_coseno     (MA: MatImg; var MB: MatImg);
   procedure fp_claroOscuro(MA: MatImg; var MB: MatImg; vv : single);
+  procedure fp_OscFuerte  (MA: MatImg; var MB: MatImg; vv : single);
+  procedure fp_Senoidal   (MA: MatImg; var MB: MatImg; vv : single);
+
 
 implementation
 
@@ -112,6 +115,24 @@ for y :=0 to Ma.nr-1 do
       MB.dat[x][y][c]:= coseno(MA.dat[x][y][c]);
 end;
 
+//Aplicacion de Filtro de Oscurecimiento Fuerte
+procedure fp_OscFuerte  (MA: MatImg; var MB: MatImg; vv : single);
+var
+x,y,c   :integer;
+ff,kk   :single;
+
+function osc(z,ee:single): single;
+begin
+      result:=ff*(exp((ee*z)/255)-1);
+end;
+
+begin
+ff:=255/(exp(vv)-1);
+  for y := 0 to Ma.nr-1 do
+    for x := 0 to Ma.nc-1 do
+      for c := 0 to 2 do
+        MB.dat[x][y][c]:= osc(MA.dat[x][y][c],vv);
+end;
 
 //Aplicacion de Filtro Exponencial para Aclarado
 
@@ -131,6 +152,24 @@ var
       for c := 0 to 2 do
         MB.dat[x][y][c]:= expo(MA.dat[x][y][c],vv);
   end;
+
+//Aplicacion de Filtro Senodial para Contraste
+procedure fp_Senoidal   (MA: MatImg; var MB: MatImg; vv : single);
+var
+x,y,c   :integer;
+ff,kk   :single;
+function senoidal(z,ee:single): single;
+begin
+      result:=z-ee*sin((kk*z)/255);
+end;
+begin
+kk:=2*3.1416;
+ for y := 0 to Ma.nr-1 do
+    for x := 0 to MA.nc-1 do
+      for c := 0 to 2 do
+        MB.dat[x][y][c]:= senoidal(MA.dat[x][y][c],vv);
+  end;
+
 //Aplicacion de Fitro arcotangente para claro-obscuro
 
 procedure fp_claroOscuro(MA:MatImg; var MB:MatImg; vv:single);

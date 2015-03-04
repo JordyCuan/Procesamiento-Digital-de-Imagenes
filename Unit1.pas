@@ -67,6 +67,8 @@ type
     CheckBox3_AZUL: TCheckBox;
     FuncionCoseno1: TMenuItem;
     ClaroOscuro1: TMenuItem;
+    OscurecimientoFuerte1: TMenuItem;
+    SenoidaInvertida1: TMenuItem;
 
     // Metodos
     procedure Abrir1Click(Sender: TObject);
@@ -92,6 +94,9 @@ type
     procedure CheckBox3_AZULClick(Sender: TObject);
     procedure FuncionCoseno1Click(Sender: TObject);
     procedure ClaroOscuro1Click(Sender: TObject);
+    procedure OscurecimientoFuerte1Click(Sender: TObject);
+    procedure SenoidaInvertida1Click(Sender: TObject);
+
 
 
     // Añadidos por Jordy
@@ -363,6 +368,7 @@ begin
   Image1.Picture.Assign(BM1);
 end;
 
+
 // Negativo usando el BitMap: BM1
 procedure TAppPDI.Negativo1Click(Sender: TObject);
 begin
@@ -370,6 +376,8 @@ begin
   fp_negativo(Im1,Im2);
   Presenta();
 end;
+
+
 
 // Correccion Gamma
 procedure TAppPDI.Gamma1Click(Sender: TObject);
@@ -405,6 +413,16 @@ fp_coseno(Im1,Im2);
 Presenta();
 end;
 
+//Funcion Oscurecimiento Fuerte
+procedure TAppPDI.OscurecimientoFuerte1Click(Sender: TObject);
+begin
+valor:=StrToFloat(Edit1.Text);
+Prepara();
+fp_OscFuerte(Im1,Im2,valor);
+Presenta();
+
+end;
+
 //Funcion Exponencial
 
 procedure TAppPDI.FuncionExponencial1Click(Sender: TObject);
@@ -414,7 +432,15 @@ Prepara();
 fp_exponencial(Im1,Im2,valor);
 Presenta();
 end;
+//Funcion Senoidal Invertida para  Contraste
+procedure TAppPDI.SenoidaInvertida1Click(Sender: TObject);
+begin
+valor:= StrToFloat(Edit1.Text);
+Prepara();
+fp_Senoidal(Im1,Im2,valor);
+Presenta();
 
+end;
 //Funcion TangenteHiperbolica Claro-Oscuro
 procedure TAppPDI.ClaroOscuro1Click(Sender: TObject);
 begin
