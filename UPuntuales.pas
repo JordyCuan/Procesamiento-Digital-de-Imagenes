@@ -169,12 +169,11 @@ var
 
 begin
 
-<<<<<<< HEAD
   for y := 0 to Ma.nr-1 do
     for x := 0 to MA.nc-1 do
       for c := 0 to 2 do
         MB.dat[x][y][c]:= expo(MA.dat[x][y][c],vv);
-  end;
+end;
 
 //Aplicacion de Filtro Senodial para Contraste
 procedure fp_Senoidal   (MA: MatImg; var MB: MatImg; vv : single);
@@ -192,19 +191,17 @@ kk:=2*3.1416;
       for c := 0 to 2 do
         MB.dat[x][y][c]:= senoidal(MA.dat[x][y][c],vv);
   end;
-
-=======
-  for c := 0 to 2 do
-    if _kan[c] then
-      for y := _y1 to _y2-1 do
-        for x := _x1 to _x2-1 do
-          MB.dat[x][y][c]:= expo(MA.dat[x][y][c],vv)
-    else
-			for y := 0 to MA.nr-1 do
-				for x := 0 to MA.nc-1 do
-					MB.dat[x][y][c] := MA.dat[x][y][c];
-end;
->>>>>>> origin/master
+///*  for c := 0 to 2 do
+//    if _kan[c] then
+ //     for y := _y1 to _y2-1 do
+//        for x := _x1 to _x2-1 do
+//          MB.dat[x][y][c]:= expo(MA.dat[x][y][c],vv)
+//    else
+//			for y := 0 to MA.nr-1 do
+//				for x := 0 to MA.nc-1 do
+//					MB.dat[x][y][c] := MA.dat[x][y][c];
+//end;
+//>>>>>>> origin/master
 //Aplicacion de Fitro arcotangente para claro-obscuro
 
 procedure fp_claroOscuro(MA:MatImg; var MB:MatImg; vv:single);

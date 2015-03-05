@@ -68,12 +68,11 @@ type
     CheckBox3_AZUL: TCheckBox;
     FuncionCoseno1: TMenuItem;
     ClaroOscuro1: TMenuItem;
-<<<<<<< HEAD
+
     OscurecimientoFuerte1: TMenuItem;
     SenoidaInvertida1: TMenuItem;
 
-    // Metodos
-=======
+
     Image2Selec: TImage;
     Activarseleccion1: TMenuItem;
     ActivarSeleccionCir1: TMenuItem;
@@ -92,7 +91,6 @@ type
     MedianasConvolucion1: TMenuItem;
 
     // Metodos
->>>>>>> origin/master
     procedure Abrir1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Negativo1Click(Sender: TObject);
@@ -113,11 +111,9 @@ type
     procedure CheckBox3_AZULClick(Sender: TObject);
     procedure FuncionCoseno1Click(Sender: TObject);
     procedure ClaroOscuro1Click(Sender: TObject);
-<<<<<<< HEAD
     procedure OscurecimientoFuerte1Click(Sender: TObject);
     procedure SenoidaInvertida1Click(Sender: TObject);
 
-=======
     procedure Image2SelecMouseLeave(Sender: TObject);
     procedure Image2SelecMouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
@@ -131,7 +127,6 @@ type
     procedure BlancoyNegro1Click(Sender: TObject);
     procedure BordesX1Click(Sender: TObject);
     procedure BordesY1Click(Sender: TObject);
->>>>>>> origin/master
 
 
     // Añadidos por Jordy
