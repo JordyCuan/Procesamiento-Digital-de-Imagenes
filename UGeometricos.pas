@@ -66,6 +66,9 @@ begin
     end;
   end;
 
+  _x2 := MB.nc;
+  _y2 := MB.nr;
+
 end;
 
 
@@ -90,6 +93,9 @@ begin
       end;
     end;
   end;
+
+  _x2 := MB.nc;
+  _y2 := MB.nr;
 
 end;
 
