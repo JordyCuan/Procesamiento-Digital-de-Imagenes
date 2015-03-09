@@ -139,6 +139,7 @@ type
     procedure BordesY1Click(Sender: TObject);
     procedure RotacionIBL1Click(Sender: TObject);
 
+
     // Añadidos por Jordy
     //procedure BSX1Click(Sender: TObject);
     //procedure BSY1Click(Sender: TObject);
