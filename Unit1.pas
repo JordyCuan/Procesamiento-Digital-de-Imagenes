@@ -99,6 +99,9 @@ type
     ZoomVMC1: TMenuItem;
     ZoomIBL1: TMenuItem;
     RotacionVMC1: TMenuItem;
+    Rotacion901: TMenuItem;
+    Rotacion902: TMenuItem;
+    Rotacion1801: TMenuItem;
 
     // Metodos
     procedure Abrir1Click(Sender: TObject);
@@ -138,6 +141,8 @@ type
     procedure BordesX1Click(Sender: TObject);
     procedure BordesY1Click(Sender: TObject);
     procedure RotacionIBL1Click(Sender: TObject);
+    procedure Rotacion901Click(Sender: TObject);
+    procedure Rotacion902Click(Sender: TObject);
 
 
     // Añadidos por Jordy
@@ -788,6 +793,22 @@ begin
 end;
 
 
+
+procedure TAppPDI.Rotacion901Click(Sender: TObject);
+begin
+  Prepara();
+  fg_rotaMas90(im1,im2);
+  Presenta();
+end;
+
+
+
+procedure TAppPDI.Rotacion902Click(Sender: TObject);
+begin
+  Prepara();
+  fg_rotaMenos90(im1,im2);
+  Presenta();
+end;
 
 end.
 
