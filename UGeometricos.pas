@@ -44,7 +44,7 @@ end;
 
 procedure fg_rotaMas90(MA : MatImg; var MB : MatImg);
 var
-  xc, yr, ir, jc, kan : integer;
+  xc, yr, ir, jc, kan, auxX : integer;
 begin
   // Invertimos las dimensiones
   MB.nc := MA.nr;
@@ -55,11 +55,13 @@ begin
   // Establecemos el tamaño
   Setlength(MB.dat,MB.nc,MB.nr,3);
 
+  auxX := xc - 1;
+
   // Intercambio
   for kan := 0 to 2 do begin
     for ir := 0 to yr - 1 do begin
       for jc := 0 to xc - 1 do begin
-        MB.dat[jc][ir][kan] := MA.dat[ir][xc - 1 - jc][kan];
+        MB.dat[jc][ir][kan] := MA.dat[ir][auxX - jc][kan];
       end;
     end;
   end;
@@ -96,11 +98,14 @@ end;
 
 procedure fg_rota180(MA : MatImg; var MB : MatImg);
 var
-  xc, yr, ir, jc, kan : integer;
+  xc, yr, ir, jc, kan, auxX, auxY : integer;
 begin
   // Invertimos las dimensiones
   xc := MA.nc;
   yr := MA.nr;
+
+  auxX := xc - 1;
+  auxY := yr - 1;
 
   // Intercambio
   for kan := 0 to 2 do begin
