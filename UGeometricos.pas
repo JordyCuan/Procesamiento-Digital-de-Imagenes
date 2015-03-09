@@ -9,6 +9,8 @@ uses
   procedure fg_rotaMas90(MA : MatImg; var MB : MatImg);
   procedure fg_rotaMenos90(MA : MatImg; var MB : MatImg);
   procedure fg_rota180(MA : MatImg; var MB : MatImg);
+  procedure fg_flipX(Ma:MatImg; var MB:MatImg);
+  procedure fg_flipY(Ma:MatImg; var MB:MatImg);
 
 
 implementation
@@ -38,6 +40,7 @@ begin
   end;
  }
 end;
+
 
 
 
@@ -130,5 +133,36 @@ end;
 
 
 
+
+
+//Flip en X
+procedure fg_flipX(Ma:MatImg; var MB:MatImg);
+var
+x,y,c,NCX,NCY:  integer;
+begin
+  NCX:=Ma.nc-1;
+  NCY:=Ma.nr-1;
+  for c := 0 to 2 do
+    for y:= 0 to NCY do
+      for x := 0 to NCX do
+        MB.dat[x][y][c]:=MA.dat[NCX-x][y][c]
+
+
+end;
+
+//Flip en Y
+ procedure fg_flipY(Ma:MatImg; var MB:MatImg);
+ var
+x,y,c,NCX,NCY:  integer;
+begin
+  NCX:=Ma.nc-1;
+  NCY:=Ma.nr-1;
+  for c := 0 to 2 do
+    for y:= 0 to NCY do
+      for x := 0 to NCX do
+        MB.dat[x][y][c]:=MA.dat[x][NCY-y][c]
+
+
+end;
 
 end.//Fin *.pas

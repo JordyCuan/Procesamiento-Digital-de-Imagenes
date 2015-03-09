@@ -40,7 +40,6 @@ object AppPDI: TAppPDI
       OnMouseDown = Image2SelecMouseDown
       OnMouseLeave = Image2SelecMouseLeave
       OnMouseMove = Image2SelecMouseMove
-      OnMouseUp = Image2SelecMouseUp
     end
   end
   object StatusBar1: TStatusBar
@@ -370,9 +369,11 @@ object AppPDI: TAppPDI
       Caption = 'Filtros &Geometricos'
       object FlipX1: TMenuItem
         Caption = 'Flip X'
+        OnClick = FlipX1Click
       end
       object FlipY1: TMenuItem
         Caption = 'Flip Y'
+        OnClick = FlipY1Click
       end
       object N3: TMenuItem
         Caption = '-'

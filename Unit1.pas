@@ -134,15 +134,18 @@ type
     procedure ActivarSeleccionCir1Click(Sender: TObject);
     procedure Desactivarseleccion1Click(Sender: TObject);
     procedure Image2SelecMouseUp(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
+      Shift: TShiftstate; X,Y: Integer);
     procedure Image2SelecMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure BlancoyNegro1Click(Sender: TObject);
     procedure BordesX1Click(Sender: TObject);
     procedure BordesY1Click(Sender: TObject);
     procedure RotacionIBL1Click(Sender: TObject);
+
     procedure Rotacion901Click(Sender: TObject);
     procedure Rotacion902Click(Sender: TObject);
+    procedure FlipX1Click(Sender: TObject);
+    procedure FlipY1Click(Sender: TObject);
 
 
     // Añadidos por Jordy
@@ -156,7 +159,8 @@ type
   private
     { Private declarations }
 
-    procedure Prepara();
+
+procedure Prepara();
     procedure Presenta();
   public
     { Public declarations }
@@ -176,6 +180,8 @@ implementation
 {$R *.dfm}
 
 // Inicializacion de la Ventana
+
+
 procedure TAppPDI.FormCreate(Sender: TObject);
 var
   i : integer;
@@ -792,7 +798,26 @@ begin
   end;
 end;
 
+//Reflexion en X
+procedure TAppPDI.FlipX1Click(Sender: TObject);
+begin
+if CanalPrendido then
+Prepara();
+fg_flipX(Im1,Im2);
+Presenta();
 
+end;
+
+
+//Reflexion en Y
+procedure TAppPDI.FlipY1Click(Sender: TObject);
+begin
+if CanalPrendido then
+Prepara();
+fg_flipY(Im1,Im2);
+Presenta();
+
+end;
 
 procedure TAppPDI.Rotacion901Click(Sender: TObject);
 begin
