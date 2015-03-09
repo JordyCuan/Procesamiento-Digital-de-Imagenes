@@ -16,7 +16,7 @@ uses
   Vcl.ComCtrls, math, Vcl.StdCtrls,
   Jpeg, PNGImage, GIFImg, Vcl.ImgList, Vcl.ToolWin,
 
-  UBase, UHisto, UPuntuales, URegionales;
+  UBase, UHisto, UPuntuales, URegionales, UGeometricos, UIntRotacion;
 
 type
   TAppPDI = class(TForm)
@@ -72,7 +72,7 @@ type
     OscurecimientoFuerte1: TMenuItem;
     SenoidaInvertida1: TMenuItem;
 
-
+
     Image2Selec: TImage;
     Activarseleccion1: TMenuItem;
     ActivarSeleccionCir1: TMenuItem;
@@ -89,6 +89,16 @@ type
     N2: TMenuItem;
     MedianaSimple1: TMenuItem;
     MedianasConvolucion1: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    RotacionIBL1: TMenuItem;
+    FlipX1: TMenuItem;
+    FlipY1: TMenuItem;
+    Zoom2xF1: TMenuItem;
+    Zoom2xP1: TMenuItem;
+    ZoomVMC1: TMenuItem;
+    ZoomIBL1: TMenuItem;
+    RotacionVMC1: TMenuItem;
 
     // Metodos
     procedure Abrir1Click(Sender: TObject);
@@ -127,7 +137,7 @@ type
     procedure BlancoyNegro1Click(Sender: TObject);
     procedure BordesX1Click(Sender: TObject);
     procedure BordesY1Click(Sender: TObject);
-
+    procedure RotacionIBL1Click(Sender: TObject);
 
     // Añadidos por Jordy
     //procedure BSX1Click(Sender: TObject);
@@ -193,6 +203,7 @@ end;
 procedure TAppPDI.Activarseleccion1Click(Sender: TObject);
 begin
   _banRect := true;
+  _banCir  := false;
   StatusBar1.Panels[6].Text := 'Activa';
 
   // Si lo primero que hace el usuario despues de abierta la imagen es la seleccion
@@ -201,7 +212,11 @@ end;
 procedure TAppPDI.ActivarSeleccionCir1Click(Sender: TObject);
 begin
   _banCir := true;
+  _banRect:= false;
   StatusBar1.Panels[6].Text := 'Activa';
+
+  // Si lo primero que hace el usuario despues de abierta la imagen es la seleccion
+  Mat2Mat(Im1,Im2);
 end;
 procedure TAppPDI.Desactivarseleccion1Click(Sender: TObject);
 begin
@@ -222,6 +237,14 @@ procedure TAppPDI.Image2SelecMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   if _banRect and (Button = mbLeft) then begin
+    _x1 := X;
+    _y1 := Y;
+
+    _boolSeleccionando := true;
+  end;
+
+  // Circular
+  if _banCir and (Button = mbLeft) then begin
     _x1 := X;
     _y1 := Y;
 
@@ -252,6 +275,33 @@ begin
     BMSel.Canvas.Pen.Color := clGreen;
 
     BMSel.Canvas.Rectangle(_x1,_y1,_x2,_y2);
+    Image2Selec.Picture.Assign(BMSel);
+
+    _boolSeleccionando := false;
+  end;
+
+
+  // Circular
+  if (_banCir and (Button = mbLeft)) then begin
+    if X < _x1 then begin
+      _x2 := _x1;
+      _x1 := X
+    end
+    else begin
+      _x2 := X;
+    end;
+
+    if Y < _y1 then begin
+      _y2 := _y1;
+      _y1 := Y
+    end
+    else begin
+      _y2 := Y;
+    end;
+
+    BMSel.Canvas.Pen.Color := clGreen;
+
+    BMSel.Canvas.Ellipse(_x1,_y1,_x2,_y2);
     Image2Selec.Picture.Assign(BMSel);
 
     _boolSeleccionando := false;
@@ -454,7 +504,7 @@ begin
   StatusBar1.Panels[3].Text := IntToStr(g);
   StatusBar1.Panels[4].Text := IntToStr(b);
 
-  if ((ssLeft in Shift) and _boolSeleccionando) then begin
+  if ((ssLeft in Shift) and _boolSeleccionando) and _banRect then begin
     // Borramos el anterior
     BMSel.Canvas.Pen.Color := clWhite;
     BMSel.Canvas.Rectangle(0,0,BMSel.Width, BMSel.Height);
@@ -464,6 +514,20 @@ begin
     BMSel.Canvas.Pen.Color := clGreen;
 
     BMSel.Canvas.Rectangle(_x1,_y1,X,Y);
+    Image2Selec.Picture.Assign(BMSel);
+  end;
+
+  // Circular
+  if ((ssLeft in Shift) and _boolSeleccionando) and _banCir then begin
+    // Borramos el anterior
+    BMSel.Canvas.Pen.Color := clWhite;
+    BMSel.Canvas.Rectangle(0,0,BMSel.Width, BMSel.Height);
+    Image2Selec.Picture.Assign(BMSel);
+
+    // Dibujamos el temporal
+    BMSel.Canvas.Pen.Color := clGreen;
+
+    BMSel.Canvas.Ellipse(_x1,_y1,X,Y);
     Image2Selec.Picture.Assign(BMSel);
   end;
 end;
@@ -702,6 +766,27 @@ begin
     Presenta();
   end;
 end;
+
+
+
+
+// ****************** GEOMETRICOS ************************
+procedure TAppPDI.RotacionIBL1Click(Sender: TObject);
+var
+  ang : single;
+begin
+  FormRot.ShowModal;
+
+  if FormRot.ModalResult = mrOK then begin
+    ang := FormRot.angRot;
+
+    //Prepara();
+    //fg_rotaIBL(im1, im2, ang);
+    //Presenta();
+  end;
+end;
+
+
 
 end.
 
