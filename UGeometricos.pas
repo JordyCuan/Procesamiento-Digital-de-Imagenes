@@ -11,6 +11,8 @@ uses
   procedure fg_rota180(MA : MatImg; var MB : MatImg);
   procedure fg_flipX(Ma:MatImg; var MB:MatImg);
   procedure fg_flipY(Ma:MatImg; var MB:MatImg);
+  procedure fg_zoomF2x(MA:MatImg; var MB:MatImg);
+  procedure fg_zoom2x(MA:MatImg; var MB:MatImg);
 
 
 implementation
@@ -126,15 +128,6 @@ begin
   end;
 end;
 
-
-
-
-
-
-
-
-
-
 //Flip en X
 procedure fg_flipX(Ma:MatImg; var MB:MatImg);
 var
@@ -164,5 +157,139 @@ begin
 
 
 end;
+
+//Zoom del Flojo
+ procedure fg_zoomF2x(MA:MatImg; var MB:MatImg);
+ var
+ x,y,c,NCX,NCY  :integer;
+ x2,y2          :integer;
+ rr             :single;
+ begin
+ NCX:=MA.nc-1;
+ NCY:=MA.nr-1;
+
+ MB.nc:=2*MA.nc;
+ MB.nr:=2*MA.nr;
+
+ setLength(MB.dat,MB.nc,MB.nr,3);
+
+ for c := 0 to 2 do
+  for y := 0 to NCY do
+    for x := 0 to NCX do begin
+        x2:=2*x;
+        y2:=2*y;
+        rr:=MA.dat[x][y][c];
+        MB.dat[x2 ][y2  ][c ]:=rr;
+        MB.dat[x2+1][y2 ][c ]:=rr;
+        MB.dat[x2 ][y2+1 ][c  ]:=rr;
+        MB.dat[x2+1][y2+1][c  ]:=rr;
+ end;
+ _x2 := MB.nc;
+  _y2 := MB.nr;
+ end;
+
+ //Zoom Por Promedio
+ procedure fg_zoom2x(MA:MatImg; var MB: MatImg);
+var
+x,y,c,NCX,NCY	:integer;
+x2,y2,ym1,y2m1,xm1,x2m1,y1	:integer;
+ro,rd,ra,re	:single;
+ta,td		:single;
+
+begin
+NCX:=MA.nc-1;
+NCY:=MA.nr-1;
+
+MB.nc:=2*MA.nc;
+MB.nr:=2*MA.nr;
+
+setLength(MB.dat,MB.nc,MB.nr,3);
+//El bulto
+for c := 0 to 2 do
+	for y := 0 to NCY-1 do begin
+			y2:=2*y;
+			y2m1:=y2+1;
+			ym1:=y+1;
+for x := 0 to NCX-1 do begin
+			x2:=2*x;
+
+			ro:=MA.dat[x][y][c];
+			rd:=MA.dat[x][ym1][c];
+			ra:=MA.dat[x+1][y][c];
+			re:=MA.dat[x+1][ym1][c];
+      ta:=(ro+ra)/2;
+
+
+      MB.dat[x2][y2][c]:=ro;
+			MB.dat[x2+1][y2][c]:=(ro+rd)/2;
+			MB.dat[x2][y2m1][c]:=(ro+ra)/2;
+			MB.dat[x2+1][y2m1][c]:=(ro+re)/2;
+end;
+end;
+
+//Orilla inferior-Ultimo Renglon
+
+
+for c := 0 to 2 do begin
+	 y :=NCY;
+	 y2:=2*y;
+	 y2m1:=y2+1;
+	 ym1:=y+1;
+
+for x := 0 to NCX-1 do begin
+			x2:=2*x;
+
+			ro:=MA.dat[x][y][c];
+			rd:=MA.dat[x+1][y][c];
+			td:=(ro+rd)/2;
+
+      MB.dat[x2][y2][c]:=ro;
+			MB.dat[x2+1][y2][c]:=td;
+			MB.dat[x2][y2m1][c]:=ro;
+			MB.dat[x2+1][y2m1][c]:=td;
+end;
+end;
+
+//Orilla Derecha
+   x :=NCX;
+	 xm1:=x+1;
+	 x2:=2*x;
+	 x2m1:=x2+1;
+for c := 0 to 2 do begin
+  for y := 0 to NCY-1 do begin
+			y2:=2*y;
+			y2m1:=y2+1;
+			ym1:=y+1;
+
+			ro:=MA.dat[x][y][c];
+			ra:=MA.dat[x][ym1][c];
+			ta:=(ro+ra)/2;
+
+
+      MB.dat[x2][y2][c]:=ro;
+			MB.dat[x2m1][y2][c]:=ro;
+			MB.dat[x2][y2m1][c]:=ta;
+			MB.dat[x2m1][y2m1][c]:=ta;
+      end;
+end;
+
+//Esquina Derecha inferior
+   y :=NCY;
+	 x:= NCX;
+	 y2:=2*y;
+	 x2:=2*x;
+for c := 0 to 2 do begin
+			ro:=MA.dat[x][y][c];
+      MB.dat[x2][y2][c]:=ro;
+			MB.dat[x2+1][y2][c]:=ro;
+			MB.dat[x2][y2+1][c]:=ro;
+			MB.dat[x2+1][y2+1][c]:=ro;
+end;
+
+
+_x2:=MB.nc;
+_y2:=MB.nr;
+end;
+
 
 end.//Fin *.pas

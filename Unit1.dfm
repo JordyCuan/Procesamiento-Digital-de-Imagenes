@@ -345,6 +345,7 @@ object AppPDI: TAppPDI
       end
       object BordesXY1: TMenuItem
         Caption = 'Bordes XY'
+        OnClick = BordesXY1Click
       end
       object BordesConvolucion1: TMenuItem
         Caption = 'Bordes Convolucion'
@@ -360,6 +361,7 @@ object AppPDI: TAppPDI
       end
       object MedianaSimple1: TMenuItem
         Caption = 'Mediana Simple'
+        OnClick = MedianaSimple1Click
       end
       object MedianasConvolucion1: TMenuItem
         Caption = 'Medianas Convolucion'
@@ -380,9 +382,11 @@ object AppPDI: TAppPDI
       end
       object Zoom2xF1: TMenuItem
         Caption = 'Zoom 2xF'
+        OnClick = Zoom2xF1Click
       end
       object Zoom2xP1: TMenuItem
         Caption = 'Zoom 2xP'
+        OnClick = Zoom2xP1Click
       end
       object ZoomVMC1: TMenuItem
         Caption = 'Zoom VMC'
@@ -410,6 +414,7 @@ object AppPDI: TAppPDI
       end
       object Rotacion1801: TMenuItem
         Caption = 'Rotacion 180'#176
+        OnClick = Rotacion1801Click
       end
     end
     object Interface1: TMenuItem
@@ -436,7 +441,7 @@ object AppPDI: TAppPDI
     Left = 128
     Top = 280
     Bitmap = {
-      494C010104000A002C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010104000A00380010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -711,7 +716,7 @@ object AppPDI: TAppPDI
     Left = 272
     Top = 280
     Bitmap = {
-      494C010104000A002C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010104000A00380010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

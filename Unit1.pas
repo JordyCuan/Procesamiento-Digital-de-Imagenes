@@ -146,6 +146,11 @@ type
     procedure Rotacion902Click(Sender: TObject);
     procedure FlipX1Click(Sender: TObject);
     procedure FlipY1Click(Sender: TObject);
+    procedure Rotacion1801Click(Sender: TObject);
+    procedure Zoom2xF1Click(Sender: TObject);
+    procedure Zoom2xP1Click(Sender: TObject);
+    procedure MedianaSimple1Click(Sender: TObject);
+    procedure BordesXY1Click(Sender: TObject);
 
 
     // Añadidos por Jordy
@@ -624,6 +629,11 @@ begin
   end;
 end;
 
+procedure TAppPDI.MedianaSimple1Click(Sender: TObject);
+begin
+
+end;
+
 //Funcion Seno
 procedure TAppPDI.FuncionSeno1Click(Sender: TObject);
 begin
@@ -673,6 +683,8 @@ fp_Senoidal(Im1,Im2,valor);
 Presenta();
 
 end;
+
+
 //Funcion TangenteHiperbolica Claro-Oscuro
 procedure TAppPDI.ClaroOscuro1Click(Sender: TObject);
 begin
@@ -769,6 +781,11 @@ end;
 
 
 
+procedure TAppPDI.BordesXY1Click(Sender: TObject);
+begin
+
+end;
+
 // Borde simple en Y
 procedure TAppPDI.BordesY1Click(Sender: TObject);
 begin
@@ -819,6 +836,8 @@ Presenta();
 
 end;
 
+
+
 procedure TAppPDI.Rotacion901Click(Sender: TObject);
 begin
   Prepara();
@@ -833,6 +852,31 @@ begin
   Prepara();
   fg_rotaMenos90(im1,im2);
   Presenta();
+end;
+
+procedure TAppPDI.Rotacion1801Click(Sender: TObject);
+begin
+  Prepara();
+  fg_rota180(im1,im2);
+  Presenta();
+
+end;
+
+//Zoom del Flojo
+procedure TAppPDI.Zoom2xF1Click(Sender: TObject);
+begin
+  Prepara();
+  fg_zoomF2x(Im1,Im2);
+  Presenta();
+
+end;
+
+procedure TAppPDI.Zoom2xP1Click(Sender: TObject);
+begin
+Prepara();
+fg_zoom2x(Im1,Im2);
+Presenta();
+
 end;
 
 end.
