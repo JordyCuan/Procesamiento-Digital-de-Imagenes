@@ -102,6 +102,11 @@ type
     Rotacion901: TMenuItem;
     Rotacion902: TMenuItem;
     Rotacion1801: TMenuItem;
+    Mapeo1: TMenuItem;
+    FalsoColor1: TMenuItem;
+    AbrirPaleta1: TMenuItem;
+    AplicarPaleta1: TMenuItem;
+    OpenDialog1: TOpenDialog;
 
     // Metodos
     procedure Abrir1Click(Sender: TObject);
@@ -151,6 +156,8 @@ type
     procedure Zoom2xP1Click(Sender: TObject);
     procedure MedianaSimple1Click(Sender: TObject);
     procedure BordesXY1Click(Sender: TObject);
+    procedure AbrirPaleta1Click(Sender: TObject);
+    procedure AplicarPaleta1Click(Sender: TObject);
 
 
     // Añadidos por Jordy
@@ -878,6 +885,60 @@ fg_zoom2x(Im1,Im2);
 Presenta();
 
 end;
+
+
+
+// *****************************************************
+// ******************** FALSO COLOR ********************
+// *****************************************************
+
+// Abrir una paleta de colores
+procedure TAppPDI.AbrirPaleta1Click(Sender: TObject);
+var
+  k   : integer;
+  nom : string;
+  fid : TextFile;
+begin
+  if OpenDialog1.Execute then begin
+    nom := OpenDialog1.FileName;
+    AssignFile(fid, nom);
+    Reset(fid);
+
+    // Saltar 6 renglones
+    for k := 1 to 6 do
+      readln(fid);
+
+    // leer las 256 tercias RGB
+    for k := 0 to 255 do
+      readln(fid, _Paleta[k][0], _Paleta[k][1], _Paleta[k][2]);
+
+    closeFile(fid);
+  end;
+end;
+
+
+// Aplicar una paleta de colores
+procedure TAppPDI.AplicarPaleta1Click(Sender: TObject);
+var
+  x,y,v,tono : integer;
+  c: Integer;
+begin
+  Prepara();
+
+  for y := _y1 to _y2-1 do begin
+    for x := _x1 to _x2-1 do begin
+      tono := ajusta255(Im1.dat[x][y][0]);
+      for c := 0 to 2 do begin
+        Im2.dat[x][y][c] := _Paleta[tono][c];
+      end;
+    end;
+  end;
+
+
+  Presenta();
+end;
+
+
 
 end.
 

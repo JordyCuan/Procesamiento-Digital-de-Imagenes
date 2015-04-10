@@ -36,6 +36,13 @@ var
   x,y : integer;
 
 
+  // No se porque lo tiene el profe
+  _Norma              : byte;
+
+  // Falso color
+  _Paleta             : array [0..255] of array [0..2] of single;
+
+
   // metodos
   function ajusta255(z : single) : byte;
   function ajusta511(z : single) : integer;

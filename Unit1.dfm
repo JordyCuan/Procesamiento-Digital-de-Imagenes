@@ -5,7 +5,7 @@ object AppPDI: TAppPDI
   BorderStyle = bsSingle
   Caption = 'Ejemplo de PDI (2) Prim 2015 FCC BUAP'
   ClientHeight = 640
-  ClientWidth = 663
+  ClientWidth = 762
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -21,7 +21,7 @@ object AppPDI: TAppPDI
   object ScrollBox1: TScrollBox
     Left = 8
     Top = 33
-    Width = 646
+    Width = 750
     Height = 460
     TabOrder = 0
     object Image1: TImage
@@ -45,7 +45,7 @@ object AppPDI: TAppPDI
   object StatusBar1: TStatusBar
     Left = 0
     Top = 621
-    Width = 663
+    Width = 762
     Height = 19
     Panels = <
       item
@@ -72,11 +72,12 @@ object AppPDI: TAppPDI
       item
         Width = 50
       end>
+    ExplicitWidth = 663
   end
   object StatusBar2: TStatusBar
     Left = 0
     Top = 602
-    Width = 663
+    Width = 762
     Height = 19
     Panels = <
       item
@@ -104,11 +105,12 @@ object AppPDI: TAppPDI
       item
         Width = 50
       end>
+    ExplicitWidth = 663
   end
   object StatusBar3: TStatusBar
     Left = 0
     Top = 583
-    Width = 663
+    Width = 762
     Height = 19
     Panels = <
       item
@@ -117,11 +119,12 @@ object AppPDI: TAppPDI
       item
         Width = 450
       end>
+    ExplicitWidth = 663
   end
   object Panel1: TPanel
     Left = 8
     Top = 499
-    Width = 646
+    Width = 750
     Height = 76
     Color = clMoneyGreen
     ParentBackground = False
@@ -178,7 +181,7 @@ object AppPDI: TAppPDI
   object ToolBar1: TToolBar
     Left = 0
     Top = 0
-    Width = 663
+    Width = 762
     Height = 29
     ButtonHeight = 30
     ButtonWidth = 30
@@ -189,6 +192,7 @@ object AppPDI: TAppPDI
     Images = ImageList1
     GradientDirection = gdHorizontal
     TabOrder = 5
+    ExplicitWidth = 663
     object ToolButton1: TToolButton
       Left = 0
       Top = 0
@@ -417,6 +421,20 @@ object AppPDI: TAppPDI
         OnClick = Rotacion1801Click
       end
     end
+    object Mapeo1: TMenuItem
+      Caption = 'Mapeo'
+    end
+    object FalsoColor1: TMenuItem
+      Caption = 'Falso Color'
+      object AbrirPaleta1: TMenuItem
+        Caption = 'Abrir Paleta'
+        OnClick = AbrirPaleta1Click
+      end
+      object AplicarPaleta1: TMenuItem
+        Caption = 'Aplicar Paleta'
+        OnClick = AplicarPaleta1Click
+      end
+    end
     object Interface1: TMenuItem
       Caption = 'Interface'
       object EstiloFCC1: TMenuItem
@@ -441,7 +459,7 @@ object AppPDI: TAppPDI
     Left = 128
     Top = 280
     Bitmap = {
-      494C010104000A00380010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010104000A003C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -716,7 +734,7 @@ object AppPDI: TAppPDI
     Left = 272
     Top = 280
     Bitmap = {
-      494C010104000A00380010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010104000A003C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -994,5 +1012,13 @@ object AppPDI: TAppPDI
     Title = 'Salvar Imagen - PDI'
     Left = 424
     Top = 176
+  end
+  object OpenDialog1: TOpenDialog
+    DefaultExt = 'palt'
+    Filter = 'Paleta FCC (*.palt)|*.palt|Todos|(*.*)'
+    InitialDir = '.'
+    Options = [ofHideReadOnly, ofExtensionDifferent, ofPathMustExist, ofFileMustExist, ofEnableSizing]
+    Left = 312
+    Top = 112
   end
 end
