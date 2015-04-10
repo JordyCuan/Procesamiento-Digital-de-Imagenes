@@ -1,6 +1,6 @@
 // Sistema de desarrollo para la implementacion de
 // Procesamiento Digital de iMgenes
-// V 0.5.8
+// V 0.5.11
 // 21 - 01 - 2015
 // FCC BUAP
 
@@ -161,8 +161,6 @@ type
 
 
     // Añadidos por Jordy
-    //procedure BSX1Click(Sender: TObject);
-    //procedure BSY1Click(Sender: TObject);
     //procedure MatrizYB1Click(Sender: TObject);
     //procedure MetMediasGen(Sender: TObject);
 
@@ -172,16 +170,17 @@ type
     { Private declarations }
 
 
-procedure Prepara();
+    procedure Prepara();
     procedure Presenta();
   public
     { Public declarations }
     nomIma   : string;
     BM1, BMS : TBitMap;
     valor    : single;
+    Im1,Im2  : MatImg;
     nc, nr   : integer;
     MC1      : MatConv;
-    Im1,Im2  : MatImg;
+
   end;
 
 var
@@ -664,33 +663,32 @@ end;
 //Funcion Oscurecimiento Fuerte
 procedure TAppPDI.OscurecimientoFuerte1Click(Sender: TObject);
 begin
-valor:=StrToFloat(Edit1.Text);
-Prepara();
-fp_OscFuerte(Im1,Im2,valor);
-Presenta();
-
+  if CanalPrendido then begin
+    Prepara();
+    fp_OscFuerte(Im1,Im2,StrToFloat(Edit1.Text));
+    Presenta();
+  end;
 end;
 
 //Funcion Exponencial
 procedure TAppPDI.FuncionExponencial1Click(Sender: TObject);
 begin
   if CanalPrendido then begin
-    valor := StrToFloat(Edit1.Text);
     Prepara();
-    fp_exponencial(Im1,Im2,valor);
+    fp_exponencial(Im1,Im2,StrToFloat(Edit1.Text));
     Presenta();
   end;
 end;
+
 //Funcion Senoidal Invertida para  Contraste
 procedure TAppPDI.SenoidaInvertida1Click(Sender: TObject);
 begin
-valor:= StrToFloat(Edit1.Text);
-Prepara();
-fp_Senoidal(Im1,Im2,valor);
-Presenta();
-
+  if CanalPrendido then begin
+    Prepara();
+    fp_Senoidal(Im1,Im2,StrToFloat(Edit1.Text));
+    Presenta();
+  end;
 end;
-
 
 //Funcion TangenteHiperbolica Claro-Oscuro
 procedure TAppPDI.ClaroOscuro1Click(Sender: TObject);
@@ -705,6 +703,7 @@ end;
 
 procedure TAppPDI.BlancoyNegro1Click(Sender: TObject);
 begin
+  // No es necesaria la parte del CANAL del color
   Prepara();
   fp_blancoNegro(Im1,Im2);
   Presenta();
@@ -778,30 +777,31 @@ end;
 
 // ****************** REGIONALES ************************
 procedure TAppPDI.BordesX1Click(Sender: TObject);
+// Borde simple en X
 begin
-  if CanalPrendido then begin
+  //if CanalPrendido then begin
     Prepara();
     fr_BSX(im1, im2);
     Presenta();
-  end;
-end;
-
-
-
-procedure TAppPDI.BordesXY1Click(Sender: TObject);
-begin
-
+  //end;
 end;
 
 // Borde simple en Y
 procedure TAppPDI.BordesY1Click(Sender: TObject);
 begin
-  if CanalPrendido then begin
+  //if CanalPrendido then begin
     Prepara();
     fr_BSY(im1, im2);
     Presenta();
-  end;
+  //end;
 end;
+
+// Borde Simple en XY
+procedure TAppPDI.BordesXY1Click(Sender: TObject);
+begin
+//
+end;
+
 
 
 
@@ -825,22 +825,18 @@ end;
 //Reflexion en X
 procedure TAppPDI.FlipX1Click(Sender: TObject);
 begin
-if CanalPrendido then
-Prepara();
-fg_flipX(Im1,Im2);
-Presenta();
-
+  Prepara();
+  fg_flipX(Im1,Im2);
+  Presenta();
 end;
 
 
 //Reflexion en Y
 procedure TAppPDI.FlipY1Click(Sender: TObject);
 begin
-if CanalPrendido then
-Prepara();
-fg_flipY(Im1,Im2);
-Presenta();
-
+  Prepara();
+  fg_flipY(Im1,Im2);
+  Presenta();
 end;
 
 
@@ -875,15 +871,13 @@ begin
   Prepara();
   fg_zoomF2x(Im1,Im2);
   Presenta();
-
 end;
 
 procedure TAppPDI.Zoom2xP1Click(Sender: TObject);
 begin
-Prepara();
-fg_zoom2x(Im1,Im2);
-Presenta();
-
+  Prepara();
+  fg_zoom2x(Im1,Im2);
+  Presenta();
 end;
 
 
@@ -933,7 +927,6 @@ begin
       end;
     end;
   end;
-
 
   Presenta();
 end;

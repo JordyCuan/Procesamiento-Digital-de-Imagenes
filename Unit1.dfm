@@ -40,6 +40,7 @@ object AppPDI: TAppPDI
       OnMouseDown = Image2SelecMouseDown
       OnMouseLeave = Image2SelecMouseLeave
       OnMouseMove = Image2SelecMouseMove
+      OnMouseUp = Image2SelecMouseUp
     end
   end
   object StatusBar1: TStatusBar
