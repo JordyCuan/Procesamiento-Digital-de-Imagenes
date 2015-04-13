@@ -54,8 +54,6 @@ object AppPDI: TAppPDI
       item
         Width = 50
       end>
-    ExplicitTop = 621
-    ExplicitWidth = 762
   end
   object StatusBar2: TStatusBar
     Left = 0
@@ -88,8 +86,6 @@ object AppPDI: TAppPDI
       item
         Width = 50
       end>
-    ExplicitTop = 602
-    ExplicitWidth = 762
   end
   object StatusBar3: TStatusBar
     Left = 0
@@ -103,8 +99,6 @@ object AppPDI: TAppPDI
       item
         Width = 450
       end>
-    ExplicitTop = 583
-    ExplicitWidth = 762
   end
   object ToolBar1: TToolBar
     Left = 0
@@ -181,8 +175,6 @@ object AppPDI: TAppPDI
     TabOrder = 4
     object TabSheet1: TTabSheet
       Caption = 'Principal'
-      ExplicitWidth = 649
-      ExplicitHeight = 354
       object Panel1: TPanel
         Left = -2
         Top = 461
@@ -198,6 +190,19 @@ object AppPDI: TAppPDI
           Height = 13
           Caption = 'valor = '
         end
+        object Label2: TLabel
+          Left = 209
+          Top = 11
+          Width = 111
+          Height = 40
+          Caption = 'Norma Bordes'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlue
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
         object Edit1: TEdit
           Left = 52
           Top = 8
@@ -209,7 +214,7 @@ object AppPDI: TAppPDI
         object CheckBox1_ROJO: TCheckBox
           Left = 118
           Top = 10
-          Width = 97
+          Width = 75
           Height = 17
           Caption = '  Rojo'
           Checked = True
@@ -220,7 +225,7 @@ object AppPDI: TAppPDI
         object CheckBox2_VERDE: TCheckBox
           Left = 118
           Top = 30
-          Width = 97
+          Width = 75
           Height = 17
           Caption = '  Verde'
           Checked = True
@@ -231,13 +236,34 @@ object AppPDI: TAppPDI
         object CheckBox3_AZUL: TCheckBox
           Left = 118
           Top = 50
-          Width = 97
+          Width = 75
           Height = 17
           Caption = '  Azul'
           Checked = True
           State = cbChecked
           TabOrder = 3
           OnClick = CheckBox3_AZULClick
+        end
+        object RadioGroup1: TRadioGroup
+          Left = 287
+          Top = 8
+          Width = 121
+          Height = 63
+          Caption = 'Norma Bordes'
+          Ctl3D = True
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlue
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ItemIndex = 0
+          Items.Strings = (
+            'Val Absoluto'
+            'Repujado')
+          ParentCtl3D = False
+          ParentFont = False
+          TabOrder = 4
+          OnClick = RadioGroup1Click
         end
       end
       object ScrollBox1: TScrollBox
@@ -270,8 +296,6 @@ object AppPDI: TAppPDI
       Caption = 'Calculadora'
       ImageIndex = 1
       PopupMenu = PopupMenu1
-      ExplicitWidth = 750
-      ExplicitHeight = 354
       object ScrollBox2: TScrollBox
         Left = 0
         Top = 0
@@ -306,6 +330,12 @@ object AppPDI: TAppPDI
         Caption = 'Guardar como...'
         ShortCut = 49235
         OnClick = Guardarcomo1Click
+      end
+      object N7: TMenuItem
+        Caption = '-'
+      end
+      object AbrirfotodesdeWebCam1: TMenuItem
+        Caption = 'Abrir foto desde WebCam'
       end
     end
     object Editar1: TMenuItem
@@ -519,7 +549,7 @@ object AppPDI: TAppPDI
     Left = 128
     Top = 280
     Bitmap = {
-      494C010105000A004C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010105000A00540010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -794,7 +824,7 @@ object AppPDI: TAppPDI
     Left = 272
     Top = 280
     Bitmap = {
-      494C010105000A004C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010105000A00540010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1122,6 +1152,7 @@ object AppPDI: TAppPDI
     end
     object Resta1: TMenuItem
       Caption = 'Resta'
+      OnClick = Resta1Click
     end
     object Logicas1: TMenuItem
       Break = mbBarBreak
@@ -1134,6 +1165,7 @@ object AppPDI: TAppPDI
     end
     object OR1: TMenuItem
       Caption = 'OR'
+      OnClick = OR1Click
     end
   end
 end

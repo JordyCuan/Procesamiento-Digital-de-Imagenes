@@ -132,6 +132,10 @@ type
     Logicas1: TMenuItem;
     AND1: TMenuItem;
     OR1: TMenuItem;
+    RadioGroup1: TRadioGroup;
+    Label2: TLabel;
+    N7: TMenuItem;
+    AbrirfotodesdeWebCam1: TMenuItem;
 
     // Metodos
     procedure Abrir1Click(Sender: TObject);
@@ -188,6 +192,9 @@ type
     procedure deArchivo1Click(Sender: TObject);
     procedure Suma1Click(Sender: TObject);
     procedure AND1Click(Sender: TObject);
+    procedure OR1Click(Sender: TObject);
+    procedure Resta1Click(Sender: TObject);
+    procedure RadioGroup1Click(Sender: TObject);
 
 
     // Añadidos por Jordy
@@ -849,8 +856,15 @@ end;
 // *****************************************************
 // ******************** F REGIONALES *******************
 // *****************************************************
-procedure TAppPDI.BordesX1Click(Sender: TObject);
+
+// Obserbador de tipo de borde (Val Absoluto / Repujado)
+procedure TAppPDI.RadioGroup1Click(Sender: TObject);
+begin
+  _Norma := RadioGroup1.ItemIndex;
+end;
+
 // Borde simple en X
+procedure TAppPDI.BordesX1Click(Sender: TObject);
 begin
   //if CanalPrendido then begin
     Prepara();
@@ -1068,6 +1082,15 @@ begin
   PageControl1.ActivePageIndex := 0;
 end;
 
+// Restar imagenes
+procedure TAppPDI.Resta1Click(Sender: TObject);
+begin
+  Prepara();
+  Calc_Resta(Im1, ImC, Im2);
+  Presenta();
+  PageControl1.ActivePageIndex := 0;
+end;
+
 // AND Logico en imagenes
 procedure TAppPDI.AND1Click(Sender: TObject);
 begin
@@ -1076,6 +1099,16 @@ begin
   Presenta();
   PageControl1.ActivePageIndex := 0;
 end;
+
+// OR Logico en imagenes
+procedure TAppPDI.OR1Click(Sender: TObject);
+begin
+  Prepara();
+  Calc_OR(Im1, ImC, Im2);
+  Presenta();
+  PageControl1.ActivePageIndex := 0;
+end;
+
 
 
 

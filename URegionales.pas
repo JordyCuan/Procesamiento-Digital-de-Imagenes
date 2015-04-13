@@ -24,9 +24,14 @@ var
 begin
 	for c:= 0 to 2 do
 		if _kan[c] then
-			for y := _y1+1 to _y2-1 do
-				for x := _x1 to _x2-1 do
-					MB.dat[x][y][c] := abs(MA.dat[x][y][c] - MA.dat[x][y-1][c])
+      if _Norma = 0 then
+        for y := _y1+1 to _y2-1 do
+          for x := _x1 to _x2-1 do
+            MB.dat[x][y][c] := abs(MA.dat[x][y][c] - MA.dat[x][y-1][c])
+      else
+        for y := _y1+1 to _y2-1 do
+          for x := _x1 to _x2-1 do
+            MB.dat[x][y][c] := repuja(MA.dat[x][y][c] - MA.dat[x][y-1][c])
 		else
 			for y := 0 to MA.nr-1 do
 				for x := 0 to MA.nc-1 do
@@ -41,9 +46,14 @@ var
 begin
 	for c:= 0 to 2 do
 		if _kan[c] then
-			for y := _y1 to _y2-1 do
-				for x := _x1+1 to _x2-1 do
-					MB.dat[x][y][c] := abs(MA.dat[x][y][c] - MA.dat[x-1][y][c])
+      if _Norma = 0 then
+        for y := _y1 to _y2-1 do
+          for x := _x1+1 to _x2-1 do
+            MB.dat[x][y][c] := abs(MA.dat[x][y][c] - MA.dat[x-1][y][c])
+      else
+        for y := _y1 to _y2-1 do
+          for x := _x1+1 to _x2-1 do
+            MB.dat[x][y][c] := repuja(MA.dat[x][y][c] - MA.dat[x-1][y][c])
 		else
 			for y := 0 to MA.nr-1 do
 				for x := 0 to MA.nc-1 do
@@ -82,10 +92,14 @@ begin
 
 	for c := 0 to 2 do
 		if _kan[c] then
-			for y := _y1 + Ly to _y2-1-Ly do
-				for x := _x1+Lx to _x2-1-Lx do
-					MB.dat[x][y][c] := abs(CONVB(MA, MC, Lx, Ly, x,y,c))
-
+      if _Norma = 0 then
+        for y := _y1 + Ly to _y2-1-Ly do
+          for x := _x1+Lx to _x2-1-Lx do
+            MB.dat[x][y][c] := abs(CONVB(MA, MC, Lx, Ly, x,y,c))
+      else
+        for y := _y1 + Ly to _y2-1-Ly do
+          for x := _x1+Lx to _x2-1-Lx do
+            MB.dat[x][y][c] := repuja(CONVB(MA, MC, Lx, Ly, x,y,c))
 		else
 			for y := 0 to MA.nr - 1 do
 				for x := 0 to MA.nc - 1 do
