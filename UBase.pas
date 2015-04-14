@@ -35,8 +35,7 @@ var
   idf : TextFile;
   x,y : integer;
 
-
-  // No se porque lo tiene el profe
+  // Norma que define el tipo de borde (Val Absoluto / Repujado)
   _Norma              : byte;
 
   // Falso color
@@ -55,6 +54,9 @@ var
 
 
   function CanalPrendido() : boolean;
+
+  function repuja(z : single) : single;
+
 
 implementation
 
@@ -181,5 +183,15 @@ function CanalPrendido() : boolean;
 begin
   result := _kan[0] or _kan[1] or _kan[2];
 end;
+
+
+function repuja(z : single) : single;
+begin
+  result := (z+255) / 2;
+end;
+
+
+begin
+  _Norma := 0; // Valor Absoluto
 
 end.

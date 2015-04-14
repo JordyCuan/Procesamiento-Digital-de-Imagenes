@@ -8,7 +8,8 @@ uses
   UPuntuales in 'UPuntuales.pas',
   URegionales in 'URegionales.pas',
   UGeometricos in 'UGeometricos.pas',
-  UIntRotacion in 'UIntRotacion.pas' {FormRot};
+  UIntRotacion in 'UIntRotacion.pas' {FormRot},
+  UCalc in 'UCalc.pas';
 
 {$R *.res}
 

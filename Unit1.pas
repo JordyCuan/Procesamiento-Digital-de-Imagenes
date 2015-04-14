@@ -1,6 +1,6 @@
 // Sistema de desarrollo para la implementacion de
 // Procesamiento Digital de iMgenes
-// V 0.5.8
+// V 0.5.11
 // 21 - 01 - 2015
 // FCC BUAP
 
@@ -16,7 +16,8 @@ uses
   Vcl.ComCtrls, math, Vcl.StdCtrls,
   Jpeg, PNGImage, GIFImg, Vcl.ImgList, Vcl.ToolWin,
 
-  UBase, UHisto, UPuntuales, URegionales, UGeometricos, UIntRotacion;
+  UBase, UHisto, UPuntuales, URegionales, UGeometricos, UIntRotacion, UCalc,
+  Vcl.ActnMan, Vcl.ActnCtrls;
 
 type
   TAppPDI = class(TForm)
@@ -107,6 +108,34 @@ type
     AbrirPaleta1: TMenuItem;
     AplicarPaleta1: TMenuItem;
     OpenDialog1: TOpenDialog;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    N5: TMenuItem;
+    N6: TMenuItem;
+    ActivarCalculadora1: TMenuItem;
+    ToolButton7: TToolButton;
+    ScrollBox2: TScrollBox;
+    Image2: TImage;
+    Image3calcu: TImage;
+    PopupMenu1: TPopupMenu;
+    CargarImagen1: TMenuItem;
+    deArchivo1: TMenuItem;
+    deCamara1: TMenuItem;
+    ReglaAplicacion1: TMenuItem;
+    EsquinaIS1: TMenuItem;
+    SeleccPunto1: TMenuItem;
+    N001: TMenuItem;
+    Aritmeticas1: TMenuItem;
+    Suma1: TMenuItem;
+    Resta1: TMenuItem;
+    Logicas1: TMenuItem;
+    AND1: TMenuItem;
+    OR1: TMenuItem;
+    RadioGroup1: TRadioGroup;
+    Label2: TLabel;
+    N7: TMenuItem;
+    AbrirfotodesdeWebCam1: TMenuItem;
 
     // Metodos
     procedure Abrir1Click(Sender: TObject);
@@ -158,13 +187,22 @@ type
     procedure BordesXY1Click(Sender: TObject);
     procedure AbrirPaleta1Click(Sender: TObject);
     procedure AplicarPaleta1Click(Sender: TObject);
+<<<<<<< HEAD
     procedure ZoomIBL1Click(Sender: TObject);
     procedure ZoomVMC1Click(Sender: TObject);
+=======
+    procedure ActivarCalculadora1Click(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
+    procedure deArchivo1Click(Sender: TObject);
+    procedure Suma1Click(Sender: TObject);
+    procedure AND1Click(Sender: TObject);
+    procedure OR1Click(Sender: TObject);
+    procedure Resta1Click(Sender: TObject);
+    procedure RadioGroup1Click(Sender: TObject);
+>>>>>>> origin/master
 
 
     // Añadidos por Jordy
-    //procedure BSX1Click(Sender: TObject);
-    //procedure BSY1Click(Sender: TObject);
     //procedure MatrizYB1Click(Sender: TObject);
     //procedure MetMediasGen(Sender: TObject);
 
@@ -174,16 +212,17 @@ type
     { Private declarations }
 
 
-procedure Prepara();
+    procedure Prepara();
     procedure Presenta();
   public
     { Public declarations }
-    nomIma   : string;
-    BM1, BMS : TBitMap;
-    valor    : single;
-    nc, nr   : integer;
-    MC1      : MatConv;
-    Im1,Im2  : MatImg;
+    nomIma        : string;
+    BM1, BMS      : TBitMap;
+    valor         : single;
+    Im1,Im2,ImC   : MatImg;
+    nc, nr        : integer;
+    MC1           : MatConv;
+
   end;
 
 var
@@ -222,6 +261,10 @@ begin
   // Llenado del canal
   for i := 0 to 2 do
     _kan[i] := true;
+
+  // Inicialización de los Tabs
+  TabSheet2.TabVisible := false;
+  PageControl1.ActivePageIndex := 0;
 end;
 
 
@@ -258,7 +301,12 @@ begin
   Image2Selec.Picture.Assign(BMSel);
 end;
 
-// ******** SELECCIONES
+
+
+
+// *****************************************************
+// ******************** SELECCIONES ********************
+// *****************************************************
 procedure TAppPDI.Image2SelecMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
@@ -333,10 +381,16 @@ begin
     _boolSeleccionando := false;
   end;
 end;
+// *****************************************************
+// ************************ FIN ************************
+// ******************** SELECCIONES ********************
+// *****************************************************
 
 
 
-// ************Ajustar canales según el cambio
+// *****************************************************
+// ********************** CANALES **********************
+// *****************************************************
 procedure TAppPDI.CheckBox1_ROJOClick(Sender: TObject);
 var ROJO : integer;
 begin
@@ -357,9 +411,16 @@ begin
   AZUL := 2;
   _kan[AZUL] := CheckBox3_AZUL.Checked;
 end;
+// *****************************************************
+// ************************ FIN ************************
+// ********************** CANALES **********************
+// *****************************************************
 
 
-// Cambia Tema
+
+// *****************************************************
+// ******************** CAMBIAR TEMA *******************
+// *****************************************************
 procedure TAppPDI.EstiloFCC1Click(Sender: TObject);
 begin
   ToolBar1.Images := ImageList1;
@@ -370,7 +431,9 @@ begin
   ToolBar1.Images := ImageList2;
 end;
 
-// Histograma
+// *****************************************************
+// ******************** HISTOGRAMA *********************
+// *****************************************************
 procedure TAppPDI.Histograma1Click(Sender: TObject);
 begin
   // Llamar a la interface del Histograma
@@ -378,7 +441,10 @@ begin
 end;
 
 
-// Abrir una imagen
+
+// *****************************************************
+// ******************** ABRIR IMAGEN *******************
+// *****************************************************
 procedure TAppPDI.Abrir1Click(Sender: TObject);
 var
   pic : TPicture;
@@ -437,6 +503,9 @@ begin
   end;
 end;
 
+// *****************************************************
+// ********************** GUARDAR **********************
+// *****************************************************
 procedure salvar_Imagen(BB : TBitmap; nombre : string);
 var
   ext  : string;
@@ -490,7 +559,10 @@ begin
   salvar_Imagen(bm1, nomIma);
 end;
 
-// Salvar Como
+
+// *****************************************************
+// ******************** GUARDAR COMO *******************
+// *****************************************************
 procedure TAppPDI.Guardarcomo1Click(Sender: TObject);
 begin
   SavePictureDialog1.FileName := nomIma;
@@ -559,7 +631,9 @@ begin
 end;
 
 
-// Hacer deshacer
+// *****************************************************
+// ******************* HACER-DESHACER ******************
+// *****************************************************
 // Siempre que haya un proceso previo una imagen
 procedure TAppPDI.HacerDeshacer1Click(Sender: TObject);
 var
@@ -604,6 +678,11 @@ begin
 end;
 
 
+
+// *****************************************************
+// ******************** F PUNTUALES ********************
+// *****************************************************
+
 // Negativo usando el BitMap: BM1
 procedure TAppPDI.Negativo1Click(Sender: TObject);
 begin
@@ -640,7 +719,7 @@ end;
 
 procedure TAppPDI.MedianaSimple1Click(Sender: TObject);
 begin
-
+                              //
 end;
 
 //Funcion Seno
@@ -666,31 +745,31 @@ end;
 //Funcion Oscurecimiento Fuerte
 procedure TAppPDI.OscurecimientoFuerte1Click(Sender: TObject);
 begin
-valor:=StrToFloat(Edit1.Text);
-Prepara();
-fp_OscFuerte(Im1,Im2,valor);
-Presenta();
-
+  if CanalPrendido then begin
+    Prepara();
+    fp_OscFuerte(Im1,Im2,StrToFloat(Edit1.Text));
+    Presenta();
+  end;
 end;
 
 //Funcion Exponencial
 procedure TAppPDI.FuncionExponencial1Click(Sender: TObject);
 begin
   if CanalPrendido then begin
-    valor := StrToFloat(Edit1.Text);
     Prepara();
-    fp_exponencial(Im1,Im2,valor);
+    fp_exponencial(Im1,Im2,StrToFloat(Edit1.Text));
     Presenta();
   end;
 end;
+
 //Funcion Senoidal Invertida para  Contraste
 procedure TAppPDI.SenoidaInvertida1Click(Sender: TObject);
 begin
-valor:= StrToFloat(Edit1.Text);
-Prepara();
-fp_Senoidal(Im1,Im2,valor);
-Presenta();
-
+  if CanalPrendido then begin
+    Prepara();
+    fp_Senoidal(Im1,Im2,StrToFloat(Edit1.Text));
+    Presenta();
+  end;
 end;
 
 
@@ -707,6 +786,7 @@ end;
 
 procedure TAppPDI.BlancoyNegro1Click(Sender: TObject);
 begin
+  // No es necesaria la parte del CANAL del color
   Prepara();
   fp_blancoNegro(Im1,Im2);
   Presenta();
@@ -778,37 +858,48 @@ end;
 *)
 
 
-// ****************** REGIONALES ************************
+// *****************************************************
+// ******************** F REGIONALES *******************
+// *****************************************************
+
+// Obserbador de tipo de borde (Val Absoluto / Repujado)
+procedure TAppPDI.RadioGroup1Click(Sender: TObject);
+begin
+  _Norma := RadioGroup1.ItemIndex;
+end;
+
+// Borde simple en X
 procedure TAppPDI.BordesX1Click(Sender: TObject);
 begin
-  if CanalPrendido then begin
+  //if CanalPrendido then begin
     Prepara();
     fr_BSX(im1, im2);
     Presenta();
-  end;
-end;
-
-
-
-procedure TAppPDI.BordesXY1Click(Sender: TObject);
-begin
-
+  //end;
 end;
 
 // Borde simple en Y
 procedure TAppPDI.BordesY1Click(Sender: TObject);
 begin
-  if CanalPrendido then begin
+  //if CanalPrendido then begin
     Prepara();
     fr_BSY(im1, im2);
     Presenta();
-  end;
+  //end;
+end;
+
+// Borde Simple en XY
+procedure TAppPDI.BordesXY1Click(Sender: TObject);
+begin
+//
 end;
 
 
 
 
-// ****************** GEOMETRICOS ************************
+// *****************************************************
+// ******************* F GEOMETRICOS *******************
+// *****************************************************
 procedure TAppPDI.RotacionIBL1Click(Sender: TObject);
 var
   ang : single;
@@ -818,31 +909,27 @@ begin
   if FormRot.ModalResult = mrOK then begin
     ang := FormRot.angRot;
 
-    //Prepara();
-    //fg_rotaIBL(im1, im2, ang);
-    //Presenta();
+    Prepara();
+    fg_rotaIBL(im1, im2, ang);
+    Presenta();
   end;
 end;
 
 //Reflexion en X
 procedure TAppPDI.FlipX1Click(Sender: TObject);
 begin
-if CanalPrendido then
-Prepara();
-fg_flipX(Im1,Im2);
-Presenta();
-
+  Prepara();
+  fg_flipX(Im1,Im2);
+  Presenta();
 end;
 
 
 //Reflexion en Y
 procedure TAppPDI.FlipY1Click(Sender: TObject);
 begin
-if CanalPrendido then
-Prepara();
-fg_flipY(Im1,Im2);
-Presenta();
-
+  Prepara();
+  fg_flipY(Im1,Im2);
+  Presenta();
 end;
 
 
@@ -877,15 +964,13 @@ begin
   Prepara();
   fg_zoomF2x(Im1,Im2);
   Presenta();
-
 end;
 
 procedure TAppPDI.Zoom2xP1Click(Sender: TObject);
 begin
-Prepara();
-fg_zoom2x(Im1,Im2);
-Presenta();
-
+  Prepara();
+  fg_zoom2x(Im1,Im2);
+  Presenta();
 end;
 
 
@@ -953,9 +1038,99 @@ begin
     end;
   end;
 
-
   Presenta();
 end;
+
+
+
+// *****************************************************
+// ******************** CALCULADORA ********************
+// *****************************************************
+procedure TAppPDI.ActivarCalculadora1Click(Sender: TObject);
+begin
+  if not ActivarCalculadora1.Checked then begin
+    TabSheet2.TabVisible := true;
+    ActivarCalculadora1.Checked := true;
+    PageControl1.ActivePageIndex := 1;
+  end
+  else begin
+    TabSheet2.TabVisible := false;
+    ActivarCalculadora1.Checked := false;
+  end;
+end;
+
+procedure TAppPDI.ToolButton7Click(Sender: TObject);
+begin
+  ActivarCalculadora1.Click;
+end;
+
+// Abrir archivo para la calculadora
+procedure TAppPDI.deArchivo1Click(Sender: TObject);
+var
+  pic     : TPicture;
+  nomIma  : String;
+begin
+  if OpenPictureDialog1.Execute then begin
+    nomIma := OpenPictureDialog1.FileName;
+    pic := TPicture.Create;
+
+    try
+      pic.LoadFromFile(nomIma);
+
+      BM1.Width := pic.Width;
+      BM1.Height:= pic.Height;
+      BM1.Canvas.Draw(0,0,pic.Graphic);
+
+      Image3calcu.Width := BM1.Width;
+      Image3calcu.Height := BM1.Height;
+      Image3calcu.Picture.Assign(BM1);
+
+      _x2 := BM1.Width;
+      _y2 := BM1.Height;
+
+      BMP2Mat(BM1, ImC);
+    finally
+      pic.Free
+    end;
+  end;
+end;
+
+// Sumar imagenes
+procedure TAppPDI.Suma1Click(Sender: TObject);
+begin
+  Prepara();
+  Calc_Suma(Im1, ImC, Im2);
+  Presenta();
+  PageControl1.ActivePageIndex := 0;
+end;
+
+// Restar imagenes
+procedure TAppPDI.Resta1Click(Sender: TObject);
+begin
+  Prepara();
+  Calc_Resta(Im1, ImC, Im2);
+  Presenta();
+  PageControl1.ActivePageIndex := 0;
+end;
+
+// AND Logico en imagenes
+procedure TAppPDI.AND1Click(Sender: TObject);
+begin
+  Prepara();
+  Calc_AND(Im1, ImC, Im2);
+  Presenta();
+  PageControl1.ActivePageIndex := 0;
+end;
+
+// OR Logico en imagenes
+procedure TAppPDI.OR1Click(Sender: TObject);
+begin
+  Prepara();
+  Calc_OR(Im1, ImC, Im2);
+  Presenta();
+  PageControl1.ActivePageIndex := 0;
+end;
+
 
 
 
