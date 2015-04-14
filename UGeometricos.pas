@@ -13,6 +13,8 @@ uses
   procedure fg_flipY(Ma:MatImg; var MB:MatImg);
   procedure fg_zoomF2x(MA:MatImg; var MB:MatImg);
   procedure fg_zoom2x(MA:MatImg; var MB:MatImg);
+  procedure fg_zoomIBL(MA:MatImg; var MB:MatImg; nx,ny:integer);
+  procedure fg_zoomVC(MA:MatImg; var MB:MatImg; nx,ny :integer);
 
 
 implementation
@@ -290,6 +292,102 @@ end;
 _x2:=MB.nc;
 _y2:=MB.nr;
 end;
+
+//Zooom IBL
+procedure fg_zoomIBL(MA:MatImg; var MB:MatImg; nx,ny  :integer);
+  //----------------------------------
+var
+x,y,c,NCX,NCY,
+xtm1,ytm1,xt,yt:  Integer;
+vac,
+dx,dy,
+cx,cy,
+f1,f2,f3,f4,
+fx,fy,
+xx,yy          :  single;
+
+begin
+  NCX := MA.nc-1;
+  NCY := MA.nr-1;
+
+  MB.nc := nx;
+  MB.nr := ny;
+  setLength(MB.dat,MB.nc,MB.nr,3);
+
+  //Factores de escala
+  fx := NCX/(nx-1);
+  fy := NCY/(ny-1);
+
+  //El bulto
+
+      for y := 0 to ny-2 do begin
+        yy    := fy*y;
+        yt    := floor(yy);
+        ytm1  := yt+1;
+        dy    := yy-yt;
+        cy    := 1 -dy;
+        for x := 0 to nx-2 do begin
+          xx   := fx*x;
+          xt   := floor(xx);
+          xtm1 := xt+1;
+          dx   := xx-xt;
+          cx   := 1-dx;
+
+          f1 := cx * cy;
+          f2 := dx * cy;
+          f3 := cx * dy;
+          f4 := dy * dy;
+          for c := 0 to 2 do begin
+
+           vac :=       f1 * MA.dat[xt   ][yt  ][c] ;
+           vac := vac + f2 * MA.dat[xtm1][yt  ][c] ;
+           vac := vac + f3 * MA.dat[xt  ][ytm1][c] ;
+           vac := vac + f4 * MA.dat[xtm1][ytm1][c] ;
+
+           MB.dat[x][y][c] := vac;
+          end;
+       end;
+      end;
+end;
+
+//Zoom Vecinos Mas Cercanos
+procedure fg_zoomVC(MA:MatImg; var MB:MatImg; nx,ny: integer);
+  var
+    x,y,c,NCX,NCY:  integer;
+    xt,yt        :  integer;
+    fx,fy,xx,yy  :  single;
+
+begin
+
+NCX:=MA.nc-1;
+NCY:=MA.nr-1;
+
+MB.nc:=nx;
+MB.nr:=ny;
+
+setLength(MB.dat,MB.nc,MB.nr,3);
+
+//Factores de Escala
+
+fx:=NCX/(nx-1);
+fy:=NCY/(ny-1);
+//Reduccion nx y ny
+//El bulto
+for c := 0 to 2 do
+  for y := 0 to ny-1 do begin
+    yy:=fy*y;
+    yt:=ceil(yy);
+    for x := 0 to nx-1 do begin
+      xx:=fx*x;
+      xt:=ceil(xx);
+      MB.dat[x][y][c]:=MA.dat[xt][yt][c];
+    end;
+  end;
+  _x2:=MB.nc;
+  _y2:=MB.nr;
+end;
+
+
 
 
 end.//Fin *.pas

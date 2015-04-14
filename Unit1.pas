@@ -158,6 +158,8 @@ type
     procedure BordesXY1Click(Sender: TObject);
     procedure AbrirPaleta1Click(Sender: TObject);
     procedure AplicarPaleta1Click(Sender: TObject);
+    procedure ZoomIBL1Click(Sender: TObject);
+    procedure ZoomVMC1Click(Sender: TObject);
 
 
     // Añadidos por Jordy
@@ -887,6 +889,23 @@ Presenta();
 end;
 
 
+
+procedure TAppPDI.ZoomIBL1Click(Sender: TObject);
+begin
+//Los parametros que se le pasan, son lo que se recibiran de la Interfaz
+Prepara();
+fg_zoomIBL(Im1,Im2,1000,1000);
+Presenta();
+end;
+
+procedure TAppPDI.ZoomVMC1Click(Sender: TObject);
+begin
+
+Prepara();
+fg_zoomVC(Im1,Im2,500,500);
+Presenta();
+
+end;
 
 // *****************************************************
 // ******************** FALSO COLOR ********************

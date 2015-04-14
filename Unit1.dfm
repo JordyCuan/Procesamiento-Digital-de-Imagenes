@@ -72,7 +72,6 @@ object AppPDI: TAppPDI
       item
         Width = 50
       end>
-    ExplicitWidth = 663
   end
   object StatusBar2: TStatusBar
     Left = 0
@@ -105,7 +104,6 @@ object AppPDI: TAppPDI
       item
         Width = 50
       end>
-    ExplicitWidth = 663
   end
   object StatusBar3: TStatusBar
     Left = 0
@@ -119,7 +117,6 @@ object AppPDI: TAppPDI
       item
         Width = 450
       end>
-    ExplicitWidth = 663
   end
   object Panel1: TPanel
     Left = 8
@@ -192,7 +189,6 @@ object AppPDI: TAppPDI
     Images = ImageList1
     GradientDirection = gdHorizontal
     TabOrder = 5
-    ExplicitWidth = 663
     object ToolButton1: TToolButton
       Left = 0
       Top = 0
@@ -394,9 +390,11 @@ object AppPDI: TAppPDI
       end
       object ZoomVMC1: TMenuItem
         Caption = 'Zoom VMC'
+        OnClick = ZoomVMC1Click
       end
       object ZoomIBL1: TMenuItem
         Caption = 'Zoom IBL'
+        OnClick = ZoomIBL1Click
       end
       object N4: TMenuItem
         Caption = '-'
@@ -459,7 +457,7 @@ object AppPDI: TAppPDI
     Left = 128
     Top = 280
     Bitmap = {
-      494C010104000A003C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010104000A00440010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -734,7 +732,7 @@ object AppPDI: TAppPDI
     Left = 272
     Top = 280
     Bitmap = {
-      494C010104000A003C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010104000A00440010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
