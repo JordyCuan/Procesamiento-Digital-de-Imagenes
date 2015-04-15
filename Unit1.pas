@@ -16,7 +16,7 @@ uses
   Vcl.ComCtrls, math, Vcl.StdCtrls,
   Jpeg, PNGImage, GIFImg, Vcl.ImgList, Vcl.ToolWin,
 
-  UBase, UHisto, UPuntuales, URegionales, UGeometricos, UIntRotacion, UCalc,
+  UBase,UnitZoom, UHisto, UPuntuales, URegionales, UGeometricos, UIntRotacion, UCalc,
   Vcl.ActnMan, Vcl.ActnCtrls;
 
 type
@@ -187,10 +187,8 @@ type
     procedure BordesXY1Click(Sender: TObject);
     procedure AbrirPaleta1Click(Sender: TObject);
     procedure AplicarPaleta1Click(Sender: TObject);
-<<<<<<< HEAD
     procedure ZoomIBL1Click(Sender: TObject);
     procedure ZoomVMC1Click(Sender: TObject);
-=======
     procedure ActivarCalculadora1Click(Sender: TObject);
     procedure ToolButton7Click(Sender: TObject);
     procedure deArchivo1Click(Sender: TObject);
@@ -199,7 +197,6 @@ type
     procedure OR1Click(Sender: TObject);
     procedure Resta1Click(Sender: TObject);
     procedure RadioGroup1Click(Sender: TObject);
->>>>>>> origin/master
 
 
     // Añadidos por Jordy
@@ -915,6 +912,24 @@ begin
   end;
 end;
 
+procedure TAppPDI.ZoomVMC1Click(Sender: TObject);
+var
+  nx,ny: integer;
+begin
+  Form2.Edit1.Text:=IntToStr(Im1.nc);
+  Form2.Edit2.Text:=IntToStr(Im1.nr);
+  Form2.Label5.Caption:=Format('%d x %d',[Im1.nc,Im1.nr]);
+  Form2.ShowModal;
+  if(Form2.ModalResult=mrOk)then begin
+    nx := StrToInt(Form2.Edit1.Text);
+    ny := StrToInt(Form2.Edit2.Text);
+
+    Prepara();
+    fg_zoomVC(Im1,Im2,nx,ny);
+    Presenta();
+  end;
+end;
+
 //Reflexion en X
 procedure TAppPDI.FlipX1Click(Sender: TObject);
 begin
@@ -983,14 +998,7 @@ fg_zoomIBL(Im1,Im2,1000,1000);
 Presenta();
 end;
 
-procedure TAppPDI.ZoomVMC1Click(Sender: TObject);
-begin
 
-Prepara();
-fg_zoomVC(Im1,Im2,500,500);
-Presenta();
-
-end;
 
 // *****************************************************
 // ******************** FALSO COLOR ********************

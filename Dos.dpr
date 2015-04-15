@@ -9,7 +9,8 @@ uses
   URegionales in 'URegionales.pas',
   UGeometricos in 'UGeometricos.pas',
   UIntRotacion in 'UIntRotacion.pas' {FormRot},
-  UCalc in 'UCalc.pas';
+  UCalc in 'UCalc.pas',
+  UnitZoom in 'UnitZoom.pas' {Form2};
 
 {$R *.res}
 
@@ -18,5 +19,6 @@ begin
   Application.CreateForm(TAppPDI, AppPDI);
   Application.CreateForm(TFormHisto, FormHisto);
   Application.CreateForm(TFormRot, FormRot);
+  Application.CreateForm(TForm2, Form2);
   Application.Run;
 end.

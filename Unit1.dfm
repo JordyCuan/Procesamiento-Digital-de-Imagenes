@@ -99,66 +99,6 @@ object AppPDI: TAppPDI
       item
         Width = 450
       end>
-<<<<<<< HEAD
-  end
-  object Panel1: TPanel
-    Left = 8
-    Top = 499
-    Width = 750
-    Height = 76
-    Color = clMoneyGreen
-    ParentBackground = False
-    TabOrder = 4
-    object Label1: TLabel
-      Left = 8
-      Top = 11
-      Width = 38
-      Height = 13
-      Caption = 'valor = '
-    end
-    object Edit1: TEdit
-      Left = 52
-      Top = 8
-      Width = 53
-      Height = 21
-      TabOrder = 0
-      Text = '1.0'
-    end
-    object CheckBox1_ROJO: TCheckBox
-      Left = 118
-      Top = 10
-      Width = 97
-      Height = 17
-      Caption = '  Rojo'
-      Checked = True
-      State = cbChecked
-      TabOrder = 1
-      OnClick = CheckBox1_ROJOClick
-    end
-    object CheckBox2_VERDE: TCheckBox
-      Left = 118
-      Top = 30
-      Width = 97
-      Height = 17
-      Caption = '  Verde'
-      Checked = True
-      State = cbChecked
-      TabOrder = 2
-      OnClick = CheckBox2_VERDEClick
-    end
-    object CheckBox3_AZUL: TCheckBox
-      Left = 118
-      Top = 50
-      Width = 97
-      Height = 17
-      Caption = '  Azul'
-      Checked = True
-      State = cbChecked
-      TabOrder = 3
-      OnClick = CheckBox3_AZULClick
-    end
-=======
->>>>>>> origin/master
   end
   object ToolBar1: TToolBar
     Left = 0
@@ -173,11 +113,7 @@ object AppPDI: TAppPDI
     GradientStartColor = clSkyBlue
     Images = ImageList1
     GradientDirection = gdHorizontal
-<<<<<<< HEAD
-    TabOrder = 5
-=======
     TabOrder = 3
->>>>>>> origin/master
     object ToolButton1: TToolButton
       Left = 0
       Top = 0
@@ -257,8 +193,8 @@ object AppPDI: TAppPDI
         object Label2: TLabel
           Left = 209
           Top = 11
-          Width = 111
-          Height = 40
+          Width = 67
+          Height = 13
           Caption = 'Norma Bordes'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlue
@@ -615,11 +551,7 @@ object AppPDI: TAppPDI
     Left = 128
     Top = 280
     Bitmap = {
-<<<<<<< HEAD
-      494C010104000A00440010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
-=======
-      494C010105000A00540010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
->>>>>>> origin/master
+      494C010105000A00580010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -894,11 +826,7 @@ object AppPDI: TAppPDI
     Left = 272
     Top = 280
     Bitmap = {
-<<<<<<< HEAD
-      494C010104000A00440010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
-=======
-      494C010105000A00540010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
->>>>>>> origin/master
+      494C010105000A00580010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
