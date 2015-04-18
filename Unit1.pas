@@ -143,6 +143,11 @@ type
     Recortar1: TMenuItem;
     N8: TMenuItem;
     BSCY1: TMenuItem;
+    Acercade1: TMenuItem;
+    ColorBox1: TColorBox;
+    ColorBox2: TColorBox;
+    Label2: TLabel;
+    Label3: TLabel;
 
 
     // Metodos
@@ -223,14 +228,9 @@ type
 
     procedure leer_Medianas(nom : string);
     procedure MedianaXClick(Sender: TObject);
+    procedure Acercade1Click(Sender: TObject);
 
 
-
-
-
-    // Añadidos por Jordy
-    //procedure MatrizYB1Click(Sender: TObject);
-    //procedure MetMediasGen(Sender: TObject);
 
 
 
@@ -278,7 +278,7 @@ begin
   StatusBar2.Panels[3].Text := 'G';
   StatusBar2.Panels[4].Text := 'B';
 
-  Application.Icon.LoadFromFile('alien.ico');
+  Application.Icon.LoadFromFile('coffee.ico');
 
   // Variables: Saleccion
   BM1 := TBitMap.Create;
@@ -490,7 +490,7 @@ begin
   if _banRect = False then begin // Con esto parchamos un error de clonar imagen
     _banRect := true;
     _banCir  := false;
-    StatusBar1.Panels[6].Text := 'Activa';
+    StatusBar1.Panels[6].Text := 'Activa: Rectangular';
 
     // Si lo primero que hace el usuario despues de abierta la imagen es la seleccion
     Mat2Mat(Im1,Im2);
@@ -501,7 +501,7 @@ begin
   if _banCir = False then begin // Con esto parchamos un error de clonar imagen
     _banCir := true;
     _banRect:= false;
-    StatusBar1.Panels[6].Text := 'Activa';
+    StatusBar1.Panels[6].Text := 'Activa: Circular';
 
     // Si lo primero que hace el usuario despues de abierta la imagen es la seleccion
     Mat2Mat(Im1,Im2);
@@ -519,6 +519,10 @@ begin
   BMSel.Canvas.Pen.Color := clWhite;
   BMSel.Canvas.Rectangle(0,0,BMSel.Width, BMSel.Height);
   Image2Selec.Picture.Assign(BMSel);
+
+  // Limpiamos el rango de selección
+  StatusBar1.Panels[7].Text := '';
+  StatusBar2.Panels[7].Text := '';
 end;
 
 
@@ -535,6 +539,8 @@ begin
     _y1 := Y;
 
     _boolSeleccionando := true;
+
+    StatusBar2.Panels[7].Text := 'Region de Seleccion:';
   end;
 
   // Circular
@@ -543,6 +549,8 @@ begin
     _y1 := Y;
 
     _boolSeleccionando := true;
+
+    StatusBar2.Panels[7].Text := 'Region de Seleccion:';
   end;
 end;
 
@@ -579,7 +587,7 @@ begin
       _y1 := 0;
 
 
-    BMSel.Canvas.Pen.Color := clGreen;
+    BMSel.Canvas.Pen.Color := ColorBox1.Selected;
 
     BMSel.Canvas.Rectangle(_x1,_y1,_x2,_y2);
     Image2Selec.Picture.Assign(BMSel);
@@ -614,6 +622,8 @@ begin
     _boolSeleccionando := false;
   end;
 end;
+
+
 // *****************************************************
 // ************************ FIN ************************
 // ******************** SELECCIONES ********************
@@ -956,10 +966,30 @@ begin
     Image2Selec.Picture.Assign(BMSel);
 
     // Dibujamos el temporal
-    BMSel.Canvas.Pen.Color := clGreen;
+    BMSel.Canvas.Pen.Color := ColorBox1.Selected;
 
     BMSel.Canvas.Rectangle(_x1,_y1,X,Y);
     Image2Selec.Picture.Assign(BMSel);
+
+
+    // Para dar una mejor presentación corregimos el bug aqui tambien
+
+    // Si el usuario se sale del margen de la imagen mientras selecciona
+    // se puede sobre pasar el valor de la imagen, ENTONCES:
+    if BM1.Width < _x2 then
+      _x2 := BM1.Width;
+    if BM1.Height < _y2 then
+      _y2 := BM1.Height;
+    if 0 > _x1 then
+      _x1 := 0;
+    if 0 > _y1 then
+      _y1 := 0;
+
+    // Mostramos el rango de selección
+    StatusBar1.Panels[7].Text :=
+              '(' + inttostr(_x1) + ',' + inttostr(_y1)+
+              ') -> (' + inttostr(X) + ',' + inttostr(Y)+ ') | '
+              + inttostr(abs(X - _x1)) + 'x' + inttostr(abs(Y - _y1));
   end;
 
   // Circular
@@ -974,6 +1004,12 @@ begin
 
     BMSel.Canvas.Ellipse(_x1,_y1,X,Y);
     Image2Selec.Picture.Assign(BMSel);
+
+        // Mostramos el rango de selección
+    StatusBar1.Panels[7].Text :=
+              '(' + inttostr(_x1) + ',' + inttostr(_y1)+
+              ') -> (' + inttostr(X) + ',' + inttostr(Y)+ ') | '
+              + inttostr(abs(X - _x1)) + 'x' + inttostr(abs(Y - _y1));
   end;
 end;
 
@@ -1578,6 +1614,16 @@ begin
   Calc_OR(Im1, ImC, Im2);
   Presenta();
   PageControl1.ActivePageIndex := 0;
+end;
+
+
+
+// Acerca de
+procedure TAppPDI.Acercade1Click(Sender: TObject);
+begin
+  ShowMessage('Programadores'#13#10'- Jordy Joaquin Cuan Robledo'#13#10''
+              + '- 201103624'#13#10'jcuan4@hotmail.com'#13#10''#13#10''
+              + '* Guillermo Vara de Gante'#13#10'- ***PON AQUI TU MATRICULA Y CORREO***'    );
 end;
 
 

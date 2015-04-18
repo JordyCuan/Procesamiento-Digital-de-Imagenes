@@ -49,7 +49,7 @@ object AppPDI: TAppPDI
         Width = 25
       end
       item
-        Width = 75
+        Width = 120
       end
       item
         Width = 50
@@ -81,7 +81,7 @@ object AppPDI: TAppPDI
       end
       item
         Text = 'Seleccion: '
-        Width = 75
+        Width = 120
       end
       item
         Width = 50
@@ -171,14 +171,10 @@ object AppPDI: TAppPDI
     Top = 32
     Width = 759
     Height = 570
-    ActivePage = TabSheet2
+    ActivePage = TabSheet1
     TabOrder = 4
     object TabSheet1: TTabSheet
       Caption = 'Principal'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Panel1: TPanel
         Left = -2
         Top = 461
@@ -193,6 +189,20 @@ object AppPDI: TAppPDI
           Width = 38
           Height = 13
           Caption = 'valor = '
+        end
+        object Label2: TLabel
+          Left = 352
+          Top = 11
+          Width = 154
+          Height = 13
+          Caption = 'Color de la Pluma de Seleccion: '
+        end
+        object Label3: TLabel
+          Left = 352
+          Top = 51
+          Width = 156
+          Height = 13
+          Caption = 'Color de Relleno de la Rotacion: '
         end
         object Edit1: TEdit
           Left = 52
@@ -256,6 +266,14 @@ object AppPDI: TAppPDI
           TabOrder = 4
           OnClick = RadioGroup1Click
         end
+        object ColorBox1: TColorBox
+          Left = 512
+          Top = 8
+          Width = 145
+          Height = 22
+          Selected = clGreen
+          TabOrder = 5
+        end
       end
       object ScrollBox1: TScrollBox
         Left = -2
@@ -301,6 +319,14 @@ object AppPDI: TAppPDI
         end
       end
     end
+  end
+  object ColorBox2: TColorBox
+    Left = 519
+    Top = 565
+    Width = 145
+    Height = 22
+    Selected = clGray
+    TabOrder = 5
   end
   object MainMenu1: TMainMenu
     Left = 128
@@ -556,6 +582,10 @@ object AppPDI: TAppPDI
         OnClick = EstiloPunk1Click
       end
     end
+    object Acercade1: TMenuItem
+      Caption = 'Acerca de...'
+      OnClick = Acercade1Click
+    end
   end
   object OpenPictureDialog1: TOpenPictureDialog
     DefaultExt = 'bmp'
@@ -569,7 +599,7 @@ object AppPDI: TAppPDI
     Left = 128
     Top = 280
     Bitmap = {
-      494C010105000A00740010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010105000A00780010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -844,7 +874,7 @@ object AppPDI: TAppPDI
     Left = 272
     Top = 280
     Bitmap = {
-      494C010105000A00740010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010105000A00780010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
