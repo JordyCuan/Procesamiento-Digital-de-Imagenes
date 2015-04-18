@@ -16,8 +16,9 @@ uses
   Vcl.ComCtrls, math, Vcl.StdCtrls,
   Jpeg, PNGImage, GIFImg, Vcl.ImgList, Vcl.ToolWin,
 
-  UBase,UnitZoom,UParBin, UHisto, UPuntuales, URegionales, UGeometricos, UIntRotacion, UCalc,
-  Vcl.ActnMan, Vcl.ActnCtrls;
+  UBase,UnitZoom, UParBin, UHisto, UPuntuales, URegionales, UGeometricos, UIntRotacion, UCalc,
+  Vcl.ActnMan, Vcl.ActnCtrls, Vcl.ActnColorMaps;
+
 
 type
   TAppPDI = class(TForm)
@@ -88,7 +89,6 @@ type
     N1: TMenuItem;
     MediasConvulucion1: TMenuItem;
     N2: TMenuItem;
-    MedianaSimple1: TMenuItem;
     MedianasConvolucion1: TMenuItem;
     N3: TMenuItem;
     N4: TMenuItem;
@@ -133,13 +133,17 @@ type
     AND1: TMenuItem;
     OR1: TMenuItem;
     RadioGroup1: TRadioGroup;
-    Label2: TLabel;
     N7: TMenuItem;
     AbrirfotodesdeWebCam1: TMenuItem;
     Luminancia1: TMenuItem;
     Binarizacion1: TMenuItem;
     BinarizacionParametro1: TMenuItem;
     CPerfilTringular1: TMenuItem;
+    ReAbrirOriginal1: TMenuItem;
+    Recortar1: TMenuItem;
+    N8: TMenuItem;
+    BSCY1: TMenuItem;
+
 
     // Metodos
     procedure Abrir1Click(Sender: TObject);
@@ -201,10 +205,27 @@ type
     procedure OR1Click(Sender: TObject);
     procedure Resta1Click(Sender: TObject);
     procedure RadioGroup1Click(Sender: TObject);
+
     procedure Luminancia1Click(Sender: TObject);
     procedure Binarizacion1Click(Sender: TObject);
     procedure BinarizacionParametro1Click(Sender: TObject);
     procedure CPerfilTringular1Click(Sender: TObject);
+
+    procedure ReAbrirOriginal1Click(Sender: TObject);
+    procedure Recortar1Click(Sender: TObject);
+    procedure BSCY1Click(Sender: TObject);
+
+    procedure leer_Bordes(nom : string);
+    procedure BordeXClick(Sender: TObject);
+
+    procedure leer_Medias(nom : string);
+    procedure MediaXClick(Sender: TObject);
+
+    procedure leer_Medianas(nom : string);
+    procedure MedianaXClick(Sender: TObject);
+
+
+
 
 
     // Añadidos por Jordy
@@ -228,6 +249,10 @@ type
     nc, nr        : integer;
     MC1           : MatConv;
 
+    MatBordes     : array of MatConv;
+    MatMedias     : array of MatConvNM;
+    MatMedianas   : array of MatConvNM;
+
   end;
 
 var
@@ -238,12 +263,12 @@ implementation
 {$R *.dfm}
 
 // Inicializacion de la Ventana
-
-
 procedure TAppPDI.FormCreate(Sender: TObject);
 var
   i : integer;
 begin
+  DecimalSeparator := '.'; // Nos ayudará a evitar problemas con el idioma
+
   StatusBar3.Panels[0].Text := 'Archivo';
 
   StatusBar2.Panels[0].Text := 'X';
@@ -270,27 +295,217 @@ begin
   // Inicialización de los Tabs
   TabSheet2.TabVisible := false;
   PageControl1.ActivePageIndex := 0;
+
+  leer_Bordes('mBordes.dat');
+  leer_medias('mMedias.dat');
+  leer_Medianas('mMedianas.dat');
+
 end;
+
+// Leer matrices de Bordes
+procedure TAppPDI.leer_Bordes(nom : string);
+var
+  id     : TextFile;
+  nomF   : String;
+  NF,kk,
+  n,m,
+  i,j    : integer;
+
+  hijo   : TMenuItem;
+
+begin
+  AssignFile(id,nom);
+  reset(id);
+
+  // leer en número de Máscaras
+  readln(id,NF);
+  SetLength(MatBordes,NF);
+
+  for kk := 0 to NF - 1 do begin
+
+    hijo := TMenuItem.Create(self);
+    readln(id,nomF);
+    hijo.Name    := nomF;
+    hijo.Caption := nomF;
+    hijo.OnClick := BordeXClick;
+
+    BordesConvolucion1.Add(hijo);
+
+    readln(id,n,m);
+    SetLength(MatBordes[kk].dat, n, m);
+    MatBordes[kk].nc := n;
+    MatBordes[kk].nr := m;
+
+    for j := 0 to 2 do begin
+      for i := 0 to 2 do
+        read(id, MatBordes[kk].dat[i][j]);
+      readln(id);
+    end;
+
+  end;
+
+  closeFile(id);
+end;
+
+// Auxiliar para definir el tipo de Borde a usar cuando se hace click
+procedure TAppPDI.BordeXClick(Sender: TObject);
+var
+  opc   : integer;
+  item  : TMenuItem;
+
+begin
+  opc  := BordesConvolucion1.IndexOf(Sender as TMenuItem);
+
+  if CanalPrendido then begin
+    Prepara();
+    fr_BordeConX(Im1, MatBordes[opc], Im2);
+    Presenta();
+  end;
+end;
+
+// Leer Matrices de medias
+procedure TAppPDI.leer_Medias(nom : string);
+var
+  id     : TextFile;
+  nomF   : String;
+  NF,kk,
+  n,m,
+  i,j    : integer;
+  hijo   : TMenuItem;
+begin
+  AssignFile(id,nom);
+  reset(id);
+
+  // leer en número de Máscaras
+  readln(id,NF);
+  SetLength(MatMedias,NF);
+
+  for kk := 0 to NF - 1 do begin
+
+    hijo := TMenuItem.Create(self);
+    readln(id,nomF);
+    hijo.Name    := nomF;
+    hijo.Caption := nomF;
+    hijo.OnClick := MediaXClick;
+
+    MediasConvulucion1.Add(hijo);
+
+    readln(id,n,m);
+    MatMedias[kk].nc := n;
+    MatMedias[kk].nr := m;
+    SetLength(MatMedias[kk].dat, n,m);
+
+    for j := 0 to m-1 do begin
+      for i := 0 to n-1 do
+        read(id, MatMedias[kk].dat[i][j]);
+      readln(id);
+    end;
+    readln(id,MatMedias[kk].fac);
+
+  end;
+
+  closeFile(id);
+end;
+
+// Auxiliar para definir el tipo de Media a usar cuando se hace click
+procedure TAppPDI.MediaXClick(Sender: TObject);
+var
+  opc   : integer;
+  item  : TMenuItem;
+
+begin
+  opc  := MediasConvulucion1.IndexOf(Sender as TMenuItem);
+
+  if CanalPrendido then begin
+    Prepara();
+    fr_MediaConX(Im1,MatMedias[opc],Im2);
+    Presenta();
+  end;
+end;
+
+// Leer matrices de Medianas
+procedure TAppPDI.leer_Medianas(nom : string);
+var
+  id     : TextFile;
+  nomF   : String;
+  totFilt,kk,
+  n,m,
+  i,j    : integer;
+
+  hijo   : TMenuItem;
+begin
+  AssignFile(id,nom);
+  reset(id);
+
+  // leer el número total
+  readln(id,totFilt);
+  SetLength(MatMedianas,totFilt);
+
+  for kk := 0 to totFilt - 1 do begin
+
+    hijo := TMenuItem.Create(self);
+    readln(id,nomF);
+    hijo.Name    := nomF;
+    hijo.Caption := nomF;
+    hijo.OnClick := MedianaXClick;
+
+    MedianasConvolucion1.Add(hijo);
+
+    readln(id,n,m);
+    MatMedianas[kk].nc := n;
+    MatMedianas[kk].nr := m;
+    SetLength(MatMedianas[kk].dat, n,m);
+
+    for i := 0 to n-1 do begin
+      for j := 0 to m-1 do
+        read(id, MatMedianas[kk].dat[i][j]);
+      readln(id);
+    end;
+    readln(id,MatMedianas[kk].fac);
+  end;
+
+  closeFile(id);
+end;
+
+// Auxiliar para definir el tipo de Mediana a usar cuando se hace click
+procedure TAppPDI.MedianaXClick(Sender: TObject);
+var
+  opc   : integer;
+begin
+  opc  := MedianasConvolucion1.IndexOf(Sender as TMenuItem);
+
+  if CanalPrendido then begin
+    Prepara();
+    fr_MedianaX(Im1, MatMedianas[opc], Im2);
+    Presenta();
+  end;
+end;
+
+
 
 
 // ************ Ajuste de las banderas de seleccion segun el cambio
 procedure TAppPDI.Activarseleccion1Click(Sender: TObject);
 begin
-  _banRect := true;
-  _banCir  := false;
-  StatusBar1.Panels[6].Text := 'Activa';
+  if _banRect = False then begin // Con esto parchamos un error de clonar imagen
+    _banRect := true;
+    _banCir  := false;
+    StatusBar1.Panels[6].Text := 'Activa';
 
-  // Si lo primero que hace el usuario despues de abierta la imagen es la seleccion
-  Mat2Mat(Im1,Im2);
+    // Si lo primero que hace el usuario despues de abierta la imagen es la seleccion
+    Mat2Mat(Im1,Im2);
+  end;
 end;
 procedure TAppPDI.ActivarSeleccionCir1Click(Sender: TObject);
 begin
-  _banCir := true;
-  _banRect:= false;
-  StatusBar1.Panels[6].Text := 'Activa';
+  if _banCir = False then begin // Con esto parchamos un error de clonar imagen
+    _banCir := true;
+    _banRect:= false;
+    StatusBar1.Panels[6].Text := 'Activa';
 
-  // Si lo primero que hace el usuario despues de abierta la imagen es la seleccion
-  Mat2Mat(Im1,Im2);
+    // Si lo primero que hace el usuario despues de abierta la imagen es la seleccion
+    Mat2Mat(Im1,Im2);
+  end;
 end;
 procedure TAppPDI.Desactivarseleccion1Click(Sender: TObject);
 begin
@@ -351,6 +566,19 @@ begin
       _y2 := Y;
     end;
 
+
+    // Si el usuario se sale del margen de la imagen mientras selecciona
+    // se puede sobre pasar el valor de la imagen, ENTONCES:
+    if BM1.Width < _x2 then
+      _x2 := BM1.Width;
+    if BM1.Height < _y2 then
+      _y2 := BM1.Height;
+    if 0 > _x1 then
+      _x1 := 0;
+    if 0 > _y1 then
+      _y1 := 0;
+
+
     BMSel.Canvas.Pen.Color := clGreen;
 
     BMSel.Canvas.Rectangle(_x1,_y1,_x2,_y2);
@@ -390,6 +618,62 @@ end;
 // ************************ FIN ************************
 // ******************** SELECCIONES ********************
 // *****************************************************
+
+
+
+// *****************************************************
+// ********************** RECORTAR *********************
+// *****************************************************
+procedure TAppPDI.Recortar1Click(Sender: TObject);
+var
+  Mt : MatImg;
+  x, y, c, xi, yi,
+  nnx,nny : integer;
+begin
+  if _banRect = True then begin
+    Mat2Mat(Im2,Im1);
+
+    nnx := _x2 - _x1;
+    nny := _y2 - _y1;
+
+
+    BMSel.Canvas.Pen.Color := clWhite;
+    BMSel.Canvas.Rectangle(0,0,BMSel.Width, BMSel.Height);
+    Image2Selec.Picture.Assign(BMSel);
+
+    //Cambio de tamaño
+    BMSel.Width := nnx;
+    BMSel.Height := nny;
+
+    Mt.nc := nnx;
+    Mt.nr := nny;
+    SetLength(Mt.dat, nnx, nny, 3);
+  
+    for x := 0 to nnx - 1 do
+      for y := 0 to nny - 1 do begin
+        for c := 0 to 2 do begin
+          Mt.dat[x, y, c] := Im2.dat[x + _x1, y + _y1, c];
+        end;
+      end;
+
+    Im2.nc := nnx;
+    Im2.nr := nny;
+    SetLength(Im2.dat, nnx, nny, 3);
+    
+    _x1 := 0;     _y1 := 0;
+    _x2 := nnx;    _y2 := nny;
+
+    Mat2Mat(Mt, Im2);
+
+    Mt.nc := 0;
+    Mt.nr := 0;
+    SetLength(Mt.dat, 0,0,0);
+  
+    
+    Presenta();
+  end;
+end;
+
 
 
 
@@ -507,6 +791,64 @@ begin
 
   end;
 end;
+
+
+// *****************************************************
+// ********************** RE ABRIR *********************
+// *****************************************************
+procedure TAppPDI.ReAbrirOriginal1Click(Sender: TObject);
+var
+  pic : TPicture;
+begin
+  nomIma := OpenPictureDialog1.FileName;
+
+  // Verifiquemos que ya se haya abierto algo
+  if nomIma='' then
+    exit;
+  
+  pic := TPicture.Create;
+
+  _banRect := false;
+  _banCir  := false;
+
+  StatusBar1.Panels[6].Text := 'No activa';
+
+  try
+    pic.LoadFromFile(nomIma);
+
+    BM1.Width  := pic.Width;
+    BM1.Height := pic.Height;
+    BM1.Canvas.Draw(0,0,pic.Graphic);
+    Image1.Picture.Assign(BM1);
+
+    BMP2Mat(BM1,Im1);
+    Im2.nc := 0; Im2.nr := 0;
+
+    _x1 := 0      ; _y1 := 0;
+    _x2 := Im1.nc ; _y2 := Im1.nr;
+
+    StatusBar3.Panels[1].Text := nomIma;
+
+
+    // Actualizamos el tam del ImageSelec
+    Image2Selec.Width := _x2;
+    Image2Selec.Height := _y2;
+
+    // dimensionamos el BItMap de Seleccion
+    BMSel.Width  := Image1.Width;
+    BMSel.Height := Image1.Height;
+
+    BMSel.Transparent := true;
+    BMSel.TransparentColor := clWhite;
+    BMSel.Canvas.Pen.Color := clWhite;
+    BMSel.Canvas.Rectangle(0,0,BMSel.Width, BMSel.Height);
+
+    Image2Selec.Picture.Assign(BMSel);
+  finally
+    pic.Free;
+  end;
+end;
+
 
 // *****************************************************
 // ********************** GUARDAR **********************
@@ -652,6 +994,21 @@ begin
     SetLength(Mtemp.dat,1,1,1);
 
     Presenta();
+
+    // Hay un bug muy escondido que surge cuando se selecciona una imagen,
+    // luego se recorta, luego se hace UNDO y luego se aplica un filtro
+    _x1 := 0;
+    _y1 := 0;
+    _x2 := BM1.Width;
+    _y2 := BM1.Height;
+    _banCir := False;
+    _banRect := False;
+    StatusBar1.Panels[6].Text := 'No activa';
+
+    // Limpia
+    BMSel.Canvas.Pen.Color := clWhite;
+    BMSel.Canvas.Rectangle(0,0,BMSel.Width, BMSel.Height);
+    Image2Selec.Picture.Assign(BMSel);
   end;
 end;
 
@@ -941,10 +1298,26 @@ begin
   //end;
 end;
 
+
 // Borde Simple en XY
 procedure TAppPDI.BordesXY1Click(Sender: TObject);
 begin
-//
+  //if CanalPrendido then begin
+    Prepara();
+    fr_BSXY(im1, im2);
+    Presenta();
+  //end;
+end;
+
+
+// Bordes Simples con Convolucion en Y
+procedure TAppPDI.BSCY1Click(Sender: TObject);
+begin
+  //if CanalPrendido then begin
+    Prepara();
+    fr_BSCY(im1, _MC1Y, im2);
+    Presenta();
+  //end;
 end;
 
 
