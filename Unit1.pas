@@ -88,7 +88,6 @@ type
     N1: TMenuItem;
     MediasConvulucion1: TMenuItem;
     N2: TMenuItem;
-    MedianaSimple1: TMenuItem;
     MedianasConvolucion1: TMenuItem;
     N3: TMenuItem;
     N4: TMenuItem;
@@ -207,6 +206,9 @@ type
     procedure leer_Bordes(nom : string);
     procedure BordeXClick(Sender: TObject);
 
+    procedure leer_Medias(nom : string);
+    procedure MediaXClick(Sender: TObject);
+
     procedure leer_Medianas(nom : string);
     procedure MedianaXClick(Sender: TObject);
 
@@ -235,6 +237,7 @@ type
     MC1           : MatConv;
 
     MatBordes     : array of MatConv;
+    MatMedias     : array of MatConvNM;
     MatMedianas   : array of MatConvNM;
 
   end;
@@ -281,6 +284,7 @@ begin
   PageControl1.ActivePageIndex := 0;
 
   leer_Bordes('mBordes.dat');
+  leer_medias('mMedias.dat');
   leer_Medianas('mMedianas.dat');
 
 end;
@@ -330,7 +334,7 @@ begin
   closeFile(id);
 end;
 
-// Click en alguno de bordes
+// Auxiliar para definir el tipo de Borde a usar cuando se hace click
 procedure TAppPDI.BordeXClick(Sender: TObject);
 var
   opc   : integer;
@@ -346,6 +350,66 @@ begin
   end;
 end;
 
+// Leer Matrices de medias
+procedure TAppPDI.leer_Medias(nom : string);
+var
+  id     : TextFile;
+  nomF   : String;
+  NF,kk,
+  n,m,
+  i,j    : integer;
+  hijo   : TMenuItem;
+begin
+  AssignFile(id,nom);
+  reset(id);
+
+  // leer en número de Máscaras
+  readln(id,NF);
+  SetLength(MatMedias,NF);
+
+  for kk := 0 to NF - 1 do begin
+
+    hijo := TMenuItem.Create(self);
+    readln(id,nomF);
+    hijo.Name    := nomF;
+    hijo.Caption := nomF;
+    hijo.OnClick := MediaXClick;
+
+    MediasConvulucion1.Add(hijo);
+
+    readln(id,n,m);
+    MatMedias[kk].nc := n;
+    MatMedias[kk].nr := m;
+    SetLength(MatMedias[kk].dat, n,m);
+
+    for j := 0 to m-1 do begin
+      for i := 0 to n-1 do
+        read(id, MatMedias[kk].dat[i][j]);
+      readln(id);
+    end;
+    readln(id,MatMedias[kk].fac);
+
+  end;
+
+  closeFile(id);
+end;
+
+// Auxiliar para definir el tipo de Media a usar cuando se hace click
+procedure TAppPDI.MediaXClick(Sender: TObject);
+var
+  opc   : integer;
+  item  : TMenuItem;
+
+begin
+  opc  := MediasConvulucion1.IndexOf(Sender as TMenuItem);
+
+  if CanalPrendido then begin
+    Prepara();
+    fr_MediaConX(Im1,MatMedias[opc],Im2);
+    Presenta();
+  end;
+end;
+
 // Leer matrices de Medianas
 procedure TAppPDI.leer_Medianas(nom : string);
 var
@@ -356,12 +420,11 @@ var
   i,j    : integer;
 
   hijo   : TMenuItem;
-         OBSERVADOR : single;
 begin
   AssignFile(id,nom);
   reset(id);
 
-  // leer el número de Máscaras
+  // leer el número total
   readln(id,totFilt);
   SetLength(MatMedianas,totFilt);
 
@@ -386,8 +449,6 @@ begin
       readln(id);
     end;
     readln(id,MatMedianas[kk].fac);
-    OBSERVADOR := MatMedianas[kk].fac;
-
   end;
 
   closeFile(id);
@@ -397,17 +458,14 @@ end;
 procedure TAppPDI.MedianaXClick(Sender: TObject);
 var
   opc   : integer;
-  item  : TMenuItem;
-
 begin
-  Prepara();
-  // Cual filtro es??
-  item := Sender as TMenuItem;
-  opc  := MediasConvulucion1.IndexOf(item);
+  opc  := MedianasConvolucion1.IndexOf(Sender as TMenuItem);
 
-  //fr_MedianaX(Im1,Im2,MatMedianas[opc]);
-
-  Presenta();
+  if CanalPrendido then begin
+    Prepara();
+    fr_MedianaX(Im1, MatMedianas[opc], Im2);
+    Presenta();
+  end;
 end;
 
 

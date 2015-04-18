@@ -450,14 +450,10 @@ object AppPDI: TAppPDI
         Caption = '-'
       end
       object MediasConvulucion1: TMenuItem
-        Caption = 'Medias Convulucion'
+        Caption = 'Medias Convolucion'
       end
       object N2: TMenuItem
         Caption = '-'
-      end
-      object MedianaSimple1: TMenuItem
-        Caption = 'Mediana Simple'
-        OnClick = MedianaSimple1Click
       end
       object MedianasConvolucion1: TMenuItem
         Caption = 'Medianas Convolucion'

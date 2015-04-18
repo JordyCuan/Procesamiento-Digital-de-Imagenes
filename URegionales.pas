@@ -12,13 +12,14 @@ procedure fr_BSY(MA: MatImg; var MB: MatImg);
 procedure fr_BSXY(MA: MatImg; var MB: MatImg);
 
 
-function CONVB(MatI : MatImg; MatC : MatConv; wx,wy,x,y,c : integer) : single;
+function CONVB(MatI : MatImg; MatC : MatConv; wx,wy,x,y,c : integer) : single; overload;
 
 procedure fr_BSCY(MA: MatImg; MC: MatConv; var MB: MatImg);
 
 
 procedure fr_BordeConX(MA: MatImg; MC: MatConv; var MB: MatImg);
-procedure fr_MedianaX (Ma: MatImg; MCMed: MatConvNM; var Mb: MatImg);
+procedure FR_MediaConX(Ma: MatImg; MC: MatConvNM; var Mb: MatImg);
+procedure fr_MedianaX(Ma: MatImg; MCMed: MatConvNM; var Mb: MatImg);
 
 
 implementation
@@ -46,7 +47,7 @@ begin
 		else
 			for y := 0 to MA.nr-1 do
 				for x := 0 to MA.nc-1 do
-					MB.dat[x][y][c] := MB.dat[x][y][c]
+					MB.dat[x][y][c] := MA.dat[x][y][c]
 end;
 
 
@@ -68,7 +69,7 @@ begin
 		else
 			for y := 0 to MA.nr-1 do
 				for x := 0 to MA.nc-1 do
-					MB.dat[x][y][c] := MB.dat[x][y][c]
+					MB.dat[x][y][c] := MA.dat[x][y][c]
 end;
 
 
@@ -90,11 +91,33 @@ begin
 		else
 			for y := 0 to MA.nr-1 do
 				for x := 0 to MA.nc-1 do
-					MB.dat[x][y][c] := MB.dat[x][y][c]
+					MB.dat[x][y][c] := MA.dat[x][y][c]
 end;
 
 
-function CONVB(MatI : MatImg; MatC : MatConv; wx,wy,x,y,c : integer) : single;
+function CONVB(MatI : MatImg; MatC : MatConv; wx,wy,x,y,c : integer) : single; overload;
+var
+	i,j 	 : integer;
+	ii, jj : integer;
+	ss 		 : single;
+
+begin
+	ss := 0.0;
+
+  jj := 0;
+	for j := y-wy to y+wy do begin
+    ii := 0;
+		for i := x-wx to x+wx do begin
+			ss := ss + MatI.dat[i][j][c] * MatC.dat[ii][jj];
+      ii := ii + 1;
+		end;
+    jj := jj + 1;
+	end;
+
+	result := ss;
+end;
+
+function CONVB(MatI : MatImg; MatC : MatConvNM; wx,wy,x,y,c : integer) : single; overload;
 var
 	i,j 	 : integer;
 	ii, jj : integer;
@@ -139,7 +162,7 @@ begin
 		else
 			for y := 0 to MA.nr - 1 do
 				for x := 0 to MA.nc - 1 do
-					MB.dat[x][y][c] := MB.dat[x][y][c]
+					MB.dat[x][y][c] := MA.dat[x][y][c]
 end;
 
 
@@ -149,63 +172,106 @@ begin
   fr_BSCY(MA, MC, MB); // Aprovechamos que ya está definida esta funcion
 end;
 
+// *****************************************************
+// *********************** FIN *************************
+// ********************** BORDES ***********************
+// *****************************************************
 
+
+
+
+// *****************************************************
+// ********************** MEDIAS ***********************
+// *****************************************************
+
+// Convolución con medias de nxm
+procedure fr_MediaConX (Ma: MatImg; MC: MatConvNM; var Mb: MatImg);
+var
+  factor : single;
+  n,m,
+  Lx, Ly,
+  x,y,c : integer;
+
+begin
+  Lx := MC.nc div 2;
+  Ly := MC.nr div 2;
+  factor := MC.fac;
+
+  for c := 0 to 2 do
+    if _kan[c] then // aplica el filtro
+      for y := _y1 + Ly to _y2-1-Ly do
+        for x := _x1+Lx to _x2-1-Lx do
+          Mb.dat[x][y][c]:= CONVB(MA, MC, Lx, Ly, x,y,c) / factor
+    else
+			for y := 0 to MA.nr - 1 do
+				for x := 0 to MA.nc - 1 do
+					MB.dat[x][y][c] := MA.dat[x][y][c]
+end;
+
+
+
+
+// *****************************************************
+// ********************* MEDIANAS **********************
+// *****************************************************
+
+// Convolución con medianas de nxm
 procedure fr_MedianaX (Ma: MatImg; MCMed: MatConvNM; var Mb: MatImg);
 var
   unos,
-  a,b,c,x,y : integer;
+  Lx,Ly,c,x,y : integer;
   arreglo     : array of single;
   numD,med    : integer;
 
-  procedure recoge(xx,yy: integer);
-  var
-    i,j,k : integer;
-  begin
-    k := 0;
 
-    for j := -b to b do
-      for i := -a to a do begin
-        //PONER UN IF Y RECOGER SOLO DONDE HAY UNOS EN LA
-        //MÁSCARA
-        if MCMed.dat[i + a, j + b] = 1 then begin
-          arreglo[k] := Ma.dat[xx+i, yy+j, c];
-          inc(k);
+
+        function Mediana(xx,yy: integer): single;
+        var
+          i,j  : integer;
+          flag : boolean;
+          temp : single;
+
+
+                  procedure recogePixeles(xx,yy: integer);
+                  var
+                    i,j,k : integer;
+                  begin
+                    k := 0;
+
+                    for j := -Ly to Ly do
+                      for i := -Lx to Lx do begin
+                        // Recogemos unicamente los pixeles que coinciden con 1
+                        if MCMed.dat[i + Lx, j + Ly] = 1 then begin
+                          arreglo[k] := Ma.dat[xx+i, yy+j, c];
+                          inc(k);
+                        end;
+                      end;
+                  end;
+
+        begin
+          recogePixeles(xx,yy);
+
+          //Ordenacion burbuja
+          for j := 0 to numD - 2 do begin
+            flag := false;
+            for i := 0 to numD - 2 - j do begin
+              if arreglo[i] > arreglo[i+1] then begin
+                temp := arreglo[i];
+                arreglo[i] := arreglo[i+1];
+                arreglo[i+1] := temp;
+                flag := true;
+              end;
+            end;
+            if not flag then break;
+          end;
+          result := arreglo[med];
         end;
-      end;
-  end;
-
-  function Mediana(xx,yy: integer): single;
-  var
-    i,j  : integer;
-    flag : boolean;
-    temp : single;
-  begin
-    recoge(xx,yy);
-
-    //Ordenar
-    for j := 0 to numD - 2 do begin
-      flag := false;
-      for i := 0 to numD - 2 - j do begin
-        if arreglo[i] > arreglo[i+1] then begin
-          temp := arreglo[i];
-          arreglo[i] := arreglo[i+1];
-          arreglo[i+1] := temp;
-          flag := true;
-        end;
-      end;
-      if not flag then break;
-    end;
-    result := arreglo[med];
-
-  end;
 
 begin
-  Mat2Mat(Ma,Mb);
+  Lx := MCMed.nc div 2;
+  Ly := MCMed.nr div 2;
 
-  a := MCMed.nc div 2;
-  b := MCMed.nr div 2;
-
-  //Contar los unos de la máscara
+  //Buscamos el total de unos
   unos := 0;
   for y := 0 to MCMed.nr-1 do
     for x := 0 to MCMed.nc-1 do
@@ -216,13 +282,15 @@ begin
   med := unos div 2;
   SetLength(arreglo, unos);
 
-  for c := 0 to 2 do if _kan[c]
-    then // aplica el filtro
-      for y := _y1+b to _y2 - b-1 do
-        for x := _x1+a to _x2 - a-1 do
-        // ---
-          Mb.dat[x][y][c]:= Mediana(x,y);
-        // ---
+  for c := 0 to 2 do
+    if _kan[c] then // aplica el filtro
+      for y := _y1 + Ly to _y2-1-Ly do
+        for x := _x1+Lx to _x2-1-Lx do
+          Mb.dat[x][y][c]:= Mediana(x,y)
+    else
+			for y := 0 to MA.nr - 1 do
+				for x := 0 to MA.nc - 1 do
+					MB.dat[x][y][c] := MA.dat[x][y][c]
 end;
 
 end.
