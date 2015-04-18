@@ -190,19 +190,6 @@ object AppPDI: TAppPDI
           Height = 13
           Caption = 'valor = '
         end
-        object Label2: TLabel
-          Left = 209
-          Top = 11
-          Width = 67
-          Height = 13
-          Caption = 'Norma Bordes'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlue
-          Font.Height = -11
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-        end
         object Edit1: TEdit
           Left = 52
           Top = 8
@@ -245,8 +232,8 @@ object AppPDI: TAppPDI
           OnClick = CheckBox3_AZULClick
         end
         object RadioGroup1: TRadioGroup
-          Left = 287
-          Top = 8
+          Left = 199
+          Top = 4
           Width = 121
           Height = 63
           Caption = 'Norma Bordes'
@@ -321,6 +308,10 @@ object AppPDI: TAppPDI
         ShortCut = 16449
         OnClick = Abrir1Click
       end
+      object ReAbrirOriginal1: TMenuItem
+        Caption = 'Re-Abrir Original'
+        OnClick = ReAbrirOriginal1Click
+      end
       object Guardar1: TMenuItem
         Caption = 'Guardar'
         ShortCut = 16467
@@ -359,6 +350,13 @@ object AppPDI: TAppPDI
       object Desactivarseleccion1: TMenuItem
         Caption = 'Desactivar seleccion'
         OnClick = Desactivarseleccion1Click
+      end
+      object N8: TMenuItem
+        Caption = '-'
+      end
+      object Recortar1: TMenuItem
+        Caption = 'Recortar'
+        OnClick = Recortar1Click
       end
       object N6: TMenuItem
         Caption = '-'
@@ -438,8 +436,12 @@ object AppPDI: TAppPDI
         OnClick = BordesY1Click
       end
       object BordesXY1: TMenuItem
-        Caption = 'Bordes XY'
+        Caption = 'Borde Simple XY'
         OnClick = BordesXY1Click
+      end
+      object BSCY1: TMenuItem
+        Caption = 'BSCY'
+        OnClick = BSCY1Click
       end
       object BordesConvolucion1: TMenuItem
         Caption = 'Bordes Convolucion'
@@ -551,7 +553,7 @@ object AppPDI: TAppPDI
     Left = 128
     Top = 280
     Bitmap = {
-      494C010105000A00580010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010105000A00740010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -826,7 +828,7 @@ object AppPDI: TAppPDI
     Left = 272
     Top = 280
     Bitmap = {
-      494C010105000A00580010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010105000A00740010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

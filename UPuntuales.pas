@@ -3,7 +3,7 @@ unit UPuntuales;
 interface
 
 uses
-  math, UBase;
+  math, UBase, SysUtils;
 
   procedure fp_negativo   (MA: MatImg; var MB: MatImg);
   procedure fp_gamma      (MA: MatImg; var MB: MatImg; vv : single);

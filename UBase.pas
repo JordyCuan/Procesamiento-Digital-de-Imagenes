@@ -17,6 +17,13 @@ type
     dat    : array of array of single;
   end;
 
+  MatConvNM = record
+    nc, nr : integer;
+    fac    : single;
+    dat  : array of array of single;
+  end;
+
+
 var
   //Regiones establecidas en la selección de la imagen
   BMSel               : TBitmap;
@@ -31,7 +38,7 @@ var
   _boolSeleccionando  : Boolean;
 
   _kan                : array [0..2] of boolean;
-  _MC1                : MatConv;
+  _MC1Y, _MC1X        : MatConv;
   idf : TextFile;
   x,y : integer;
 
@@ -194,4 +201,23 @@ end;
 begin
   _Norma := 0; // Valor Absoluto
 
+
+  // Matriz Convolucion Bordes Y
+  SetLength(_MC1Y.dat, 3,3);
+  _MC1Y.nc := 3;
+  _MC1Y.nr := 3;
+
+  _MC1Y.dat[0][0] := -1;   _MC1Y.dat[1][0] := 0;   _MC1Y.dat[2][0] := 1;
+  _MC1Y.dat[0][1] := -1;   _MC1Y.dat[1][1] := 0;   _MC1Y.dat[2][1] := 1;
+  _MC1Y.dat[0][2] := -1;   _MC1Y.dat[1][2] := 0;   _MC1Y.dat[2][2] := 1;
+
+
+  // Matriz Convolucion Bordes X
+  SetLength(_MC1X.dat, 3,3);
+  _MC1X.nc := 3;
+  _MC1X.nr := 3;
+
+  _MC1X.dat[0][0] := -1;   _MC1X.dat[1][0] := 0;   _MC1X.dat[2][0] := 1;
+  _MC1X.dat[0][1] := -1;   _MC1X.dat[1][1] := 0;   _MC1X.dat[2][1] := 1;
+  _MC1X.dat[0][2] := -1;   _MC1X.dat[1][2] := 0;   _MC1X.dat[2][2] := 1;
 end.
