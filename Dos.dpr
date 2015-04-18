@@ -10,7 +10,8 @@ uses
   UGeometricos in 'UGeometricos.pas',
   UIntRotacion in 'UIntRotacion.pas' {FormRot},
   UCalc in 'UCalc.pas',
-  UnitZoom in 'UnitZoom.pas' {Form2};
+  UnitZoom in 'UnitZoom.pas' {Form2},
+  UParBin in 'UParBin.pas' {Form3};
 
 {$R *.res}
 
@@ -20,5 +21,6 @@ begin
   Application.CreateForm(TFormHisto, FormHisto);
   Application.CreateForm(TFormRot, FormRot);
   Application.CreateForm(TForm2, Form2);
+  Application.CreateForm(TForm3, Form3);
   Application.Run;
 end.

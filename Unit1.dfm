@@ -171,10 +171,14 @@ object AppPDI: TAppPDI
     Top = 32
     Width = 759
     Height = 570
-    ActivePage = TabSheet1
+    ActivePage = TabSheet2
     TabOrder = 4
     object TabSheet1: TTabSheet
       Caption = 'Principal'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Panel1: TPanel
         Left = -2
         Top = 461
@@ -426,6 +430,22 @@ object AppPDI: TAppPDI
         Caption = 'Senoida Invertida'
         OnClick = SenoidaInvertida1Click
       end
+      object Luminancia1: TMenuItem
+        Caption = 'Luminancia'
+        OnClick = Luminancia1Click
+      end
+      object Binarizacion1: TMenuItem
+        Caption = 'Binarizacion'
+        OnClick = Binarizacion1Click
+      end
+      object BinarizacionParametro1: TMenuItem
+        Caption = 'Binarizacion Parametro'
+        OnClick = BinarizacionParametro1Click
+      end
+      object CPerfilTringular1: TMenuItem
+        Caption = 'C.Perfil Tringular'
+        OnClick = CPerfilTringular1Click
+      end
     end
     object FiltrosRegionales1: TMenuItem
       Caption = 'Filtros &Regionales'
@@ -551,7 +571,7 @@ object AppPDI: TAppPDI
     Left = 128
     Top = 280
     Bitmap = {
-      494C010105000A00580010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010105000A00680010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -826,7 +846,7 @@ object AppPDI: TAppPDI
     Left = 272
     Top = 280
     Bitmap = {
-      494C010105000A00580010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010105000A00680010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

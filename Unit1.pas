@@ -16,7 +16,7 @@ uses
   Vcl.ComCtrls, math, Vcl.StdCtrls,
   Jpeg, PNGImage, GIFImg, Vcl.ImgList, Vcl.ToolWin,
 
-  UBase,UnitZoom, UHisto, UPuntuales, URegionales, UGeometricos, UIntRotacion, UCalc,
+  UBase,UnitZoom,UParBin, UHisto, UPuntuales, URegionales, UGeometricos, UIntRotacion, UCalc,
   Vcl.ActnMan, Vcl.ActnCtrls;
 
 type
@@ -136,6 +136,10 @@ type
     Label2: TLabel;
     N7: TMenuItem;
     AbrirfotodesdeWebCam1: TMenuItem;
+    Luminancia1: TMenuItem;
+    Binarizacion1: TMenuItem;
+    BinarizacionParametro1: TMenuItem;
+    CPerfilTringular1: TMenuItem;
 
     // Metodos
     procedure Abrir1Click(Sender: TObject);
@@ -197,6 +201,10 @@ type
     procedure OR1Click(Sender: TObject);
     procedure Resta1Click(Sender: TObject);
     procedure RadioGroup1Click(Sender: TObject);
+    procedure Luminancia1Click(Sender: TObject);
+    procedure Binarizacion1Click(Sender: TObject);
+    procedure BinarizacionParametro1Click(Sender: TObject);
+    procedure CPerfilTringular1Click(Sender: TObject);
 
 
     // Añadidos por Jordy
@@ -714,6 +722,14 @@ begin
   end;
 end;
 
+procedure TAppPDI.Luminancia1Click(Sender: TObject);
+begin
+  Prepara();
+  fp_Luminancia(Im1,Im2);
+  Presenta();
+
+end;
+
 procedure TAppPDI.MedianaSimple1Click(Sender: TObject);
 begin
                               //
@@ -781,6 +797,45 @@ begin
   end;
 end;
 
+procedure TAppPDI.Binarizacion1Click(Sender: TObject);
+begin
+  Prepara();
+  fp_Binarizacion(Im1,Im2);
+  Presenta();
+
+end;
+
+procedure TAppPDI.BinarizacionParametro1Click(Sender: TObject);
+var
+u,var_Error:integer;
+begin
+  Form3.ShowModal;
+    if Form3.ModalResult <> mrOk then
+      Exit;
+
+      //Validacion
+
+      val(Form3.Edit1.Text,u,var_Error);
+
+        if var_Error <> 0 then begin
+          ShowMessage('Error de Entrada de Datos');
+          Exit;
+        end;
+        Prepara();
+        fp_BinarizacionPar(Im1,Im2,u);
+        Presenta();
+end;
+
+procedure TAppPDI.CPerfilTringular1Click(Sender: TObject);
+//Debe de Recibir un Valor del TexBox
+begin
+valor := StrToFloat(Edit1.Text);
+  Prepara();
+  fp_PerfilTriangular(Im1,Im2,valor);
+  Presenta();
+
+end;
+
 procedure TAppPDI.BlancoyNegro1Click(Sender: TObject);
 begin
   // No es necesaria la parte del CANAL del color
@@ -805,6 +860,7 @@ begin
     Presenta();
   end;
 end;
+
 
 // porcentual
 procedure TAppPDI.Porcentual50501Click(Sender: TObject);
@@ -930,6 +986,24 @@ begin
   end;
 end;
 
+procedure TAppPDI.ZoomIBL1Click(Sender: TObject);
+var
+  nx,ny : integer;
+begin
+  Form2.Edit1.Text:=IntToStr(Im1.nc);
+  Form2.Edit2.Text:=IntToStr(Im1.nr);
+  Form2.Label5.Caption:=Format('%d x %d',[Im1.nc,Im1.nr]);
+  Form2.ShowModal;
+    if(Form2.ModalResult=mrOk) then begin
+       nx:=StrToInt(Form2.Edit1.Text);
+       ny:=StrToInt(Form2.Edit2.Text);
+      //Los parametros que se le pasan, son lo que se recibiran de la Interfaz
+        Prepara();
+        fg_zoomIBL(Im1,Im2,nx,ny);
+        Presenta();
+end;
+end;
+
 //Reflexion en X
 procedure TAppPDI.FlipX1Click(Sender: TObject);
 begin
@@ -990,13 +1064,7 @@ end;
 
 
 
-procedure TAppPDI.ZoomIBL1Click(Sender: TObject);
-begin
-//Los parametros que se le pasan, son lo que se recibiran de la Interfaz
-Prepara();
-fg_zoomIBL(Im1,Im2,1000,1000);
-Presenta();
-end;
+
 
 
 

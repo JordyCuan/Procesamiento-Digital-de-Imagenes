@@ -1,0 +1,93 @@
+object Form3: TForm3
+  Left = 0
+  Top = 0
+  Caption = 'Form3'
+  ClientHeight = 207
+  ClientWidth = 424
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 14
+  object Label1: TLabel
+    Left = 40
+    Top = 32
+    Width = 32
+    Height = 18
+    Caption = 'Valor'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 24
+    Top = 105
+    Width = 9
+    Height = 19
+    Caption = '0'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label3: TLabel
+    Left = 352
+    Top = 105
+    Width = 27
+    Height = 19
+    Caption = '255'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Edit1: TEdit
+    Left = 104
+    Top = 29
+    Width = 121
+    Height = 22
+    TabOrder = 0
+    Text = '128'
+  end
+  object TrackBar1: TTrackBar
+    Left = 64
+    Top = 105
+    Width = 259
+    Height = 25
+    Max = 255
+    PageSize = 5
+    Frequency = 5
+    Position = 128
+    TabOrder = 1
+    OnChange = TrackBar1Change
+  end
+  object BitBtn1: TBitBtn
+    Left = 40
+    Top = 152
+    Width = 97
+    Height = 25
+    Kind = bkOK
+    NumGlyphs = 2
+    TabOrder = 2
+  end
+  object BitBtn2: TBitBtn
+    Left = 296
+    Top = 152
+    Width = 75
+    Height = 25
+    Kind = bkCancel
+    NumGlyphs = 2
+    TabOrder = 3
+  end
+end

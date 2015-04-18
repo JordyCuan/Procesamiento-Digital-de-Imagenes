@@ -17,6 +17,10 @@ uses
   procedure fp_claroOscuro(MA: MatImg; var MB: MatImg; vv : single);
   procedure fp_OscFuerte  (MA: MatImg; var MB: MatImg; vv : single);
   procedure fp_Senoidal   (MA: MatImg; var MB: MatImg; vv : single);
+  procedure fp_Luminancia (MA: MatImg; var MB: MatImg);
+  procedure fp_Binarizacion(MA: MatImg; var MB:MatImg);
+  procedure fp_BinarizacionPar(MA: MatImg; var MB:MatImg; vv:single);
+  procedure fp_PerfilTriangular(MA: MatImg; var MB:MatImg; vv: single);
 
 
 implementation
@@ -228,6 +232,114 @@ begin
 					MB.dat[x][y][c] := MA.dat[x][y][c];
 end;
 
+//Aplicacion de Binarizacion
+procedure fp_Binarizacion(MA: MatImg; var MB:MatImg);
+const
+Lamb=255;
+ var
+  x,y,c,nx,ny : integer;
+  function Bin(z,la:single): single;
+  begin
+      if(z<Lamb/2) then
+        result:=0
+        else
+        result:=Lamb;
+  end;
+begin
+  for c := 0 to 2 do
+    if _kan[c] then
+      for y := _y1 to _y2 - 1 do
+        for x := _x1 to _x2 - 1 do
+        MB.dat[x][y][c]:=Bin(MA.dat[x][y][c],Lamb)
+    else
+      for y := _y1 to _y2 - 1 do
+        for x := _x1 to _x2 - 1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+end;
+
+//Binarizacion con Parametro de Interfaz
+ procedure fp_BinarizacionPar(MA: MatImg; var MB:MatImg;vv: single );
+ var
+  x,y,c,
+  nx,ny : integer;
+  function BinP(z:single): single;
+    begin
+      if(z<vv) then
+        result:=0
+      else
+        result:=255;
+    end;
+begin
+  for c := 0 to 2 do
+  if _kan[c] then
+      for y := _y1 to _y2 - 1 do
+        for x := _x1 to _x2 - 1 do
+          MB.dat[x][y][c]:=BinP(MA.dat[x][y][c])
+    else
+      for y := _y1 to _y2 - 1 do
+        for x := _x1 to _x2 - 1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+end;
+//Contraste Matriz Triangular
+procedure fp_PerfilTriangular(MA: MatImg; var MB:MatImg; vv: single);
+var
+  lamb2,
+  x,y,c,
+  nx,ny : integer;  //Num de pix en x y num de pix en y
+  z, zp,
+  fact  : single;
+  // Ajusta un real pequeño a byte
+function aj256(u: single): byte;
+begin
+  if u > 255
+    then result := 255
+    else if u < 0
+      then result := 0
+      else result := ceil(u);
+end;
+
+begin
+  lamb2 := 255 * 2;
+
+  for c := 0 to 2 do
+  if _kan[c] then
+      for y := _y1 to _y2 - 1 do
+        for x := _x1 to _x2 - 1 do begin
+            z := aj256(MA.dat[x][y][c]);
+            if (z >= 0) and (z <= vv)then
+              zp := power(z, 2) / vv
+            else
+              if (z > vv) and (z <= 255) then
+                zp := vv + (z - vv) / (255 - vv) * (lamb2 - z - vv);
+
+            MB.dat[x][y][c] := zp;
+        end
+    else
+      for y := _y1 to _y2 - 1 do
+        for x := _x1 to _x2 - 1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+end;
+
+
+
+//Aplicacion de Luminancia
+procedure fp_Luminancia (MA: MatImg; var MB: MatImg);
+var
+ x,y,c: integer;  //Num de pix en x y num de pix en y
+  lum: single;
+
+
+begin
+  for x := _x1 to _x2 - 1 do
+    for y := _y1 to _y2 - 1 do begin
+        lum:=0.3*MA.dat[x][y][0]+0.59*MA.dat[x][y][1]+0.11*MA.dat[x][y][2];
+     for c := 0 to 2 do
+           MB.dat[x][y][c]:=lum;
+    end;
+end;
+
+
+
 
 // proceso Blanco y Negro
 procedure fp_blancoNegro(MA: MatImg; var MB: MatImg);
@@ -284,5 +396,7 @@ begin
 				for x := 0 to MA.nc-1 do
 					MB.dat[x][y][c] := MA.dat[x][y][c];
 end;
+
+
 
 end.

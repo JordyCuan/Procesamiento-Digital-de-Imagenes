@@ -11,6 +11,8 @@ object Form2: TForm2
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  Position = poDesktopCenter
+  OnClose = FormClose
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
@@ -23,7 +25,7 @@ object Form2: TForm2
   object Label2: TLabel
     Left = 48
     Top = 181
-    Width = 30
+    Width = 19
     Height = 13
     Caption = 'Alto'
   end
@@ -44,18 +46,34 @@ object Form2: TForm2
   object Label5: TLabel
     Left = 112
     Top = 80
-    Width = 117
+    Width = 3
     Height = 13
   end
-  object Validar: TBitBtn
+  object Label6: TLabel
+    Left = 239
+    Top = 128
+    Width = 60
+    Height = 13
+    Caption = '(16....3000)'
+  end
+  object Label7: TLabel
+    Left = 239
+    Top = 181
+    Width = 60
+    Height = 13
+    Caption = '(16....3000)'
+  end
+  object BitBtn3: TBitBtn
     Left = 48
     Top = 352
     Width = 83
     Height = 25
     Caption = '&OK'
+    Enabled = False
     Kind = bkOK
     NumGlyphs = 2
     TabOrder = 0
+    OnClick = BitBtn3Click
   end
   object BitBtn1: TBitBtn
     Left = 216
@@ -76,6 +94,7 @@ object Form2: TForm2
     Kind = bkHelp
     NumGlyphs = 2
     TabOrder = 2
+    OnClick = BitBtn2Click
   end
   object Edit1: TEdit
     Left = 112

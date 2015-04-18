@@ -348,6 +348,8 @@ begin
           end;
        end;
       end;
+      _x2:=MB.nc;
+      _y2:=MB.nr;
 end;
 
 //Zoom Vecinos Mas Cercanos
