@@ -31,15 +31,42 @@ var
   x,y,c   : integer;
 begin
 
-  for c := 0 to 2 do
-    if _kan[c] then
-      for y := _y1 to _y2-1 do
-        for x := _x1 to _x2-1 do
-          MB.dat[x][y][c] := 255 - MA.dat[x][y][c]
-		else
-			for y := 0 to MA.nr-1 do
-				for x := 0 to MA.nc-1 do
-					MB.dat[x][y][c] := MA.dat[x][y][c];
+  if _banCir then begin
+    for c := 0 to 2 do
+      if _kan[c] then begin
+        xx1 := _xc - _Rx;
+        xx2 := _xc + _Rx;
+        yy1 := _yc - _Ry;
+        yy2 := _yc + _Ry;
+
+        for y := _y1 to _y2-1 do begin
+          yy := sqr((y - _yc) / _Ry);
+          for x := _x1 to _x2-1 do begin
+            xx := sqr((x - _xc) / _Rx);
+            RR := xx + yy;
+            if RR <= 1 then
+              MB.dat[x][y][c] := 255 - MA.dat[x][y][c];
+          end;
+        end;
+      end
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end
+
+  // Selección rectangular o normal
+  else begin
+    for c := 0 to 2 do
+      if _kan[c] then
+        for y := _y1 to _y2-1 do
+          for x := _x1 to _x2-1 do
+            MB.dat[x][y][c] := 255 - MA.dat[x][y][c]
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end;
 end;
 
 // Proceso de filtrado gamma (rango dinamico)
@@ -166,7 +193,6 @@ begin
 end;
 
 //Aplicacion de Filtro Exponencial para Aclarado
-
 procedure fp_exponencial(MA:MatImg; var MB:MatImg; vv:single);
 var
   x,y,c   :integer;

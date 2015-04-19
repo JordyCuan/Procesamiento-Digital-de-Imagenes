@@ -193,7 +193,7 @@ object AppPDI: TAppPDI
         object Label2: TLabel
           Left = 352
           Top = 11
-          Width = 154
+          Width = 151
           Height = 13
           Caption = 'Color de la Pluma de Seleccion: '
         end
@@ -357,6 +357,7 @@ object AppPDI: TAppPDI
       end
       object AbrirfotodesdeWebCam1: TMenuItem
         Caption = 'Abrir foto desde WebCam'
+        OnClick = AbrirfotodesdeWebCam1Click
       end
     end
     object Editar1: TMenuItem
@@ -402,6 +403,10 @@ object AppPDI: TAppPDI
       object Histograma1: TMenuItem
         Caption = 'Histograma'
         OnClick = Histograma1Click
+      end
+      object Fourier1: TMenuItem
+        Caption = 'Fourier'
+        OnClick = Fourier1Click
       end
     end
     object FiltrosPuntuales1: TMenuItem
@@ -599,7 +604,7 @@ object AppPDI: TAppPDI
     Left = 128
     Top = 280
     Bitmap = {
-      494C010105000A00780010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010105000A007C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -874,7 +879,7 @@ object AppPDI: TAppPDI
     Left = 272
     Top = 280
     Bitmap = {
-      494C010105000A00780010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010105000A007C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
