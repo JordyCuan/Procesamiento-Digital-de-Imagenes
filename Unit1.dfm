@@ -193,7 +193,7 @@ object AppPDI: TAppPDI
         object Label2: TLabel
           Left = 352
           Top = 11
-          Width = 154
+          Width = 151
           Height = 13
           Caption = 'Color de la Pluma de Seleccion: '
         end
@@ -305,6 +305,10 @@ object AppPDI: TAppPDI
       Caption = 'Calculadora'
       ImageIndex = 1
       PopupMenu = PopupMenu1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object ScrollBox2: TScrollBox
         Left = 0
         Top = 0
@@ -505,6 +509,17 @@ object AppPDI: TAppPDI
         Caption = 'Medianas Convolucion'
       end
     end
+    object FiltrosEspeciales1: TMenuItem
+      Caption = 'Filtros Especiales '
+      object Ecualizacion1: TMenuItem
+        Caption = 'Ecualizacion'
+        OnClick = Ecualizacion1Click
+      end
+      object ExpanciondelHistograma1: TMenuItem
+        Caption = 'Expancion del Histograma'
+        OnClick = ExpanciondelHistograma1Click
+      end
+    end
     object FiltrosGeometricos1: TMenuItem
       Caption = 'Filtros &Geometricos'
       object FlipX1: TMenuItem
@@ -522,9 +537,17 @@ object AppPDI: TAppPDI
         Caption = 'Zoom 2xF'
         OnClick = Zoom2xF1Click
       end
+      object Reduccion05XF1: TMenuItem
+        Caption = 'Reduccion 0.5X- F'
+        OnClick = Reduccion05XF1Click
+      end
       object Zoom2xP1: TMenuItem
         Caption = 'Zoom 2xP'
         OnClick = Zoom2xP1Click
+      end
+      object Reduccion05xP1: TMenuItem
+        Caption = 'Reduccion 0.5 x P'
+        OnClick = Reduccion05xP1Click
       end
       object ZoomVMC1: TMenuItem
         Caption = 'Zoom VMC'
@@ -599,7 +622,7 @@ object AppPDI: TAppPDI
     Left = 128
     Top = 280
     Bitmap = {
-      494C010105000A00780010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010105000A00800010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -874,7 +897,7 @@ object AppPDI: TAppPDI
     Left = 272
     Top = 280
     Bitmap = {
-      494C010105000A00780010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010105000A00800010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

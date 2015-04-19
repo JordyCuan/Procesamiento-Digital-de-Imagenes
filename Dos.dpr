@@ -11,7 +11,9 @@ uses
   UIntRotacion in 'UIntRotacion.pas' {FormRot},
   UCalc in 'UCalc.pas',
   UnitZoom in 'UnitZoom.pas' {Form2},
-  UParBin in 'UParBin.pas' {Form3};
+  UParBin in 'UParBin.pas' {Form3},
+  UEspeciales in 'UEspeciales.pas',
+  UnitExpHisto in 'UnitExpHisto.pas' {Form4};
 
 {$R *.res}
 
@@ -22,5 +24,6 @@ begin
   Application.CreateForm(TFormRot, FormRot);
   Application.CreateForm(TForm2, Form2);
   Application.CreateForm(TForm3, Form3);
+  Application.CreateForm(TForm4, Form4);
   Application.Run;
 end.

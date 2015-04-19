@@ -12,9 +12,11 @@ uses
   procedure fg_flipX(Ma:MatImg; var MB:MatImg);
   procedure fg_flipY(Ma:MatImg; var MB:MatImg);
   procedure fg_zoomF2x(MA:MatImg; var MB:MatImg);
+  procedure fg_ReduceF5x(MA:MatImg; var MB:MatImg);
   procedure fg_zoom2x(MA:MatImg; var MB:MatImg);
   procedure fg_zoomIBL(MA:MatImg; var MB:MatImg; nx,ny:integer);
   procedure fg_zoomVC(MA:MatImg; var MB:MatImg; nx,ny :integer);
+  procedure fg_ReduceP5x(MA:MatImg; var MB:MatImg);
 
 
 implementation
@@ -189,6 +191,67 @@ end;
  _x2 := MB.nc;
   _y2 := MB.nr;
  end;
+
+ //Reduccion 0.5 por metodo del Flojo
+ procedure fg_ReduceF5x(MA:MatImg; var MB:MatImg);
+ var
+  np,mp,
+  x,y,can : integer;
+  xp,yp : integer;
+  temp : single;
+begin
+  np := MA.nc div 2;
+  mp := MA.nr div 2;
+  MB.nc:=MA.nc div 2;
+  Mb.nr:=Ma.nr div 2;
+  SetLength(MB.dat, np, mp, 3);
+  for y := 0 to mp - 1 do begin
+    yp := 2*y;
+    for x := 0 to np - 1 do begin
+      xp := 2*x;
+      for can := 0 to 2 do begin
+        MB.dat[x,   y,   can] := MA.dat[xp, yp, can];
+      end;
+    end;
+  end;
+  _x2 := MB.nc;
+  _y2 := MB.nr;
+end;
+
+//Reduccion 0.5 Por Promedio
+procedure fg_ReduceP5x(MA:MatImg; var MB:MatImg);
+var
+  np,mp,
+  x,y,can : integer;
+  xp,yp,xx, yy : integer;
+  temp,tder,tult : single;
+begin
+  np := MA.nc div 2;
+  mp := MA.nr div 2;
+
+  MB.nc:=MA.nc div 2;
+  Mb.nr:=Ma.nr div 2;
+  setLength(MB.dat,MB.nc,MB.nr, 3);
+
+  for y := 0 to mp - 1 do begin
+    yp := 2*y;
+    yy := yp + 1;
+    for x := 0 to np - 1 do begin
+      xp := 2*x;
+      xx := xp + 1;
+      for can := 0 to 2 do begin
+        temp := MA.dat[xp, yp, can];
+        temp := temp + MA.dat[xx,yp,can];
+        temp := temp + MA.dat[xp,yy,can];
+        temp := temp + MA.dat[xx,yy,can];
+
+        MB.dat[x,   y,   can] := temp / 4;
+      end;
+    end;
+  end;
+  _x2 := MB.nc;
+  _y2 := MB.nr;
+end;
 
  //Zoom Por Promedio
  procedure fg_zoom2x(MA:MatImg; var MB: MatImg);
