@@ -12,12 +12,19 @@ uses
   UCalc in 'UCalc.pas',
   UnitZoom in 'UnitZoom.pas' {Form2},
   UParBin in 'UParBin.pas' {Form3},
-  UDirectX in 'UDirectX.pas' {FDirectX},
+  UEspeciales in 'UEspeciales.pas',
+  UnitExpHisto in 'UnitExpHisto.pas' {Form4},
+  UFCapZonas in 'Fourier\UFCapZonas.pas' {FFCapZonas},
   FormAbout in 'DirectX\FormAbout.pas' {AboutBox},
   Frame_Video in 'DirectX\Frame_Video.pas' {Frame1: TFrame},
   VFrames in 'DirectX\VFrames.pas',
   VSample in 'DirectX\VSample.pas',
   VSampleDemo_MainForm in 'DirectX\VSampleDemo_MainForm.pas' {Form_Main},
+  Direct3D9 in 'DirectX\DirectX\Direct3D9.pas',
+  DirectDraw in 'DirectX\DirectX\DirectDraw.pas',
+  DirectShow9 in 'DirectX\DirectX\DirectShow9.pas',
+  DirectSound in 'DirectX\DirectX\DirectSound.pas',
+  DXTypes in 'DirectX\DirectX\DXTypes.pas',
   gfx_basedef in 'gfx_files\gfx_basedef.pas',
   gfx_colors in 'gfx_files\gfx_colors.pas',
   gfx_compression in 'gfx_files\gfx_compression.pas',
@@ -30,6 +37,7 @@ uses
   gfx_masks in 'gfx_files\gfx_masks.pas',
   gfx_pcd in 'gfx_files\gfx_pcd.pas',
   gfx_pcx in 'gfx_files\gfx_pcx.pas',
+  gfx_png in 'gfx_files\gfx_png.pas',
   gfx_rotresize in 'gfx_files\gfx_rotresize.pas',
   gfx_tga in 'gfx_files\gfx_tga.pas',
   gfx_tiff in 'gfx_files\gfx_tiff.pas',
@@ -38,11 +46,10 @@ uses
   pnglib in 'gfx_files\pnglib.pas',
   PNGZLIB in 'gfx_files\PNGZLIB.pas',
   UFourier in 'Fourier\UFourier.pas' {FFourier},
+  UFTipos in 'Fourier\UFTipos.pas',
   UFourierBase in 'Fourier\UFourierBase.pas',
   UFPatron in 'Fourier\UFPatron.pas' {FFPatron},
-  UFTipos in 'Fourier\UFTipos.pas',
-  UFCapZonas in 'Fourier\UFCapZonas.pas' {FFCapZonas},
-  gfx_png in 'gfx_files\gfx_png.pas';
+  UDirectX in 'UDirectX.pas' {FDirectX};
 
 {$R *.res}
 
@@ -61,5 +68,11 @@ begin
   Application.CreateForm(TFFourier, FFourier);
   Application.CreateForm(TFFPatron, FFPatron);
   Application.CreateForm(TFFCapZonas, FFCapZonas);
+  Application.CreateForm(TForm4, Form4);
+  Application.CreateForm(TFFCapZonas, FFCapZonas);
+  Application.CreateForm(TAboutBox, AboutBox);
+  Application.CreateForm(TForm_Main, Form_Main);
+  Application.CreateForm(TFFourier, FFourier);
+  Application.CreateForm(TFFPatron, FFPatron);
   Application.Run;
 end.

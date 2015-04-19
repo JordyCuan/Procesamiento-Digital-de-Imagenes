@@ -15,9 +15,11 @@ uses
   Vcl.Menus, Vcl.ExtDlgs,
   Vcl.ComCtrls, math, Vcl.StdCtrls,
   Jpeg, PNGImage, GIFImg, Vcl.ImgList, Vcl.ToolWin,
-
-  UBase,UnitZoom, UParBin, UHisto, UPuntuales, URegionales, UGeometricos, UIntRotacion, UCalc,
-  Vcl.ActnMan, Vcl.ActnCtrls, Vcl.ActnColorMaps, UDirectx, gfx_files, UFourierBase, UFourier;
+  UBase,UnitZoom,UParBin, UHisto,
+  UPuntuales, URegionales, UGeometricos, UIntRotacion, UCalc,
+  Vcl.ActnMan, Vcl.ActnCtrls, Vcl.ActnColorMaps, UDirectx,
+  gfx_files, UFourierBase, UFourier,
+  UnitExpHisto,UEspeciales;
 
 
 type
@@ -149,6 +151,12 @@ type
     Label2: TLabel;
     Label3: TLabel;
     Fourier1: TMenuItem;
+    FiltrosEspeciales1: TMenuItem;
+    Ecualizacion1: TMenuItem;
+    ExpanciondelHistograma1: TMenuItem;
+    Reduccion05XF1: TMenuItem;
+    Reduccion05xP1: TMenuItem;
+
 
 
     // Metodos
@@ -230,8 +238,15 @@ type
     procedure leer_Medianas(nom : string);
     procedure MedianaXClick(Sender: TObject);
     procedure Acercade1Click(Sender: TObject);
+
     procedure AbrirfotodesdeWebCam1Click(Sender: TObject);
     procedure Fourier1Click(Sender: TObject);
+
+    procedure Ecualizacion1Click(Sender: TObject);
+    procedure ExpanciondelHistograma1Click(Sender: TObject);
+    procedure Reduccion05XF1Click(Sender: TObject);
+    procedure Reduccion05xP1Click(Sender: TObject);
+
 
 
 
@@ -696,6 +711,8 @@ end;
 
 
 
+
+
 // *****************************************************
 // ********************** CANALES **********************
 // *****************************************************
@@ -729,6 +746,8 @@ end;
 // *****************************************************
 // ******************** CAMBIAR TEMA *******************
 // *****************************************************
+
+
 procedure TAppPDI.EstiloFCC1Click(Sender: TObject);
 begin
   ToolBar1.Images := ImageList1;
@@ -739,6 +758,7 @@ begin
   ToolBar1.Images := ImageList2;
 end;
 
+
 // *****************************************************
 // ******************** HISTOGRAMA *********************
 // *****************************************************
@@ -746,6 +766,50 @@ procedure TAppPDI.Histograma1Click(Sender: TObject);
 begin
   // Llamar a la interface del Histograma
   FormHisto.show;
+end;
+
+//*****************************************************
+//********************FILTROS ESPECIALES BASANDOSE*****
+//********************EN EL HISTOGRAMA*****************
+//*****************************************************
+
+//Ecualizacion  basada en el Histograma
+
+procedure TAppPDI.Ecualizacion1Click(Sender: TObject);
+begin
+  Prepara();
+  Fe_Ecualizacion(Im1,Im2);
+  Presenta();
+
+end;
+//Expansion del Histograma
+procedure TAppPDI.ExpanciondelHistograma1Click(Sender: TObject);
+var
+    zmin,zmax,var_Error:integer;
+begin
+    Form4.ShowModal;
+      if Form4.ModalResult <> mrOk then
+        Exit;
+
+        //Validacion
+        val(Form4.Edit1.Text,zmin,var_Error);
+          if var_Error <> 0 then begin
+            ShowMessage('Error en ZMIN Fuera de Rango...');
+            Exit;
+          end;
+
+        val(Form4.Edit2.Text,zmax,var_Error);
+          if var_Error <> 0 then begin
+            ShowMessage('Error en ZMAX Fuera de Rango...');
+            Exit;
+          end;
+
+          if zmin >= zmax then begin
+            ShowMessage('Error ZMIN debe de ser MENOR que ZMAX...');
+          end;
+          Prepara();
+          Fe_ExpHisto(Im1,Im2,zmin,zmax);
+          Presenta();
 end;
 
 
@@ -1294,6 +1358,8 @@ end;
 
 
 
+
+
 // *****************************************************
 // ******************** F REGIONALES *******************
 // *****************************************************
@@ -1451,6 +1517,22 @@ procedure TAppPDI.Zoom2xF1Click(Sender: TObject);
 begin
   Prepara();
   fg_zoomF2x(Im1,Im2);
+  Presenta();
+end;
+
+//Redccion Zoom del Flojo
+procedure TAppPDI.Reduccion05XF1Click(Sender: TObject);
+begin
+  Prepara();
+  fg_ReduceF5x(Im1,Im2);
+  Presenta();
+
+end;
+
+procedure TAppPDI.Reduccion05xP1Click(Sender: TObject);
+begin
+  Prepara();
+  fg_ReduceP5x(Im1,Im2);
   Presenta();
 end;
 
