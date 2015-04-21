@@ -8,6 +8,7 @@ uses
   procedure fp_negativo   (MA: MatImg; var MB: MatImg);
   procedure fp_gamma      (MA: MatImg; var MB: MatImg; vv : single);
   procedure fp_logaritmo  (MA: MatImg; var MB: MatImg);
+  procedure fp_logaritmoPar (MA: MatImg; var MB: MatImg; vv: single);
   procedure fp_blancoNegro(MA: MatImg; var MB: MatImg);
   procedure fp_constante  (MA: MatImg; var MB: MatImg; vv : single);
   procedure fp_porcentual (MA: MatImg; var MB: MatImg; vv : single);
@@ -74,6 +75,31 @@ var
   function loga(z: single): single;
   begin
     result := ff*log10(z+1);
+  end;
+
+begin
+  ff := 255/log10(256);
+
+  for c := 0 to 2 do
+    if _kan[c] then
+      for y := _y1 to _y2-1 do
+        for x := _x1 to _x2-1 do
+          MB.dat[x][y][c] := loga(MA.dat[x][y][c])
+    else
+			for y := 0 to MA.nr-1 do
+				for x := 0 to MA.nc-1 do
+					MB.dat[x][y][c] := MA.dat[x][y][c];
+
+end;
+
+procedure fp_logaritmoPar (MA: MatImg; var MB: MatImg; vv: single);
+var
+  x,y,c   : integer;
+  ff      : single;
+
+  function loga(z: single): single;
+  begin
+    result := ff*log10(vv*z+1);
   end;
 
 begin
