@@ -586,15 +586,6 @@ var
   nx,ny : integer;  //Num de pix en x y num de pix en y
   z, zp,
   fact  : single;
-  // Ajusta un real pequeño a byte
-  function aj256(u: single): byte;
-  begin
-    if u > 255 then
-      result := 255
-    else if u < 0 then
-      result := 0
-    else result := ceil(u);
-  end;
 
 begin
   lamb2 := 255 * 2;
@@ -603,7 +594,7 @@ begin
   if _kan[c] then
       for y := _y1 to _y2 - 1 do
         for x := _x1 to _x2 - 1 do begin
-            z := aj256(MA.dat[x][y][c]);
+            z := ajusta255(MA.dat[x][y][c]);
             if (z >= 0) and (z <= vv)then
               zp := power(z, 2) / vv
             else
@@ -671,7 +662,7 @@ begin
   // Selección rectangular o normal
   else begin
     for y := _y1 to _y2-1 do
-      for x := _x1 to _x2-1 do
+      for x := _x1 to _x2-1 do begin
         temp := 0;
         for c := 0 to 2 do begin
           temp := temp + MA.dat[x][y][c];
@@ -679,6 +670,7 @@ begin
         MB.dat[x][y][0] := temp / 3;
         MB.dat[x][y][1] := temp / 3;
         MB.dat[x][y][2] := temp / 3;
+      end;
   end;
 end;
 

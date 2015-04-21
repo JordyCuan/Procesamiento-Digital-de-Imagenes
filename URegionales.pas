@@ -34,20 +34,49 @@ procedure fr_BSX(MA: MatImg; var MB: MatImg);
 var
 	x,y,c : integer;
 begin
-	for c:= 0 to 2 do
-		if _kan[c] then
-      if _Norma = 0 then
-        for y := _y1+1 to _y2-1 do
-          for x := _x1 to _x2-1 do
-            MB.dat[x][y][c] := abs(MA.dat[x][y][c] - MA.dat[x][y-1][c])
+  if _banCir then begin
+    for c := 0 to 2 do
+      if _kan[c] then begin
+        xx1 := _xc - _Rx;
+        xx2 := _xc + _Rx;
+        yy1 := _yc - _Ry;
+        yy2 := _yc + _Ry;
+
+        for y := _y1 to _y2-1 do begin
+          yy := sqr((y - _yc) / _Ry);
+          for x := _x1 to _x2-1 do begin
+            xx := sqr((x - _xc) / _Rx);
+            RR := xx + yy;
+            if RR <= 1 then
+              if _Norma = 0 then
+                MB.dat[x][y][c] := abs(MA.dat[x][y][c] - MA.dat[x][y-1][c])
+              else
+                MB.dat[x][y][c] := repuja(MA.dat[x][y][c] - MA.dat[x][y-1][c])
+          end;
+        end;
+      end
       else
-        for y := _y1+1 to _y2-1 do
-          for x := _x1 to _x2-1 do
-            MB.dat[x][y][c] := repuja(MA.dat[x][y][c] - MA.dat[x][y-1][c])
-		else
-			for y := 0 to MA.nr-1 do
-				for x := 0 to MA.nc-1 do
-					MB.dat[x][y][c] := MA.dat[x][y][c]
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end
+
+  // Selección rectangular o normal
+  else
+    for c:= 0 to 2 do
+      if _kan[c] then
+        if _Norma = 0 then
+          for y := _y1+1 to _y2-1 do
+            for x := _x1 to _x2-1 do
+              MB.dat[x][y][c] := abs(MA.dat[x][y][c] - MA.dat[x][y-1][c])
+        else
+          for y := _y1+1 to _y2-1 do
+            for x := _x1 to _x2-1 do
+              MB.dat[x][y][c] := repuja(MA.dat[x][y][c] - MA.dat[x][y-1][c])
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
 end;
 
 
@@ -56,20 +85,49 @@ procedure fr_BSY(MA: MatImg; var MB: MatImg);
 var
 	x,y,c : integer;
 begin
-	for c:= 0 to 2 do
-		if _kan[c] then
-      if _Norma = 0 then
-        for y := _y1 to _y2-1 do
-          for x := _x1+1 to _x2-1 do
-            MB.dat[x][y][c] := abs(MA.dat[x][y][c] - MA.dat[x-1][y][c])
+  if _banCir then begin
+    for c := 0 to 2 do
+      if _kan[c] then begin
+        xx1 := _xc - _Rx;
+        xx2 := _xc + _Rx;
+        yy1 := _yc - _Ry;
+        yy2 := _yc + _Ry;
+
+        for y := _y1 to _y2-1 do begin
+          yy := sqr((y - _yc) / _Ry);
+          for x := _x1 to _x2-1 do begin
+            xx := sqr((x - _xc) / _Rx);
+            RR := xx + yy;
+            if RR <= 1 then
+              if _Norma = 0 then
+                MB.dat[x][y][c] := abs(MA.dat[x][y][c] - MA.dat[x-1][y][c])
+              else
+                MB.dat[x][y][c] := repuja(MA.dat[x][y][c] - MA.dat[x-1][y][c])
+          end;
+        end;
+      end
       else
-        for y := _y1 to _y2-1 do
-          for x := _x1+1 to _x2-1 do
-            MB.dat[x][y][c] := repuja(MA.dat[x][y][c] - MA.dat[x-1][y][c])
-		else
-			for y := 0 to MA.nr-1 do
-				for x := 0 to MA.nc-1 do
-					MB.dat[x][y][c] := MA.dat[x][y][c]
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end
+
+  // Selección rectangular o normal
+  else
+    for c:= 0 to 2 do
+      if _kan[c] then
+        if _Norma = 0 then
+          for y := _y1 to _y2-1 do
+            for x := _x1+1 to _x2-1 do
+              MB.dat[x][y][c] := abs(MA.dat[x][y][c] - MA.dat[x-1][y][c])
+        else
+          for y := _y1 to _y2-1 do
+            for x := _x1+1 to _x2-1 do
+              MB.dat[x][y][c] := repuja(MA.dat[x][y][c] - MA.dat[x-1][y][c])
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
 end;
 
 
@@ -78,6 +136,35 @@ procedure fr_BSXY(MA: MatImg; var MB: MatImg);
 var
 	x,y,c : integer;
 begin
+  if _banCir then begin
+    for c := 0 to 2 do
+      if _kan[c] then begin
+        xx1 := _xc - _Rx;
+        xx2 := _xc + _Rx;
+        yy1 := _yc - _Ry;
+        yy2 := _yc + _Ry;
+
+        for y := _y1 to _y2-1 do begin
+          yy := sqr((y - _yc) / _Ry);
+          for x := _x1 to _x2-1 do begin
+            xx := sqr((x - _xc) / _Rx);
+            RR := xx + yy;
+            if RR <= 1 then
+              if _Norma = 0 then
+                MB.dat[x][y][c] := abs(MA.dat[x][y][c] - MA.dat[x-1][y-1][c])
+              else
+                MB.dat[x][y][c] := repuja(MA.dat[x][y][c] - MA.dat[x-1][y-1][c])
+          end;
+        end;
+      end
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end
+
+  // Selección rectangular o normal
+  else
 	for c:= 0 to 2 do
 		if _kan[c] then
       if _Norma = 0 then
@@ -88,10 +175,10 @@ begin
         for y := _y1+1 to _y2-1 do
           for x := _x1+1 to _x2-1 do
             MB.dat[x][y][c] := repuja(MA.dat[x][y][c] - MA.dat[x-1][y-1][c])
-		else
-			for y := 0 to MA.nr-1 do
-				for x := 0 to MA.nc-1 do
-					MB.dat[x][y][c] := MA.dat[x][y][c]
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
 end;
 
 
@@ -149,20 +236,48 @@ begin
 	Lx := MC.nc div 2;
 	Ly := MC.nr div 2;
 
-	for c := 0 to 2 do
-		if _kan[c] then
-      if _Norma = 0 then
-        for y := _y1 + Ly to _y2-1-Ly do
-          for x := _x1+Lx to _x2-1-Lx do
-            MB.dat[x][y][c] := abs(CONVB(MA, MC, Lx, Ly, x,y,c))
+  if _banCir then begin
+    for c := 0 to 2 do
+      if _kan[c] then begin
+        xx1 := _xc - _Rx;
+        xx2 := _xc + _Rx;
+        yy1 := _yc - _Ry;
+        yy2 := _yc + _Ry;
+
+        for y := _y1 to _y2-1 do begin
+          yy := sqr((y - _yc) / _Ry);
+          for x := _x1 to _x2-1 do begin
+            xx := sqr((x - _xc) / _Rx);
+            RR := xx + yy;
+            if RR <= 1 then
+              MB.dat[x][y][c] := abs(CONVB(MA, MC, Lx, Ly, x,y,c))
+            else
+              MB.dat[x][y][c] := repuja(CONVB(MA, MC, Lx, Ly, x,y,c))
+          end;
+        end;
+      end
       else
-        for y := _y1 + Ly to _y2-1-Ly do
-          for x := _x1+Lx to _x2-1-Lx do
-            MB.dat[x][y][c] := repuja(CONVB(MA, MC, Lx, Ly, x,y,c))
-		else
-			for y := 0 to MA.nr - 1 do
-				for x := 0 to MA.nc - 1 do
-					MB.dat[x][y][c] := MA.dat[x][y][c]
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end
+
+  // Selección rectangular o normal
+  else
+    for c := 0 to 2 do
+      if _kan[c] then
+        if _Norma = 0 then
+          for y := _y1 + Ly to _y2-1-Ly do
+            for x := _x1+Lx to _x2-1-Lx do
+              MB.dat[x][y][c] := abs(CONVB(MA, MC, Lx, Ly, x,y,c))
+        else
+          for y := _y1 + Ly to _y2-1-Ly do
+            for x := _x1+Lx to _x2-1-Lx do
+              MB.dat[x][y][c] := repuja(CONVB(MA, MC, Lx, Ly, x,y,c))
+      else
+        for y := 0 to MA.nr - 1 do
+          for x := 0 to MA.nc - 1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c]
 end;
 
 
@@ -197,7 +312,7 @@ begin
   Ly := MC.nr div 2;
   factor := MC.fac;
 
-  for c := 0 to 2 do
+{  for c := 0 to 2 do
     if _kan[c] then // aplica el filtro
       for y := _y1 + Ly to _y2-1-Ly do
         for x := _x1+Lx to _x2-1-Lx do
@@ -206,6 +321,46 @@ begin
 			for y := 0 to MA.nr - 1 do
 				for x := 0 to MA.nc - 1 do
 					MB.dat[x][y][c] := MA.dat[x][y][c]
+
+  }
+
+  if _banCir then begin
+    for c := 0 to 2 do
+      if _kan[c] then begin
+        xx1 := _xc - _Rx;
+        xx2 := _xc + _Rx;
+        yy1 := _yc - _Ry;
+        yy2 := _yc + _Ry;
+
+        for y := _y1 to _y2-1 do begin
+          yy := sqr((y - _yc) / _Ry);
+          for x := _x1 to _x2-1 do begin
+            xx := sqr((x - _xc) / _Rx);
+            RR := xx + yy;
+            if RR <= 1 then
+              Mb.dat[x][y][c]:= CONVB(MA, MC, Lx, Ly, x,y,c) / factor
+          end;
+        end;
+      end
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end
+
+  // Selección rectangular o normal
+  else
+    for c := 0 to 2 do
+      if _kan[c] then // aplica el filtro
+        for y := _y1 + Ly to _y2-1-Ly do
+          for x := _x1+Lx to _x2-1-Lx do
+            Mb.dat[x][y][c]:= CONVB(MA, MC, Lx, Ly, x,y,c) / factor
+
+      else
+        for y := 0 to MA.nr - 1 do
+          for x := 0 to MA.nc - 1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c]
+
 end;
 
 
@@ -282,6 +437,10 @@ begin
   med := unos div 2;
   SetLength(arreglo, unos);
 
+
+
+
+                                       {
   for c := 0 to 2 do
     if _kan[c] then // aplica el filtro
       for y := _y1 + Ly to _y2-1-Ly do
@@ -291,6 +450,46 @@ begin
 			for y := 0 to MA.nr - 1 do
 				for x := 0 to MA.nc - 1 do
 					MB.dat[x][y][c] := MA.dat[x][y][c]
+                                      }
+
+
+
+
+  if _banCir then begin
+    for c := 0 to 2 do
+      if _kan[c] then begin
+        xx1 := _xc - _Rx;
+        xx2 := _xc + _Rx;
+        yy1 := _yc - _Ry;
+        yy2 := _yc + _Ry;
+
+        for y := _y1 to _y2-1 do begin
+          yy := sqr((y - _yc) / _Ry);
+          for x := _x1 to _x2-1 do begin
+            xx := sqr((x - _xc) / _Rx);
+            RR := xx + yy;
+            if RR <= 1 then
+              Mb.dat[x][y][c]:= Mediana(x,y)
+          end;
+        end;
+      end
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end
+
+  // Selección rectangular o normal
+  else
+    for c := 0 to 2 do
+      if _kan[c] then // aplica el filtro
+        for y := _y1 + Ly to _y2-1-Ly do
+          for x := _x1+Lx to _x2-1-Lx do
+            Mb.dat[x][y][c]:= Mediana(x,y)
+      else
+        for y := 0 to MA.nr - 1 do
+          for x := 0 to MA.nc - 1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c]
 end;
 
 end.

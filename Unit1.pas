@@ -156,6 +156,8 @@ type
     ExpanciondelHistograma1: TMenuItem;
     Reduccion05XF1: TMenuItem;
     Reduccion05xP1: TMenuItem;
+    N9: TMenuItem;
+    N10: TMenuItem;
 
 
 
@@ -531,8 +533,8 @@ begin
   _banCir  := false;
   StatusBar1.Panels[6].Text := 'No activa';
 
-  _x1 := 0      ; _y1 := 0;
-  _x2 := Im1.nc ; _y2 := Im1.nr;
+  _x1 := 0        ; _y1 := 0;
+  _x2 := Im1.nc-1 ; _y2 := Im1.nr-1;
 
   BMSel.Canvas.Pen.Color := clWhite;
   BMSel.Canvas.Rectangle(0,0,BMSel.Width, BMSel.Height);
@@ -1581,14 +1583,38 @@ var
 begin
   Prepara();
 
-  for y := _y1 to _y2-1 do begin
-    for x := _x1 to _x2-1 do begin
-      tono := ajusta255(Im1.dat[x][y][0]);
-      for c := 0 to 2 do begin
-        Im2.dat[x][y][c] := _Paleta[tono][c];
+  if _banCir then begin
+    xx1 := _xc - _Rx;
+    xx2 := _xc + _Rx;
+    yy1 := _yc - _Ry;
+    yy2 := _yc + _Ry;
+
+    for y := _y1 to _y2-1 do begin
+      yy := sqr((y - _yc) / _Ry);
+      for x := _x1 to _x2-1 do begin
+        xx := sqr((x - _xc) / _Rx);
+        RR := xx + yy;
+        if RR <= 1 then
+          tono := ajusta255(Im1.dat[x][y][0]);
+          for c := 0 to 2 do begin
+            Im2.dat[x][y][c] := _Paleta[tono][c];
+          end;
+      end;
+    end;
+  end
+
+  // Selección rectangular o normal
+  else begin
+    for y := _y1 to _y2-1 do begin
+      for x := _x1 to _x2-1 do begin
+        tono := ajusta255(Im1.dat[x][y][0]);
+        for c := 0 to 2 do begin
+          Im2.dat[x][y][c] := _Paleta[tono][c];
+        end;
       end;
     end;
   end;
+
 
   Presenta();
 end;

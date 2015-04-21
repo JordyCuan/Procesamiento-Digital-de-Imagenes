@@ -411,9 +411,51 @@ object AppPDI: TAppPDI
     end
     object FiltrosPuntuales1: TMenuItem
       Caption = 'Filtros &Puntuales'
+      object Constante50501: TMenuItem
+        Caption = 'Add/Sust (-50, 50)'
+        OnClick = Constante50501Click
+      end
+      object Porcentual50501: TMenuItem
+        Caption = 'Porcentual (-50%, 50%)'
+        OnClick = Porcentual50501Click
+      end
+      object N9: TMenuItem
+        Caption = '-'
+      end
       object Negativo1: TMenuItem
         Caption = 'Negativo'
         OnClick = Negativo1Click
+      end
+      object BlancoyNegro1: TMenuItem
+        Caption = 'Blanco y Negro'
+        OnClick = BlancoyNegro1Click
+      end
+      object Luminancia1: TMenuItem
+        Caption = 'Luminancia'
+        OnClick = Luminancia1Click
+      end
+      object N10: TMenuItem
+        Caption = '-'
+      end
+      object FuncionSeno1: TMenuItem
+        Caption = 'Aclarado (Seno)'
+        OnClick = FuncionSeno1Click
+      end
+      object FuncionCoseno1: TMenuItem
+        Caption = 'Obscurecimiento (Coseno)'
+        OnClick = FuncionCoseno1Click
+      end
+      object ClaroOscuro1: TMenuItem
+        Caption = 'Contraste (tanh)'
+        OnClick = ClaroOscuro1Click
+      end
+      object CPerfilTringular1: TMenuItem
+        Caption = 'C.Perfil Tringular'
+        OnClick = CPerfilTringular1Click
+      end
+      object SenoidaInvertida1: TMenuItem
+        Caption = 'Senoida Invertida'
+        OnClick = SenoidaInvertida1Click
       end
       object Gamma1: TMenuItem
         Caption = 'Gamma'
@@ -423,45 +465,13 @@ object AppPDI: TAppPDI
         Caption = 'Logaritmo'
         OnClick = Logaritmo1Click
       end
-      object Constante50501: TMenuItem
-        Caption = 'Constante (-50, 50)'
-        OnClick = Constante50501Click
-      end
-      object Porcentual50501: TMenuItem
-        Caption = 'Porcentual (-50%, 50%)'
-        OnClick = Porcentual50501Click
-      end
-      object BlancoyNegro1: TMenuItem
-        Caption = 'Blanco y Negro'
-        OnClick = BlancoyNegro1Click
-      end
-      object FuncionSeno1: TMenuItem
-        Caption = 'Funcion Seno'
-        OnClick = FuncionSeno1Click
-      end
       object FuncionExponencial1: TMenuItem
         Caption = 'Funcion Exponencial'
         OnClick = FuncionExponencial1Click
       end
-      object FuncionCoseno1: TMenuItem
-        Caption = 'Funcion Coseno'
-        OnClick = FuncionCoseno1Click
-      end
-      object ClaroOscuro1: TMenuItem
-        Caption = 'Claro-Oscuro'
-        OnClick = ClaroOscuro1Click
-      end
       object OscurecimientoFuerte1: TMenuItem
         Caption = 'Oscurecimiento Fuerte'
         OnClick = OscurecimientoFuerte1Click
-      end
-      object SenoidaInvertida1: TMenuItem
-        Caption = 'Senoida Invertida'
-        OnClick = SenoidaInvertida1Click
-      end
-      object Luminancia1: TMenuItem
-        Caption = 'Luminancia'
-        OnClick = Luminancia1Click
       end
       object Binarizacion1: TMenuItem
         Caption = 'Binarizacion'
@@ -470,10 +480,6 @@ object AppPDI: TAppPDI
       object BinarizacionParametro1: TMenuItem
         Caption = 'Binarizacion Parametro'
         OnClick = BinarizacionParametro1Click
-      end
-      object CPerfilTringular1: TMenuItem
-        Caption = 'C.Perfil Tringular'
-        OnClick = CPerfilTringular1Click
       end
     end
     object FiltrosRegionales1: TMenuItem
