@@ -111,6 +111,57 @@
 				<Form>Form4</Form>
 				<FormType>dfm</FormType>
 			</DCCReference>
+			<DCCReference Include="Fourier\UFCapZonas.pas">
+				<Form>FFCapZonas</Form>
+			</DCCReference>
+			<DCCReference Include="DirectX\FormAbout.pas">
+				<Form>AboutBox</Form>
+			</DCCReference>
+			<DCCReference Include="DirectX\Frame_Video.pas">
+				<Form>Frame1</Form>
+				<DesignClass>TFrame</DesignClass>
+			</DCCReference>
+			<DCCReference Include="DirectX\VFrames.pas"/>
+			<DCCReference Include="DirectX\VSample.pas"/>
+			<DCCReference Include="DirectX\VSampleDemo_MainForm.pas">
+				<Form>Form_Main</Form>
+			</DCCReference>
+			<DCCReference Include="DirectX\DirectX\Direct3D9.pas"/>
+			<DCCReference Include="DirectX\DirectX\DirectDraw.pas"/>
+			<DCCReference Include="DirectX\DirectX\DirectShow9.pas"/>
+			<DCCReference Include="DirectX\DirectX\DirectSound.pas"/>
+			<DCCReference Include="DirectX\DirectX\DXTypes.pas"/>
+			<DCCReference Include="gfx_files\gfx_basedef.pas"/>
+			<DCCReference Include="gfx_files\gfx_colors.pas"/>
+			<DCCReference Include="gfx_files\gfx_compression.pas"/>
+			<DCCReference Include="gfx_files\gfx_const.pas"/>
+			<DCCReference Include="gfx_files\gfx_crypt.pas"/>
+			<DCCReference Include="gfx_files\gfx_effectex.pas"/>
+			<DCCReference Include="gfx_files\gfx_effects.pas"/>
+			<DCCReference Include="gfx_files\gfx_errors.pas"/>
+			<DCCReference Include="gfx_files\gfx_files.pas"/>
+			<DCCReference Include="gfx_files\gfx_masks.pas"/>
+			<DCCReference Include="gfx_files\gfx_pcd.pas"/>
+			<DCCReference Include="gfx_files\gfx_pcx.pas"/>
+			<DCCReference Include="gfx_files\gfx_png.pas"/>
+			<DCCReference Include="gfx_files\gfx_rotresize.pas"/>
+			<DCCReference Include="gfx_files\gfx_tga.pas"/>
+			<DCCReference Include="gfx_files\gfx_tiff.pas"/>
+			<DCCReference Include="gfx_files\io_const.pas"/>
+			<DCCReference Include="gfx_files\io_files.pas"/>
+			<DCCReference Include="gfx_files\pnglib.pas"/>
+			<DCCReference Include="gfx_files\PNGZLIB.pas"/>
+			<DCCReference Include="Fourier\UFourier.pas">
+				<Form>FFourier</Form>
+			</DCCReference>
+			<DCCReference Include="Fourier\UFTipos.pas"/>
+			<DCCReference Include="Fourier\UFourierBase.pas"/>
+			<DCCReference Include="Fourier\UFPatron.pas">
+				<Form>FFPatron</Form>
+			</DCCReference>
+			<DCCReference Include="UDirectX.pas">
+				<Form>FDirectX</Form>
+			</DCCReference>
 			<BuildConfiguration Include="Release">
 				<Key>Cfg_2</Key>
 				<CfgParent>Base</CfgParent>

@@ -15,9 +15,11 @@ uses
   Vcl.Menus, Vcl.ExtDlgs,
   Vcl.ComCtrls, math, Vcl.StdCtrls,
   Jpeg, PNGImage, GIFImg, Vcl.ImgList, Vcl.ToolWin,
-
-  UBase,UnitZoom,UnitExpHisto, UParBin, UHisto, UPuntuales,UEspeciales, URegionales, UGeometricos, UIntRotacion, UCalc,
-  Vcl.ActnMan, Vcl.ActnCtrls, Vcl.ActnColorMaps;
+  UBase,UnitZoom,UParBin, UHisto,
+  UPuntuales, URegionales, UGeometricos, UIntRotacion, UCalc,
+  Vcl.ActnMan, Vcl.ActnCtrls, Vcl.ActnColorMaps, UDirectx,
+  gfx_files, UFourierBase, UFourier,
+  UnitExpHisto,UEspeciales;
 
 
 type
@@ -148,12 +150,14 @@ type
     ColorBox2: TColorBox;
     Label2: TLabel;
     Label3: TLabel;
+    Fourier1: TMenuItem;
     FiltrosEspeciales1: TMenuItem;
     Ecualizacion1: TMenuItem;
     ExpanciondelHistograma1: TMenuItem;
     Reduccion05XF1: TMenuItem;
     Reduccion05xP1: TMenuItem;
     LogaritmoParametro1: TMenuItem;
+
 
 
     // Metodos
@@ -235,12 +239,17 @@ type
     procedure leer_Medianas(nom : string);
     procedure MedianaXClick(Sender: TObject);
     procedure Acercade1Click(Sender: TObject);
+
+    procedure AbrirfotodesdeWebCam1Click(Sender: TObject);
+    procedure Fourier1Click(Sender: TObject);
+
     procedure Ecualizacion1Click(Sender: TObject);
     procedure ExpanciondelHistograma1Click(Sender: TObject);
     procedure Reduccion05XF1Click(Sender: TObject);
     procedure Reduccion05xP1Click(Sender: TObject);
     procedure RotacionVMC1Click(Sender: TObject);
     procedure LogaritmoParametro1Click(Sender: TObject);
+
 
 
 
@@ -626,7 +635,13 @@ begin
       _y2 := Y;
     end;
 
-    BMSel.Canvas.Pen.Color := clGreen;
+    BMSel.Canvas.Pen.Color := ColorBox1.Selected;
+
+    _xc := _x1 + abs(_x2 - _x1) div 2;
+    _yc := _y1 + abs(_y2 - _y1) div 2;
+
+    _Rx := abs(_x2 - _xc);
+    _Ry := abs(_y2 - _yc);
 
     BMSel.Canvas.Ellipse(_x1,_y1,_x2,_y2);
     Image2Selec.Picture.Assign(BMSel);
@@ -848,11 +863,6 @@ begin
       BMSel.TransparentColor := clWhite;
       BMSel.Canvas.Pen.Color := clWhite;
       BMSel.Canvas.Rectangle(0,0,BMSel.Width, BMSel.Height);
-      //BMSel.Canvas.Pen.Color := clBlack;
-      //PlumaSel := clBlack;
-
-      // Al ImageSel lo hacemos autoSize , en diseño
-      // y también Transparente
 
       // Le asignamos el BMSel
       Image2Selec.Picture.Assign(BMSel);
@@ -871,7 +881,7 @@ procedure TAppPDI.ReAbrirOriginal1Click(Sender: TObject);
 var
   pic : TPicture;
 begin
-  nomIma := OpenPictureDialog1.FileName;
+//  nomIma := OpenPictureDialog1.FileName;
 
   // Verifiquemos que ya se haya abierto algo
   if nomIma='' then
@@ -1060,8 +1070,17 @@ begin
     BMSel.Canvas.Rectangle(0,0,BMSel.Width, BMSel.Height);
     Image2Selec.Picture.Assign(BMSel);
 
+    {
+    _xc := X;
+    _yc := Y;
+
+    xx1 := _xc - abs(_xs - _xc);
+    xx2 := _xc + abs(_xs - _xc);
+    yy1 := _yc - abs(_ys - _yc);
+    yy2 := _yc + abs(_ys - _yc);
+     }
     // Dibujamos el temporal
-    BMSel.Canvas.Pen.Color := clGreen;
+    BMSel.Canvas.Pen.Color := ColorBox1.Selected;
 
     BMSel.Canvas.Ellipse(_x1,_y1,X,Y);
     Image2Selec.Picture.Assign(BMSel);
@@ -1346,34 +1365,6 @@ end;
 
 
 
-
-// Borde Simple Y con convoluciones
-(*procedure TAppPDI.MatrizYB1Click(Sender : TObject);
-begin
-  if CanalPrendido then begin
-    Prepara();
-    fr_BSCY(im1, _MC1, im2);
-    Presenta();
-  end;
-end;
-*)
-
-
-(*procedure TAppPDI.MetMediasGen(Sender: TObject);
-var
-  opc: integer;
-begin
-  opc := MediasConvolucion1.IndexOf(Sender as TMenuItem);
-
-
-  if CanalPrendido then begin
-    Prepara();
-    fr_MediasC(Im1, _MCGM[opc], Im2);
-    Presenta();
-  end;
-
-end;
-*)
 
 
 
@@ -1781,6 +1772,106 @@ begin
               + '* Guillermo Vara de Gante'#13#10'- ***PON AQUI TU MATRICULA Y CORREO***'    );
 end;
 
+
+
+// WebCam
+procedure TAppPDI.AbrirfotodesdeWebCam1Click(Sender: TObject);
+var
+  name : string;
+begin
+  FDirectX.ShowModal;
+
+  if FDirectX.ModalResult <> mrOK then
+    Exit;
+
+
+  // Revisar bien apertura desde webCam
+  // BUGS EN LA SELECCIÓN DE IMAGENES DESDE WEBCAM
+  Mat2Mat(FDirectX.MD, Im1);
+  Mat2BMP(Im1, BM1);
+
+  // Guardamos imagen en una carpeta temporal
+  name := 'Image.bmp';
+
+  //nomIma := path + '\temp\' + name;
+  //globalName := nomIma;
+
+  gfx_files.SaveBMPToAnyFile(BM1, name, 0, 0);
+  StatusBar3.Panels[1].Text := 'temp\' + name;
+
+  _x1 := 0;
+  _y1 := 0;
+  _x2 := Im1.nc;
+  _y2 := Im1.nr;
+
+  Im2.nc := 0;
+  Im2.nr := 0;
+  SetLength(Im2.dat, 0, 0, 0);
+
+  Mat2Mat(Im1, Im2);
+
+  Image1.Picture.Assign(BM1);
+
+  //Cambio de tamaño
+  Image2Selec.Width  := Im1.nc;
+  Image2Selec.Height := Im1.nr;
+
+
+  BMSel.Canvas.Pen.Color := clWhite;
+  BMSel.Canvas.Rectangle(0,0,BM1.Width, BM1.Height);
+  Image2Selec.Picture.Assign(BMSel);
+
+  //Borra el último rectángulo
+  BMSel.Canvas.Rectangle(_x1, _y1, _x2, _y2);
+
+  Mat2BMP(Im2,BM1);
+  Image2Selec.Picture.Assign(BMSel);
+
+
+  Image2Selec.Width := _x2;
+  Image2Selec.Height := _y2;
+
+  // dimensionamos el BItMap de Seleccion
+  BMSel.Width  := Image1.Width;
+  BMSel.Height := Image1.Height;
+
+  BMSel.Transparent := true;
+  BMSel.TransparentColor := clWhite;
+  BMSel.Canvas.Pen.Color := clWhite;
+  BMSel.Canvas.Rectangle(0,0,BMSel.Width, BMSel.Height);
+  //BMSel.Canvas.Pen.Color := clBlack;
+  //PlumaSel := clBlack;
+
+  // Al ImageSel lo hacemos autoSize , en diseño
+  // y también Transparente
+
+  // Le asignamos el BMSel
+  Image2Selec.Picture.Assign(BMSel);
+end;
+
+
+
+// Fourier
+procedure TAppPDI.Fourier1Click(Sender: TObject);
+begin
+  if (Im2.nc + Im2.nr) > 0 then
+    Mat2Mat(Im2, FFourier.MT)
+  else if (Im1.nc + Im1.nr) > 0 then
+    Mat2Mat(Im1, FFourier.MT)
+  else begin
+    ShowMessage('No hay imagen cargada...');
+    Exit;
+  end;
+
+  FFourier.ShowMOdal;
+
+  if FFourier.ModalResult <> mrOK then
+    Exit;
+
+  Mat2Mat(FFourier.MT, Im2);
+
+  Presenta();
+end;
 
 
 

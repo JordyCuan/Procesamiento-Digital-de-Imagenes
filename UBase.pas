@@ -27,10 +27,12 @@ type
 var
   //Regiones establecidas en la selección de la imagen
   BMSel               : TBitmap;
-  //plumaSel            : integer;
   _x1, _x2, _y1, _y2  : integer;
+  // Seleccion Circular
+  xx1, xx2, yy1, yy2  : integer;
   _xc, _yc, _Rx, _Ry  : integer;
   _xs, _ys            : integer;
+  RR, xx, yy          : single;
 
   _banCir, _banRect   : boolean;
   _x1Selec, _y1Selec,
@@ -47,6 +49,8 @@ var
 
   // Falso color
   _Paleta             : array [0..255] of array [0..2] of single;
+
+
 
 
   // metodos
