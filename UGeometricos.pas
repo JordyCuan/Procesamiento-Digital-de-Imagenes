@@ -5,7 +5,8 @@ interface
 uses
   math, UBase;
 
-  procedure fg_rotaIBL(MA : MatImg; var MB : MatImg; aa : single);
+  procedure fg_rotaIBL(MA : MatImg; var MB : MatImg; ang: single; tfondo: integer; modo:byte);
+  procedure fg_rotaVMC(MA : MatImg; var MB : MatImg; ang: single; tfondo: integer; modo:byte);
   procedure fg_rotaMas90(MA : MatImg; var MB : MatImg);
   procedure fg_rotaMenos90(MA : MatImg; var MB : MatImg);
   procedure fg_rota180(MA : MatImg; var MB : MatImg);
@@ -21,32 +22,576 @@ uses
 
 implementation
 
+ //-----------------------------ROTACION IBL---------------------------------------
+procedure fg_rotaIBL(MA : MatImg; var MB : MatImg; ang: single; tfondo: integer;modo:byte);
+var
+  nnx,nny,
+  x,y,can,
+  n,m,kk,
+  xp,yp,
+  np,mp,
+  dx,dy,
+  xpm1,ypm1,
+  xx,yy    : integer;
 
-procedure fg_rotaIBL(MA : MatImg; var MB : MatImg; aa : single);
+  tt,
+  ar,ca,sa,
+  ysa,yca,
+
+  xmi,ymi,
+  xma,yma,
+  xpp,ypp,
+  xf,yf,
+  ax, ay,
+  t1,t2,t3,t4,
+  f1,f2,f3,f4   : single;
+  flag,flagC : boolean;
+  cotas: array [0..3] of array [0..1] of integer;
+
+  EX,EY     : array [0..3] of single;
+  MC : MatImg;
+
 begin
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
 
-{  for y := 0 to nnr - 1 do begin
-    yp := y - ycr;
-    xa := yp * sa + xc;
-    ya := yp * ca + yc;
+  ar := DegToRad(ang);
+  sa := sin(ar);
+  ca := cos(ar);
 
-    for x := 0 to nnc do begin
-      xp := x-xcr;
-      xt := xp *
+  n := MA.nc;
+  m := MA.nr;
 
-    end;
+  // hallar tamaño del lienzo nuevo
+  EX[0] :=   0; EY[0] :=   0;
+  EX[1] := n-1; EY[1] :=   0;
+  EX[2] :=   0; EY[2] := m-1;
+  EX[3] := n-1; EY[3] := m-1;
+
+  // max y min de X e Y
+  xmi := 0; ymi := 0;
+  xma := 0; yma := 0;
+
+  for kk := 1 to 3 do begin
+    xpp :=  EX[kk]*ca + EY[kk]*sa;
+    ypp := -EX[kk]*sa + EY[kk]*ca;
+
+    xmi := MIN(xmi,xpp);
+    xma := MAX(xma,xpp);
+    ymi := MIN(ymi,ypp);
+    yma := MAX(yma,ypp);
   end;
- }
+
+  np := ceil(xma-xmi+1);
+  mp := ceil(yma-ymi+1);
+
+  //setLength(MB.dat,np,mp,3);
+  setLength(MB.dat,np,mp,3);
+
+  _x1 := 0  ; _y1 := 0  ;
+  _x2 := np ; _y2 := mp ;
+
+  for y := 0 to mp - 1 do
+    for x := 0 to np - 1 do
+      for can := 0 to 2 do
+        MB.dat[x][y][can] := tfondo;
+
+      case modo of
+       // Vecinos
+        0: begin
+            // Rotacion
+            // Desplazamientos debido a la rotacion de las esquinas
+            dx := floor(xmi);
+            dy := floor(ymi);
+
+            // Rotacion propiamente dicha
+            for y := 0 to mp - 1 do begin
+              yy := y+dy;
+              ysa := yy*sa;
+              yca := yy*ca;
+
+              for x := 0 to np - 1 do begin
+                xx := x+dx;
+                xpp := xx*ca - ysa;
+                ypp := xx*sa + yca;
+
+                xp := ceil(xpp);
+                yp := ceil(ypp);
+
+                if (xp>=0) and (yp>=0) and (xp<n) and (yp<m) then
+                for can := 0 to 2 do begin
+                  tt := MA.dat[xp][yp][can];
+                  // ---
+                  MB.dat[x][y][can] := tt;
+                  // ---
+                end;
+              end;
+            end;
+        end;
+        1: begin
+            // IBL
+            // Desplazamientos debido a la rotacion de las esquinas
+            dx := floor(xmi);
+            dy := floor(ymi);
+
+            // Rotacion propiamente dicha
+            for y := 0 to mp - 2 do begin
+              yy := y+dy;
+              ysa := yy*sa;
+              yca := yy*ca;
+
+              for x := 0 to np - 2 do begin
+                xx := x+dx;
+                xpp := xx*ca - ysa;
+                ypp := xx*sa + yca;
+
+                xp := floor(xpp);
+                xpm1 := xp + 1;
+                xf := xpp-xp;
+                ax := 1-xf;
+
+                yp := floor(ypp);
+                ypm1 := yp + 1;
+                yf := ypp-yp;
+                ay := 1-yf;
+
+                f1 := ax * ay;
+                f2 := xf * ay;
+                f3 := ax * yf;
+                f4 := xf * yf;
+
+                if (xp>=0) and (yp>=0) and (xp<n-1) and (yp<m-1) then
+                  for can := 0 to 2 do begin
+                    t1 := MA.dat[xp][yp][can];
+                    t2 := MA.dat[xpm1][yp][can];
+                    t3 := MA.dat[xp][ypm1][can];
+                    t4 := MA.dat[xpm1][ypm1][can];
+                    // ---
+                    tt :=      f1*t1 + f2*t2;
+                    tt := tt + f3*t3 + f4*t4;
+                    MB.dat[x][y][can] := tt;
+                    // ---
+                  end;
+              end;
+            end;
+        end;     // Fin de 1
+      end; // Fin del case
+
+      // Izquierda
+      x := 0;
+      flag := true;
+
+      while flag  and (x < np) do begin
+        y := 0;
+        while flag and (y < mp) do begin
+          can := 0;
+          flagC := true;
+          while flagC and (can < 3) do begin
+            if ceil(MB.dat[x][y][can]) <> tfondo then
+              flagC := false;
+            inc(can);
+          end;
+          if not flagC then
+            flag := false;
+          inc(y);
+        end;
+        inc(x);
+      end;
+
+      dec(x);
+      dec(y);
+
+      cotas[0, 0] := x;
+      cotas[0, 1] := y;
+
+      // Derecha
+      x := np - 1;
+      flag := true;
+
+      while flag  and (x >= 0) do begin
+        y := 0;
+        while flag and (y < mp) do begin
+          can := 0;
+          flagC := true;
+          while flagC and (can < 3) do begin
+            if ceil(MB.dat[x][y][can]) <> tfondo then
+              flagC := false;
+            inc(can);
+          end;
+          if not flagC then
+            flag := false;
+          inc(y);
+        end;
+        dec(x);
+      end;
+
+      x := x + 2;
+      dec(y);
+
+      cotas[1, 0] := x;
+      cotas[1, 1] := y;
+
+      // Superior
+      y := 0;
+      flag := true;
+
+      while flag  and (y < mp) do begin
+        x := 0;
+        while flag and (x < np) do begin
+          can := 0;
+          flagC := true;
+          while flagC and (can < 3) do begin
+            if ceil(MB.dat[x][y][can]) <> tfondo then
+              flagC := false;
+            inc(can);
+          end;
+          if not flagC then
+            flag := false;
+          inc(x);
+        end;
+        inc(y);
+      end;
+
+      dec(x);
+      dec(y);
+
+      cotas[2, 0] := x;
+      cotas[2, 1] := y;
+
+      // Inferior
+      y := mp - 1;
+      flag := true;
+
+      while flag  and (y >= 0) do begin
+        x := 0;
+        while flag and (x < np) do begin
+          can := 0;
+          flagC := true;
+          while flagC and (can < 3) do begin
+            if ceil(MB.dat[x][y][can]) <> tfondo then
+              flagC := false;
+            inc(can);
+          end;
+          if not flagC then
+            flag := false;
+          inc(x);
+        end;
+        dec(y);
+      end;
+
+      dec(x);
+      y := y + 2;
+
+      cotas[3, 0] := x;
+      cotas[3, 1] := y;
+
+      // Cortamos
+      _x1 := cotas[0,0];
+      _x2 := cotas[1,0];
+      _y1 := cotas[2,1];
+      _y2 := cotas[3,1];
+
+      nnx := _x2 - _x1;
+      nny := _y2 - _y1;
+
+      setLength(MC.dat, nnx, nny, 3);
+
+      for x := 0 to nnx - 1 do
+        for y := 0 to nny - 1 do begin
+          for can := 0 to 2 do begin
+            MC.dat[x][y][can] := MB.dat[x+_x1][y+_y1][can];
+          end;
+        end;
+
+
+    setLength(MC.dat,0,0,0);
+
+  _x2 := MB.nc;
+  _y2 := MB.nr;
 end;
 
+//--------------------------ROTACION VMC---------------------------------
+procedure fg_rotaVMC(MA : MatImg; var MB : MatImg; ang: single; tfondo: integer; modo:byte);
+var
+  nnx,nny,
+  x,y,can,
+  n,m,kk,
+  xp,yp,
+  np,mp,
+  dx,dy,
+  xpm1,ypm1,
+  xx,yy    : integer;
+
+  tt,
+  ar,ca,sa,
+  ysa,yca,
+
+  xmi,ymi,
+  xma,yma,
+  xpp,ypp,
+  xf,yf,
+  ax, ay,
+  t1,t2,t3,t4,
+  f1,f2,f3,f4   : single;
+  flag,flagC : boolean;
+  cotas: array [0..3] of array [0..1] of integer;
+
+  EX,EY     : array [0..3] of single;
+  MC : MatImg;
+
+begin
+
+  ar := DegToRad(ang);
+  sa := sin(ar);
+  ca := cos(ar);
+
+  n := MA.nc;
+  m := MA.nr;
+
+  // hallar tamaño del lienzo nuevo
+  EX[0] :=   0; EY[0] :=   0;
+  EX[1] := n-1; EY[1] :=   0;
+  EX[2] :=   0; EY[2] := m-1;
+  EX[3] := n-1; EY[3] := m-1;
+
+  // max y min de X e Y
+  xmi := 0; ymi := 0;
+  xma := 0; yma := 0;
+
+  for kk := 1 to 3 do begin
+    xpp :=  EX[kk]*ca + EY[kk]*sa;
+    ypp := -EX[kk]*sa + EY[kk]*ca;
+
+    xmi := MIN(xmi,xpp);
+    xma := MAX(xma,xpp);
+    ymi := MIN(ymi,ypp);
+    yma := MAX(yma,ypp);
+  end;
+
+  np := ceil(xma-xmi+1);
+  mp := ceil(yma-ymi+1);
+
+  setLength(MB.dat,np,mp,3);
+
+  _x1 := 0  ; _y1 := 0  ;
+  _x2 := np ; _y2 := mp ;
+
+  for y := 0 to mp - 1 do
+    for x := 0 to np - 1 do
+      for can := 0 to 2 do
+        MB.dat[x][y][can] := tfondo;
+
+      case modo of
+        // Vecinos
+        0: begin
+            // Rotacion
+            // Desplazamientos debido a la rotacion de las esquinas
+            dx := floor(xmi);
+            dy := floor(ymi);
+
+            // Rotacion propiamente dicha
+            for y := 0 to mp - 1 do begin
+              yy := y+dy;
+              ysa := yy*sa;
+              yca := yy*ca;
+
+              for x := 0 to np - 1 do begin
+                xx := x+dx;
+                xpp := xx*ca - ysa;
+                ypp := xx*sa + yca;
+
+                xp := ceil(xpp);
+                yp := ceil(ypp);
+
+                if (xp>=0) and (yp>=0) and (xp<n) and (yp<m) then
+                for can := 0 to 2 do begin
+                  tt := MA.dat[xp][yp][can];
+                  // ---
+                  MB.dat[x][y][can] := tt;
+                  // ---
+                end;
+              end;
+            end;
+        end;
+        1: begin
+            // IBL
+            // Desplazamientos debido a la rotacion de las esquinas
+            dx := floor(xmi);
+            dy := floor(ymi);
+
+            // Rotacion propiamente dicha
+            for y := 0 to mp - 2 do begin
+              yy := y+dy;
+              ysa := yy*sa;
+              yca := yy*ca;
+
+              for x := 0 to np - 2 do begin
+                xx := x+dx;
+                xpp := xx*ca - ysa;
+                ypp := xx*sa + yca;
+
+                xp := floor(xpp);
+                xpm1 := xp + 1;
+                xf := xpp-xp;
+                ax := 1-xf;
+
+                yp := floor(ypp);
+                ypm1 := yp + 1;
+                yf := ypp-yp;
+                ay := 1-yf;
+
+                f1 := ax * ay;
+                f2 := xf * ay;
+                f3 := ax * yf;
+                f4 := xf * yf;
+
+                if (xp>=0) and (yp>=0) and (xp<n-1) and (yp<m-1) then
+                  for can := 0 to 2 do begin
+                    t1 := MA.dat[xp][yp][can];
+                    t2 := MA.dat[xpm1][yp][can];
+                    t3 := MA.dat[xp][ypm1][can];
+                    t4 := MA.dat[xpm1][ypm1][can];
+                    // ---
+                    tt :=      f1*t1 + f2*t2;
+                    tt := tt + f3*t3 + f4*t4;
+                    MB.dat[x][y][can] := tt;
+                    // ---
+                  end;
+              end;
+            end;
+        end;     // Fin de 1
+      end; // Fin del case
+
+      // Izquierda
+      x := 0;
+      flag := true;
+
+      while flag  and (x < np) do begin
+        y := 0;
+        while flag and (y < mp) do begin
+          can := 0;
+          flagC := true;
+          while flagC and (can < 3) do begin
+            if ceil(MB.dat[x][y][can]) <> tfondo then
+              flagC := false;
+            inc(can);
+          end;
+          if not flagC then
+            flag := false;
+          inc(y);
+        end;
+        inc(x);
+      end;
+
+      dec(x);
+      dec(y);
+
+      cotas[0, 0] := x;
+      cotas[0, 1] := y;
+
+      // Derecha
+      x := np - 1;
+      flag := true;
+
+      while flag  and (x >= 0) do begin
+        y := 0;
+        while flag and (y < mp) do begin
+          can := 0;
+          flagC := true;
+          while flagC and (can < 3) do begin
+            if ceil(MB.dat[x][y][can]) <> tfondo then
+              flagC := false;
+            inc(can);
+          end;
+          if not flagC then
+            flag := false;
+          inc(y);
+        end;
+        dec(x);
+      end;
+
+      x := x + 2;
+      dec(y);
+
+      cotas[1, 0] := x;
+      cotas[1, 1] := y;
+
+      // Superior
+      y := 0;
+      flag := true;
+
+      while flag  and (y < mp) do begin
+        x := 0;
+        while flag and (x < np) do begin
+          can := 0;
+          flagC := true;
+          while flagC and (can < 3) do begin
+            if ceil(MB.dat[x][y][can]) <> tfondo then
+              flagC := false;
+            inc(can);
+          end;
+          if not flagC then
+            flag := false;
+          inc(x);
+        end;
+        inc(y);
+      end;
+
+      dec(x);
+      dec(y);
+
+      cotas[2, 0] := x;
+      cotas[2, 1] := y;
+
+      // Inferior
+      y := mp - 1;
+      flag := true;
+
+      while flag  and (y >= 0) do begin
+        x := 0;
+        while flag and (x < np) do begin
+          can := 0;
+          flagC := true;
+          while flagC and (can < 3) do begin
+            if ceil(MB.dat[x][y][can]) <> tfondo then
+              flagC := false;
+            inc(can);
+          end;
+          if not flagC then
+            flag := false;
+          inc(x);
+        end;
+        dec(y);
+      end;
+
+      dec(x);
+      y := y + 2;
+
+      cotas[3, 0] := x;
+      cotas[3, 1] := y;
+
+      // Cortamos
+      _x1 := cotas[0,0];
+      _x2 := cotas[1,0];
+      _y1 := cotas[2,1];
+      _y2 := cotas[3,1];
+
+      nnx := _x2 - _x1;
+      nny := _y2 - _y1;
+
+      setLength(MC.dat, nnx, nny, 3);
+
+      for x := 0 to nnx - 1 do
+        for y := 0 to nny - 1 do begin
+          for can := 0 to 2 do begin
+            MC.dat[x][y][can] := MB.dat[x+_x1][y+_y1][can];
+          end;
+        end;
+
+
+      setLength(MC.dat,0,0,0);
+
+  _x2 := MB.nc;
+  _y2 := MB.nr;
+end;
 
 
 
@@ -130,6 +675,8 @@ begin
       end;
     end;
   end;
+  _x2 := MB.nc;
+  _y2 := MB.nr;
 end;
 
 //Flip en X
@@ -141,10 +688,12 @@ begin
   NCY:=Ma.nr-1;
   for c := 0 to 2 do
     for y:= 0 to NCY do
-      for x := 0 to NCX do
-        MB.dat[x][y][c]:=MA.dat[NCX-x][y][c]
+      for x := 0 to NCX do  begin
+        MB.dat[x][y][c]:=MA.dat[NCX-x][y][c];
+      end;
 
-
+   _x2 := MB.nc;
+  _y2 := MB.nr;
 end;
 
 //Flip en Y
@@ -156,10 +705,12 @@ begin
   NCY:=Ma.nr-1;
   for c := 0 to 2 do
     for y:= 0 to NCY do
-      for x := 0 to NCX do
-        MB.dat[x][y][c]:=MA.dat[x][NCY-y][c]
+      for x := 0 to NCX do begin
+        MB.dat[x][y][c]:=MA.dat[x][NCY-y][c];
+      end;
 
-
+  _x2 := MB.nc;
+  _y2 := MB.nr;
 end;
 
 //Zoom del Flojo
@@ -290,6 +841,7 @@ for x := 0 to NCX-1 do begin
 			MB.dat[x2][y2m1][c]:=(ro+ra)/2;
 			MB.dat[x2+1][y2m1][c]:=(ro+re)/2;
 end;
+
 end;
 
 //Orilla inferior-Ultimo Renglon
@@ -358,10 +910,10 @@ end;
 
 //Zooom IBL
 procedure fg_zoomIBL(MA:MatImg; var MB:MatImg; nx,ny  :integer);
-  //----------------------------------
 var
 x,y,c,NCX,NCY,
 xtm1,ytm1,xt,yt:  Integer;
+
 vac,
 dx,dy,
 cx,cy,
@@ -411,10 +963,10 @@ begin
           end;
        end;
       end;
-      _x2:=MB.nc;
-      _y2:=MB.nr;
-end;
 
+    _x2 :=MB.nc;
+    _y2 :=MB.nr;
+end;
 //Zoom Vecinos Mas Cercanos
 procedure fg_zoomVC(MA:MatImg; var MB:MatImg; nx,ny: integer);
   var

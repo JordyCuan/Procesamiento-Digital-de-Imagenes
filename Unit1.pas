@@ -158,6 +158,8 @@ type
     Reduccion05xP1: TMenuItem;
     N9: TMenuItem;
     N10: TMenuItem;
+    LogaritmoParametro1: TMenuItem;
+
 
 
 
@@ -248,6 +250,8 @@ type
     procedure ExpanciondelHistograma1Click(Sender: TObject);
     procedure Reduccion05XF1Click(Sender: TObject);
     procedure Reduccion05xP1Click(Sender: TObject);
+    procedure RotacionVMC1Click(Sender: TObject);
+    procedure LogaritmoParametro1Click(Sender: TObject);
 
 
 
@@ -1194,6 +1198,17 @@ begin
   end;
 end;
 
+procedure TAppPDI.LogaritmoParametro1Click(Sender: TObject);
+begin
+  if CanalPrendido then begin
+    valor:=StrToFloat(Edit1.Text);
+    Prepara();
+    fp_logaritmoPar(Im1,Im2,valor);
+    Presenta();
+  end;
+
+end;
+
 procedure TAppPDI.Luminancia1Click(Sender: TObject);
 begin
   Prepara();
@@ -1417,53 +1432,118 @@ end;
 // *****************************************************
 procedure TAppPDI.RotacionIBL1Click(Sender: TObject);
 var
-  ang : single;
+  ang,rad : single;
+  fondo: single;
 begin
   FormRot.ShowModal;
 
   if FormRot.ModalResult = mrOK then begin
+    if FormRot.RadioGroup1.ItemIndex = 0 then
     ang := FormRot.angRot;
-
     Prepara();
-    fg_rotaIBL(im1, im2, ang);
+    fg_rotaIBL(Im1, Im2, ang,128,1); // 1 IBL
     Presenta();
   end;
+  if FormRot.RadioGroup1.ItemIndex =1 then begin
+   ang := FormRot.angRot2;
+   rad:= ang*(180/pi);
+    Prepara();
+    fg_rotaIBL(Im1, Im2, rad,128,1);
+    Presenta();
+  end;
+
+end;
+
+procedure TAppPDI.RotacionVMC1Click(Sender: TObject);
+var
+  ang,rad : single;
+  fondo: single;
+begin
+  FormRot.ShowModal;
+
+  if FormRot.ModalResult = mrOK then begin
+    if FormRot.RadioGroup1.ItemIndex = 0 then
+    ang := FormRot.angRot;
+    Prepara();
+    fg_rotaIBL(Im1, Im2, ang,128,0); //0 VMC
+    Presenta();
+  end;
+  if FormRot.RadioGroup1.ItemIndex =1 then begin
+   ang := FormRot.angRot2;
+   rad:= ang*(180/pi);
+    Prepara();
+    fg_rotaIBL(Im1, Im2, rad,128,0);
+    Presenta();
+  end;
+
 end;
 
 procedure TAppPDI.ZoomVMC1Click(Sender: TObject);
 var
-  nx,ny: integer;
+  nx,ny,track: integer;
 begin
   Form2.Edit1.Text:=IntToStr(Im1.nc);
   Form2.Edit2.Text:=IntToStr(Im1.nr);
   Form2.Label5.Caption:=Format('%d x %d',[Im1.nc,Im1.nr]);
+  update;
   Form2.ShowModal;
+  //Zoom por Tamaño
   if(Form2.ModalResult=mrOk)then begin
-    nx := StrToInt(Form2.Edit1.Text);
-    ny := StrToInt(Form2.Edit2.Text);
+    if Form2.RadioGroup1.ItemIndex= 0 then begin
+      nx := StrToInt(Form2.Edit1.Text);
+      ny := StrToInt(Form2.Edit2.Text);
+      Prepara();
+      fg_zoomVC(Im1,Im2,nx,ny);
+      Presenta();
+    end;
+  end;
+  //Zoom pro Promedio
+  if(Form2.ModalResult=mrOK) then begin
+    if Form2.RadioGroup1.ItemIndex= 1 then begin
+        track:= Form2.TrackBar1.Position;
+          nx:=round(((Im1.nc)*track)/100);
+          ny:=round(((Im1.nr)*track)/100);
+        Prepara();
+        fg_zoomVC(Im1,Im2,nx,ny);
+        Presenta();
 
-    Prepara();
-    fg_zoomVC(Im1,Im2,nx,ny);
-    Presenta();
+    end;
   end;
 end;
 
 procedure TAppPDI.ZoomIBL1Click(Sender: TObject);
 var
-  nx,ny : integer;
+  nx,ny,track : integer;
 begin
   Form2.Edit1.Text:=IntToStr(Im1.nc);
   Form2.Edit2.Text:=IntToStr(Im1.nr);
   Form2.Label5.Caption:=Format('%d x %d',[Im1.nc,Im1.nr]);
   Form2.ShowModal;
+  //Zoom por Tamaño
     if(Form2.ModalResult=mrOk) then begin
-       nx:=StrToInt(Form2.Edit1.Text);
-       ny:=StrToInt(Form2.Edit2.Text);
-      //Los parametros que se le pasan, son lo que se recibiran de la Interfaz
+      if Form2.RadioGroup1.ItemIndex= 0 then begin
+        //Los parametros que se le pasan, son lo que se recibiran de la Interfaz
+        nx := StrToInt(Form2.Edit1.Text);
+        ny := StrToInt(Form2.Edit2.Text);
         Prepara();
         fg_zoomIBL(Im1,Im2,nx,ny);
         Presenta();
-end;
+      end;
+  end;
+
+  //Zoom por Promedio
+  //Zoom pro Promedio
+  if(Form2.ModalResult=mrOK) then begin
+    if Form2.RadioGroup1.ItemIndex= 1 then begin
+        track:= Form2.TrackBar1.Position;
+          nx:=round(((Im1.nc)*track)/100);
+          ny:=round(((Im1.nr)*track)/100);
+        Prepara();
+        fg_zoomIBL(Im1,Im2,nx,ny);
+        Presenta();
+    end;
+  end;
+
 end;
 
 //Reflexion en X

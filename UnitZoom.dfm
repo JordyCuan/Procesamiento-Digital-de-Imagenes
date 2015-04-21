@@ -29,13 +29,6 @@ object Form2: TForm2
     Height = 13
     Caption = 'Alto'
   end
-  object Label3: TLabel
-    Left = 47
-    Top = 36
-    Width = 30
-    Height = 13
-    Caption = 'Modo:'
-  end
   object Label4: TLabel
     Left = 48
     Top = 80
@@ -63,9 +56,48 @@ object Form2: TForm2
     Height = 13
     Caption = '(16....3000)'
   end
+  object Label3: TLabel
+    Left = 35
+    Top = 232
+    Width = 59
+    Height = 18
+    Caption = 'Porciento'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label8: TLabel
+    Left = 32
+    Top = 304
+    Width = 23
+    Height = 16
+    Caption = '0 %'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label9: TLabel
+    Left = 276
+    Top = 307
+    Width = 37
+    Height = 16
+    Caption = '200 %'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
   object BitBtn3: TBitBtn
-    Left = 48
-    Top = 352
+    Left = 32
+    Top = 376
     Width = 83
     Height = 25
     Caption = '&OK'
@@ -76,8 +108,8 @@ object Form2: TForm2
     OnClick = BitBtn3Click
   end
   object BitBtn1: TBitBtn
-    Left = 216
-    Top = 352
+    Left = 224
+    Top = 376
     Width = 75
     Height = 25
     Caption = '&Cancelar'
@@ -87,7 +119,7 @@ object Form2: TForm2
   end
   object BitBtn2: TBitBtn
     Left = 136
-    Top = 299
+    Top = 331
     Width = 75
     Height = 25
     Caption = '&Valida'
@@ -110,22 +142,28 @@ object Form2: TForm2
     Height = 21
     TabOrder = 4
   end
-  object RadioButton1: TRadioButton
-    Left = 112
-    Top = 32
-    Width = 89
-    Height = 17
-    Caption = 'Tama'#241'o'
-    Checked = True
+  object RadioGroup1: TRadioGroup
+    Left = 16
+    Top = 16
+    Width = 329
+    Height = 41
+    Caption = 'Zoom En:'
+    Columns = 2
+    Items.Strings = (
+      'Tama'#241'o'
+      'Porciento')
     TabOrder = 5
-    TabStop = True
+    OnClick = RadioGroup1Click
   end
-  object RadioButton2: TRadioButton
-    Left = 216
-    Top = 32
-    Width = 89
-    Height = 17
-    Caption = 'Porciento'
+  object TrackBar1: TTrackBar
+    Left = 35
+    Top = 256
+    Width = 264
+    Height = 45
+    Max = 200
+    Frequency = 10
+    Position = 50
     TabOrder = 6
+    OnChange = TrackBar1Change
   end
 end

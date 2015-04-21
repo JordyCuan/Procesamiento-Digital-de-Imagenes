@@ -569,6 +569,7 @@ object AppPDI: TAppPDI
       end
       object RotacionVMC1: TMenuItem
         Caption = 'Rotacion VMC'
+        OnClick = RotacionVMC1Click
       end
       object RotacionIBL1: TMenuItem
         Caption = 'Rotacion IBL'
