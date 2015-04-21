@@ -860,11 +860,6 @@ begin
       BMSel.TransparentColor := clWhite;
       BMSel.Canvas.Pen.Color := clWhite;
       BMSel.Canvas.Rectangle(0,0,BMSel.Width, BMSel.Height);
-      //BMSel.Canvas.Pen.Color := clBlack;
-      //PlumaSel := clBlack;
-
-      // Al ImageSel lo hacemos autoSize , en diseño
-      // y también Transparente
 
       // Le asignamos el BMSel
       Image2Selec.Picture.Assign(BMSel);
@@ -883,7 +878,7 @@ procedure TAppPDI.ReAbrirOriginal1Click(Sender: TObject);
 var
   pic : TPicture;
 begin
-  nomIma := OpenPictureDialog1.FileName;
+//  nomIma := OpenPictureDialog1.FileName;
 
   // Verifiquemos que ya se haya abierto algo
   if nomIma='' then
@@ -1713,8 +1708,8 @@ begin
 
   // Revisar bien apertura desde webCam
   // BUGS EN LA SELECCIÓN DE IMAGENES DESDE WEBCAM
-  Mat2Mat(FDirectX.MD, Im2);
-  Mat2BMP(Im2, BM1);
+  Mat2Mat(FDirectX.MD, Im1);
+  Mat2BMP(Im1, BM1);
 
   // Guardamos imagen en una carpeta temporal
   name := 'Image.bmp';
@@ -1722,8 +1717,8 @@ begin
   //nomIma := path + '\temp\' + name;
   //globalName := nomIma;
 
-  gfx_files.SaveBMPToAnyFile(BM1, nomIma, 0, 0);
-  StatusBar3.Panels[1].Text := 'temp\' + nomIma;
+  gfx_files.SaveBMPToAnyFile(BM1, name, 0, 0);
+  StatusBar3.Panels[1].Text := 'temp\' + name;
 
   _x1 := 0;
   _y1 := 0;
@@ -1734,6 +1729,8 @@ begin
   Im2.nr := 0;
   SetLength(Im2.dat, 0, 0, 0);
 
+  Mat2Mat(Im1, Im2);
+
   Image1.Picture.Assign(BM1);
 
   //Cambio de tamaño
@@ -1742,14 +1739,35 @@ begin
 
 
   BMSel.Canvas.Pen.Color := clWhite;
-  BMSel.Canvas.Rectangle(0,0,BMSel.Width, BMSel.Height);
+  BMSel.Canvas.Rectangle(0,0,BM1.Width, BM1.Height);
   Image2Selec.Picture.Assign(BMSel);
 
   //Borra el último rectángulo
   BMSel.Canvas.Rectangle(_x1, _y1, _x2, _y2);
 
   Mat2BMP(Im2,BM1);
-  Image1.Picture.Assign(BM1);
+  Image2Selec.Picture.Assign(BMSel);
+
+
+  Image2Selec.Width := _x2;
+  Image2Selec.Height := _y2;
+
+  // dimensionamos el BItMap de Seleccion
+  BMSel.Width  := Image1.Width;
+  BMSel.Height := Image1.Height;
+
+  BMSel.Transparent := true;
+  BMSel.TransparentColor := clWhite;
+  BMSel.Canvas.Pen.Color := clWhite;
+  BMSel.Canvas.Rectangle(0,0,BMSel.Width, BMSel.Height);
+  //BMSel.Canvas.Pen.Color := clBlack;
+  //PlumaSel := clBlack;
+
+  // Al ImageSel lo hacemos autoSize , en diseño
+  // y también Transparente
+
+  // Le asignamos el BMSel
+  Image2Selec.Picture.Assign(BMSel);
 end;
 
 

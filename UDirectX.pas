@@ -197,12 +197,10 @@ end;
 // Se seleccionó una imagen
 procedure TFDirectX.BitBtn1Click(Sender: TObject);
 begin
+  BMP2Mat(Image1.Picture.Bitmap, MD);
 
   // Dejamos de gastar recursos. JJCR
   FVideoImage.VideoStop;
-
-
-  BMP2Mat(Image1.Picture.Bitmap, MD);
 end;
 
 end.
