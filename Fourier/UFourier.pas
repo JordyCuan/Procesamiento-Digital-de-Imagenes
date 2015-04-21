@@ -183,7 +183,7 @@ type
                     var B   : TBitMap    ;
                     Nx,Ny   : integer   ); overload;
 
-    procedure ConvGris (var B :TBitMap);
+//    procedure ConvGris (var B :TBitMap);
 
     procedure TDFInversa(filtro : TFil);
 
@@ -253,7 +253,7 @@ begin
     SB1.Panels[3].text := IntToStr(Mx)+'x'+IntToStr(My);
 
     // Convierte y muestra Imagen en tonos de gris
-    ConvGris(BM);
+    //ConvGris(BM);
 
     // pasa el BitMap a su forma matricial
     SetLength(Mat0,Mx,My);
@@ -320,7 +320,7 @@ end;
 // Convierte matriz en Bitmap
 procedure TFFourier.Conv (mat : Bmatrix2D ; var B :TBitMap; Nx,Ny : integer);
 var
-  i,j,k,q : integer;
+  i,j,k,q,c : integer;
 //  p       : PByteArray;
   pix     : byte;
   ton     : integer;
@@ -345,7 +345,7 @@ begin
 end;
 
 // Convierte a Grises
-procedure TFFourier.ConvGris(var B :TBitMap);
+{procedure TFFourier.ConvGris(var B :TBitMap);
 var
   i,j,k,s : integer;
   p       : PByteArray;
@@ -616,7 +616,7 @@ begin
         SB1.Panels[3].text := IntToStr(Mx)+'x'+IntToStr(My);
 
         // Convierte y muestra Imagen en tonos de gris
-        ConvGris(BM);
+        //ConvGris(BM);
 
         // pasa el BitMap a su forma matricial
         SetLength(Mat0,Mx,My);

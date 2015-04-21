@@ -634,8 +634,8 @@ begin
 
     BMSel.Canvas.Pen.Color := ColorBox1.Selected;
 
-    _xc := abs(_x2 - _x1) div 2;
-    _yc := abs(_y2 - _y1) div 2;
+    _xc := _x1 + abs(_x2 - _x1) div 2;
+    _yc := _y1 + abs(_y2 - _y1) div 2;
 
     _Rx := abs(_x2 - _xc);
     _Ry := abs(_y2 - _yc);
@@ -1777,12 +1777,13 @@ procedure TAppPDI.Fourier1Click(Sender: TObject);
 begin
   if (Im2.nc + Im2.nr) > 0 then
     Mat2Mat(Im2, FFourier.MT)
-    else if (Im1.nc + Im1.nr) > 0 then
-         Mat2Mat(Im1, FFourier.MT)
-         else begin
-           ShowMessage('No hay imagen cargada...');
-           Exit;
-         end;
+  else if (Im1.nc + Im1.nr) > 0 then
+    Mat2Mat(Im1, FFourier.MT)
+  else begin
+    ShowMessage('No hay imagen cargada...');
+    Exit;
+  end;
+
   FFourier.ShowMOdal;
 
   if FFourier.ModalResult <> mrOK then

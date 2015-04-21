@@ -80,16 +80,42 @@ var
   end;
 
 begin
-  for c := 0 to 2 do
-    if _kan[c] then
-      for y := _y1 to _y2-1 do
-        for x := _x1 to _x2-1 do
-          MB.dat[x][y][c] := gamma(MA.dat[x][y][c],vv)
-		else
-			for y := 0 to MA.nr-1 do
-				for x := 0 to MA.nc-1 do
-					MB.dat[x][y][c] := MA.dat[x][y][c];
+  if _banCir then begin
+    for c := 0 to 2 do
+      if _kan[c] then begin
+        xx1 := _xc - _Rx;
+        xx2 := _xc + _Rx;
+        yy1 := _yc - _Ry;
+        yy2 := _yc + _Ry;
 
+        for y := _y1 to _y2-1 do begin
+          yy := sqr((y - _yc) / _Ry);
+          for x := _x1 to _x2-1 do begin
+            xx := sqr((x - _xc) / _Rx);
+            RR := xx + yy;
+            if RR <= 1 then
+              MB.dat[x][y][c] := gamma(MA.dat[x][y][c],vv)
+          end;
+        end;
+      end
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end
+
+  // Selección rectangular o normal
+  else begin
+    for c := 0 to 2 do
+      if _kan[c] then
+        for y := _y1 to _y2-1 do
+          for x := _x1 to _x2-1 do
+            MB.dat[x][y][c] := gamma(MA.dat[x][y][c],vv)
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end;
 end;
 
 // Filtro logaritmico - tipo vision nocturna
@@ -106,16 +132,42 @@ var
 begin
   ff := 255/log10(256);
 
-  for c := 0 to 2 do
-    if _kan[c] then
-      for y := _y1 to _y2-1 do
-        for x := _x1 to _x2-1 do
-          MB.dat[x][y][c] := loga(MA.dat[x][y][c])
-    else
-			for y := 0 to MA.nr-1 do
-				for x := 0 to MA.nc-1 do
-					MB.dat[x][y][c] := MA.dat[x][y][c];
+  if _banCir then begin
+    for c := 0 to 2 do
+      if _kan[c] then begin
+        xx1 := _xc - _Rx;
+        xx2 := _xc + _Rx;
+        yy1 := _yc - _Ry;
+        yy2 := _yc + _Ry;
 
+        for y := _y1 to _y2-1 do begin
+          yy := sqr((y - _yc) / _Ry);
+          for x := _x1 to _x2-1 do begin
+            xx := sqr((x - _xc) / _Rx);
+            RR := xx + yy;
+            if RR <= 1 then
+              MB.dat[x][y][c] := loga(MA.dat[x][y][c])
+          end;
+        end;
+      end
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end
+
+  // Selección rectangular o normal
+  else begin
+    for c := 0 to 2 do
+      if _kan[c] then
+        for y := _y1 to _y2-1 do
+          for x := _x1 to _x2-1 do
+            MB.dat[x][y][c] := loga(MA.dat[x][y][c])
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end;
 end;
 
 //Aplicacion de Fitro de Seno para Aclarado
@@ -130,18 +182,45 @@ var
     result:=ff*sin((3.1416*z)/(2*ff));
   end;
 
-  begin
+begin
   ff:=3.1416/2*255;
 
-  for c := 0 to 2 do
-    if _kan[c] then
-      for y := _y1 to _y2-1 do
-        for x := _x1 to _x2-1 do
-          MB.dat[x][y][c] := sen(MA.dat[x][y][c])
-    else
-			for y := 0 to MA.nr-1 do
-				for x := 0 to MA.nc-1 do
-					MB.dat[x][y][c] := MA.dat[x][y][c];
+  if _banCir then begin
+    for c := 0 to 2 do
+      if _kan[c] then begin
+        xx1 := _xc - _Rx;
+        xx2 := _xc + _Rx;
+        yy1 := _yc - _Ry;
+        yy2 := _yc + _Ry;
+
+        for y := _y1 to _y2-1 do begin
+          yy := sqr((y - _yc) / _Ry);
+          for x := _x1 to _x2-1 do begin
+            xx := sqr((x - _xc) / _Rx);
+            RR := xx + yy;
+            if RR <= 1 then
+              MB.dat[x][y][c] := sen(MA.dat[x][y][c])
+          end;
+        end;
+      end
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end
+
+  // Selección rectangular o normal
+  else begin
+    for c := 0 to 2 do
+      if _kan[c] then
+        for y := _y1 to _y2-1 do
+          for x := _x1 to _x2-1 do
+            MB.dat[x][y][c] := sen(MA.dat[x][y][c])
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end;
 end;
 
 //Aplicacion de Filtro de Coseno para Obscuresimiento
@@ -157,15 +236,42 @@ end;
 
 begin
 
-  for c := 0 to 2 do
-    if _kan[c] then
-      for y := _y1 to _y2-1 do
-        for x := _x1 to _x2-1 do
-          MB.dat[x][y][c]:= coseno(MA.dat[x][y][c])
-    else
-			for y := 0 to MA.nr-1 do
-				for x := 0 to MA.nc-1 do
-					MB.dat[x][y][c] := MA.dat[x][y][c];
+  if _banCir then begin
+    for c := 0 to 2 do
+      if _kan[c] then begin
+        xx1 := _xc - _Rx;
+        xx2 := _xc + _Rx;
+        yy1 := _yc - _Ry;
+        yy2 := _yc + _Ry;
+
+        for y := _y1 to _y2-1 do begin
+          yy := sqr((y - _yc) / _Ry);
+          for x := _x1 to _x2-1 do begin
+            xx := sqr((x - _xc) / _Rx);
+            RR := xx + yy;
+            if RR <= 1 then
+              MB.dat[x][y][c] := coseno(MA.dat[x][y][c])
+          end;
+        end;
+      end
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end
+
+  // Selección rectangular o normal
+  else begin
+    for c := 0 to 2 do
+      if _kan[c] then
+        for y := _y1 to _y2-1 do
+          for x := _x1 to _x2-1 do
+            MB.dat[x][y][c] := coseno(MA.dat[x][y][c])
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end;
 end;
 
 //Aplicacion de Filtro de Oscurecimiento Fuerte
@@ -181,15 +287,43 @@ var
 
 begin
   ff:=255/(exp(vv)-1);
-  for c := 0 to 2 do
-    if _kan[c] then
-      for y := _y1 to _y2-1 do
-        for x := _x1 to _x2-1 do
-          MB.dat[x][y][c]:= osc(MA.dat[x][y][c],vv)
-    else
-			for y := 0 to MA.nr-1 do
-				for x := 0 to MA.nc-1 do
-					MB.dat[x][y][c] := MA.dat[x][y][c];
+
+  if _banCir then begin
+    for c := 0 to 2 do
+      if _kan[c] then begin
+        xx1 := _xc - _Rx;
+        xx2 := _xc + _Rx;
+        yy1 := _yc - _Ry;
+        yy2 := _yc + _Ry;
+
+        for y := _y1 to _y2-1 do begin
+          yy := sqr((y - _yc) / _Ry);
+          for x := _x1 to _x2-1 do begin
+            xx := sqr((x - _xc) / _Rx);
+            RR := xx + yy;
+            if RR <= 1 then
+              MB.dat[x][y][c] := osc(MA.dat[x][y][c],vv)
+          end;
+        end;
+      end
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end
+
+  // Selección rectangular o normal
+  else begin
+    for c := 0 to 2 do
+      if _kan[c] then
+        for y := _y1 to _y2-1 do
+          for x := _x1 to _x2-1 do
+            MB.dat[x][y][c] := osc(MA.dat[x][y][c],vv)
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end;
 end;
 
 //Aplicacion de Filtro Exponencial para Aclarado
@@ -202,15 +336,42 @@ var
     result:=z/(1-exp(-abs(ee)));
   end;
 begin
-  for c := 0 to 2 do
-    if _kan[c] then
-      for y := _y1 to _y2-1 do
-        for x := _x1 to _x2-1 do
-          MB.dat[x][y][c]:= expo(MA.dat[x][y][c],vv)
-    else
-			for y := 0 to MA.nr-1 do
-				for x := 0 to MA.nc-1 do
-					MB.dat[x][y][c] := MA.dat[x][y][c];
+  if _banCir then begin
+    for c := 0 to 2 do
+      if _kan[c] then begin
+        xx1 := _xc - _Rx;
+        xx2 := _xc + _Rx;
+        yy1 := _yc - _Ry;
+        yy2 := _yc + _Ry;
+
+        for y := _y1 to _y2-1 do begin
+          yy := sqr((y - _yc) / _Ry);
+          for x := _x1 to _x2-1 do begin
+            xx := sqr((x - _xc) / _Rx);
+            RR := xx + yy;
+            if RR <= 1 then
+              MB.dat[x][y][c] := expo(MA.dat[x][y][c],vv)
+          end;
+        end;
+      end
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end
+
+  // Selección rectangular o normal
+  else begin
+    for c := 0 to 2 do
+      if _kan[c] then
+        for y := _y1 to _y2-1 do
+          for x := _x1 to _x2-1 do
+            MB.dat[x][y][c] := expo(MA.dat[x][y][c],vv)
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end;
 end;
 
 //Aplicacion de Filtro Senodial para Contraste
@@ -225,16 +386,43 @@ var
 
 begin
   kk := 2*3.1416;
-  for c := 0 to 2 do
-    if _kan[c] then
-      for y := _y1 to _y2-1 do
-        for x := _x1 to _x2-1 do
-          MB.dat[x][y][c]:= senoidal(MA.dat[x][y][c],vv)
-    else
-			for y := 0 to MA.nr-1 do
-				for x := 0 to MA.nc-1 do
-					MB.dat[x][y][c] := MA.dat[x][y][c];
 
+  if _banCir then begin
+    for c := 0 to 2 do
+      if _kan[c] then begin
+        xx1 := _xc - _Rx;
+        xx2 := _xc + _Rx;
+        yy1 := _yc - _Ry;
+        yy2 := _yc + _Ry;
+
+        for y := _y1 to _y2-1 do begin
+          yy := sqr((y - _yc) / _Ry);
+          for x := _x1 to _x2-1 do begin
+            xx := sqr((x - _xc) / _Rx);
+            RR := xx + yy;
+            if RR <= 1 then
+              MB.dat[x][y][c] := senoidal(MA.dat[x][y][c],vv)
+          end;
+        end;
+      end
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end
+
+  // Selección rectangular o normal
+  else begin
+    for c := 0 to 2 do
+      if _kan[c] then
+        for y := _y1 to _y2-1 do
+          for x := _x1 to _x2-1 do
+            MB.dat[x][y][c] := senoidal(MA.dat[x][y][c],vv)
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end;
 end;
 
 //Aplicacion de Fitro arcotangente para claro-obscuro
@@ -247,22 +435,49 @@ var
   end;
 
 begin
-  for c := 0 to 2 do
-    if _kan[c] then
-      for y := _y1 to _y2-1 do
-        for x := _x1 to _x2-1 do
-          MB.dat[x][y][c]:= claOsc(MA.dat[x][y][c],vv)
-    else
-			for y := 0 to MA.nr-1 do
-				for x := 0 to MA.nc-1 do
-					MB.dat[x][y][c] := MA.dat[x][y][c];
+  if _banCir then begin
+    for c := 0 to 2 do
+      if _kan[c] then begin
+        xx1 := _xc - _Rx;
+        xx2 := _xc + _Rx;
+        yy1 := _yc - _Ry;
+        yy2 := _yc + _Ry;
+
+        for y := _y1 to _y2-1 do begin
+          yy := sqr((y - _yc) / _Ry);
+          for x := _x1 to _x2-1 do begin
+            xx := sqr((x - _xc) / _Rx);
+            RR := xx + yy;
+            if RR <= 1 then
+              MB.dat[x][y][c] := claOsc(MA.dat[x][y][c],vv)
+          end;
+        end;
+      end
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end
+
+  // Selección rectangular o normal
+  else begin
+    for c := 0 to 2 do
+      if _kan[c] then
+        for y := _y1 to _y2-1 do
+          for x := _x1 to _x2-1 do
+            MB.dat[x][y][c] := claOsc(MA.dat[x][y][c],vv)
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end;
 end;
 
 //Aplicacion de Binarizacion
 procedure fp_Binarizacion(MA: MatImg; var MB:MatImg);
 const
-Lamb=255;
- var
+  Lamb=255;
+var
   x,y,c,nx,ny : integer;
   function Bin(z,la:single): single;
   begin
@@ -271,40 +486,97 @@ Lamb=255;
         else
         result:=Lamb;
   end;
+
 begin
-  for c := 0 to 2 do
-    if _kan[c] then
-      for y := _y1 to _y2 - 1 do
-        for x := _x1 to _x2 - 1 do
-        MB.dat[x][y][c]:=Bin(MA.dat[x][y][c],Lamb)
-    else
-      for y := _y1 to _y2 - 1 do
-        for x := _x1 to _x2 - 1 do
+  if _banCir then begin
+    for c := 0 to 2 do
+      if _kan[c] then begin
+        xx1 := _xc - _Rx;
+        xx2 := _xc + _Rx;
+        yy1 := _yc - _Ry;
+        yy2 := _yc + _Ry;
+
+        for y := _y1 to _y2-1 do begin
+          yy := sqr((y - _yc) / _Ry);
+          for x := _x1 to _x2-1 do begin
+            xx := sqr((x - _xc) / _Rx);
+            RR := xx + yy;
+            if RR <= 1 then
+              MB.dat[x][y][c] := Bin(MA.dat[x][y][c],Lamb)
+          end;
+        end;
+      end
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
             MB.dat[x][y][c] := MA.dat[x][y][c];
+  end
+
+  // Selección rectangular o normal
+  else begin
+    for c := 0 to 2 do
+      if _kan[c] then
+        for y := _y1 to _y2-1 do
+          for x := _x1 to _x2-1 do
+            MB.dat[x][y][c] := Bin(MA.dat[x][y][c],Lamb)
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end;
 end;
 
 //Binarizacion con Parametro de Interfaz
- procedure fp_BinarizacionPar(MA: MatImg; var MB:MatImg;vv: single );
- var
+procedure fp_BinarizacionPar(MA: MatImg; var MB:MatImg;vv: single );
+var
   x,y,c,
   nx,ny : integer;
+
   function BinP(z:single): single;
-    begin
-      if(z<vv) then
-        result:=0
-      else
-        result:=255;
-    end;
-begin
-  for c := 0 to 2 do
-  if _kan[c] then
-      for y := _y1 to _y2 - 1 do
-        for x := _x1 to _x2 - 1 do
-          MB.dat[x][y][c]:=BinP(MA.dat[x][y][c])
+  begin
+    if(z<vv) then
+      result:=0
     else
-      for y := _y1 to _y2 - 1 do
-        for x := _x1 to _x2 - 1 do
+      result:=255;
+  end;
+
+begin
+  if _banCir then begin
+    for c := 0 to 2 do
+      if _kan[c] then begin
+        xx1 := _xc - _Rx;
+        xx2 := _xc + _Rx;
+        yy1 := _yc - _Ry;
+        yy2 := _yc + _Ry;
+
+        for y := _y1 to _y2-1 do begin
+          yy := sqr((y - _yc) / _Ry);
+          for x := _x1 to _x2-1 do begin
+            xx := sqr((x - _xc) / _Rx);
+            RR := xx + yy;
+            if RR <= 1 then
+              MB.dat[x][y][c] := BinP(MA.dat[x][y][c])
+          end;
+        end;
+      end
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
             MB.dat[x][y][c] := MA.dat[x][y][c];
+  end
+
+  // Selección rectangular o normal
+  else begin
+    for c := 0 to 2 do
+      if _kan[c] then
+        for y := _y1 to _y2-1 do
+          for x := _x1 to _x2-1 do
+            MB.dat[x][y][c] := BinP(MA.dat[x][y][c])
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end;
 end;
 //Contraste Matriz Triangular
 procedure fp_PerfilTriangular(MA: MatImg; var MB:MatImg; vv: single);
@@ -315,14 +587,14 @@ var
   z, zp,
   fact  : single;
   // Ajusta un real pequeño a byte
-function aj256(u: single): byte;
-begin
-  if u > 255
-    then result := 255
-    else if u < 0
-      then result := 0
-      else result := ceil(u);
-end;
+  function aj256(u: single): byte;
+  begin
+    if u > 255 then
+      result := 255
+    else if u < 0 then
+      result := 0
+    else result := ceil(u);
+  end;
 
 begin
   lamb2 := 255 * 2;
@@ -351,16 +623,14 @@ end;
 //Aplicacion de Luminancia
 procedure fp_Luminancia (MA: MatImg; var MB: MatImg);
 var
- x,y,c: integer;  //Num de pix en x y num de pix en y
+  x,y,c: integer;  //Num de pix en x y num de pix en y
   lum: single;
-
-
 begin
   for x := _x1 to _x2 - 1 do
     for y := _y1 to _y2 - 1 do begin
-        lum:=0.3*MA.dat[x][y][0]+0.59*MA.dat[x][y][1]+0.11*MA.dat[x][y][2];
-     for c := 0 to 2 do
-           MB.dat[x][y][c]:=lum;
+      lum:=0.3*MA.dat[x][y][0]+0.59*MA.dat[x][y][1]+0.11*MA.dat[x][y][2];
+      for c := 0 to 2 do
+        MB.dat[x][y][c]:=lum;
     end;
 end;
 
@@ -374,16 +644,42 @@ var
   temp    : single;
 begin
 
-  for y := _y1 to _y2-1 do
-    for x := _x1 to _x2-1 do begin
-      temp := 0;
-      for c := 0 to 2 do begin
-        temp := temp + MA.dat[x][y][c];
+  if _banCir then begin
+    xx1 := _xc - _Rx;
+    xx2 := _xc + _Rx;
+    yy1 := _yc - _Ry;
+    yy2 := _yc + _Ry;
+
+    for y := _y1 to _y2-1 do begin
+      yy := sqr((y - _yc) / _Ry);
+      for x := _x1 to _x2-1 do begin
+        xx := sqr((x - _xc) / _Rx);
+        RR := xx + yy;
+        if RR <= 1 then begin
+          temp := 0;
+          for c := 0 to 2 do begin
+            temp := temp + MA.dat[x][y][c];
+          end;
+          MB.dat[x][y][0] := temp / 3;
+          MB.dat[x][y][1] := temp / 3;
+          MB.dat[x][y][2] := temp / 3;
+        end;
       end;
-      MB.dat[x][y][0] := temp / 3;
-      MB.dat[x][y][1] := temp / 3;
-      MB.dat[x][y][2] := temp / 3;
     end;
+  end
+
+  // Selección rectangular o normal
+  else begin
+    for y := _y1 to _y2-1 do
+      for x := _x1 to _x2-1 do
+        temp := 0;
+        for c := 0 to 2 do begin
+          temp := temp + MA.dat[x][y][c];
+        end;
+        MB.dat[x][y][0] := temp / 3;
+        MB.dat[x][y][1] := temp / 3;
+        MB.dat[x][y][2] := temp / 3;
+  end;
 end;
 
 
@@ -393,15 +689,42 @@ procedure fp_constante(MA: MatImg; var MB: MatImg; vv : single);
 var
   x,y,c   : integer;
 begin
-  for c := 0 to 2 do
-    if _kan[c] then
-      for y := _y1 to _y2-1 do
-        for x := _x1 to _x2-1 do
-          MB.dat[x][y][c] := MA.dat[x][y][c] + vv
-    else
-			for y := 0 to MA.nr-1 do
-				for x := 0 to MA.nc-1 do
-					MB.dat[x][y][c] := MA.dat[x][y][c];
+  if _banCir then begin
+    for c := 0 to 2 do
+      if _kan[c] then begin
+        xx1 := _xc - _Rx;
+        xx2 := _xc + _Rx;
+        yy1 := _yc - _Ry;
+        yy2 := _yc + _Ry;
+
+        for y := _y1 to _y2-1 do begin
+          yy := sqr((y - _yc) / _Ry);
+          for x := _x1 to _x2-1 do begin
+            xx := sqr((x - _xc) / _Rx);
+            RR := xx + yy;
+            if RR <= 1 then
+              MB.dat[x][y][c] := MA.dat[x][y][c] + vv
+          end;
+        end;
+      end
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end
+
+  // Selección rectangular o normal
+  else begin
+    for c := 0 to 2 do
+      if _kan[c] then
+        for y := _y1 to _y2-1 do
+          for x := _x1 to _x2-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c] + vv
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end;
 end;
 
 // Aplica multiplicativa una constante
@@ -412,15 +735,43 @@ var
   ff      : single;
 begin
   ff := 1 + vv/100;
-  for c := 0 to 2 do
-    if _kan[c] then
-      for y := _y1 to _y2-1 do
-        for x := _x1 to _x2-1 do
-          MB.dat[x][y][c] := ff*MA.dat[x][y][c]
-    else
-			for y := 0 to MA.nr-1 do
-				for x := 0 to MA.nc-1 do
-					MB.dat[x][y][c] := MA.dat[x][y][c];
+
+  if _banCir then begin
+    for c := 0 to 2 do
+      if _kan[c] then begin
+        xx1 := _xc - _Rx;
+        xx2 := _xc + _Rx;
+        yy1 := _yc - _Ry;
+        yy2 := _yc + _Ry;
+
+        for y := _y1 to _y2-1 do begin
+          yy := sqr((y - _yc) / _Ry);
+          for x := _x1 to _x2-1 do begin
+            xx := sqr((x - _xc) / _Rx);
+            RR := xx + yy;
+            if RR <= 1 then
+              MB.dat[x][y][c] := ff*MA.dat[x][y][c]
+          end;
+        end;
+      end
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end
+
+  // Selección rectangular o normal
+  else begin
+    for c := 0 to 2 do
+      if _kan[c] then
+        for y := _y1 to _y2-1 do
+          for x := _x1 to _x2-1 do
+            MB.dat[x][y][c] := ff*MA.dat[x][y][c]
+      else
+        for y := 0 to MA.nr-1 do
+          for x := 0 to MA.nc-1 do
+            MB.dat[x][y][c] := MA.dat[x][y][c];
+  end;
 end;
 
 
